@@ -1,0 +1,17 @@
+spring:
+  hadoop:
+    config:
+      fs:
+        defaultFS: hdfs://192.168.56.101:8020
+  zookeeper:
+    quorum: 192.168.56.101
+    port: 2181
+
+crawler:
+  start-url: https://www.infoq.cn/public/v1/article/getList
+  http-method: POST
+  request-headers:
+    referer: https://www.infoq.cn/topic/cloud-computing
+    content-type: application/json
+  request-body:
+    template: {"type": 1,"size": 12,"id": 11}
