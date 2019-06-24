@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableHadoop
-public class HadoopConfiguration extends SpringHadoopConfigurerAdapter {
+public class CustomizedHadoopConfiguration extends SpringHadoopConfigurerAdapter {
 
     @Value("${spring.zookeeper.quorum:}")
     String zkQuorum;

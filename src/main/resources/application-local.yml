@@ -8,10 +8,10 @@ spring:
     port: 2181
 
 crawler:
-  start-url: https://www.infoq.cn/public/v1/article/getList
-  http-method: POST
-  request-headers:
-    referer: https://www.infoq.cn/topic/cloud-computing
-    content-type: application/json
-  request-body:
-    template: {"type": 1,"size": 12,"id": 11}
+  start-urls:
+    - start-url: https://www.infoq.cn/public/v1/article/getList
+      http-method: POST
+      headers:
+        referer: https://www.infoq.cn/topic/cloud-computing
+        content-type: application/json
+      body: '{"type": 1, "size": 12}'
