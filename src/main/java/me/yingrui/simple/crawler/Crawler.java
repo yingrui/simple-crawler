@@ -3,7 +3,6 @@ package me.yingrui.simple.crawler;
 
 import me.yingrui.simple.crawler.dao.ArticleRepository;
 import me.yingrui.simple.crawler.model.UrlLink;
-import me.yingrui.simple.crawler.service.DataFetchFactory;
 import me.yingrui.simple.crawler.service.DataFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class Crawler {
     private ArticleRepository articleRepository;
 
     @Autowired
-    private DataFetchFactory dataFetchFactory;
+    private DataFetcher dataFetcher;
 
     private Queue<UrlLink> queue = new LinkedList<>();
 
@@ -31,14 +30,19 @@ public class Crawler {
         while (!this.queue.isEmpty()) {
             UrlLink urlLink = this.queue.poll();
             LOGGER.info(urlLink.getUrl());
-            DataFetcher dataFetcher = dataFetchFactory.create(urlLink);
+            fetchAndProcess(urlLink);
+        }
+    }
 
-            try {
-                String content = dataFetcher.fetch(urlLink);
-                System.out.println(content);
-            } catch (IOException e) {
-                LOGGER.error(e.getMessage(), e);
-            }
+    private void fetchAndProcess(UrlLink urlLink) {
+        try {
+            dataFetcher.fetch(urlLink);
+            System.out.println(urlLink.getResponseContent());
+
+        } catch (IOException e) {
+            LOGGER.error(e.getMessage(), e);
+        } catch (RuntimeException e) {
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

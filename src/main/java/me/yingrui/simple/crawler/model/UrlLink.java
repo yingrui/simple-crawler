@@ -9,28 +9,31 @@ public class UrlLink {
     private String url;
     private int depth = 0;
     private SupportHttpMethod httpMethod = SupportHttpMethod.GET;
-    private Map<String, String> headers = new HashMap<>();
+    private Map<String, String> requestHeaders = new HashMap<>();
     private long createTime = System.currentTimeMillis();
-    private String content = null;
+    private String requestBody = null;
+    private int statusCode = 0;
+    private String responseContent = null;
+    private String responseContentType = null;
     private String website = null;
     private String parentUrl = null;
 
     public UrlLink() {
     }
 
-    public UrlLink(String url, String httpMethod, Map<String, String> headers, String content) {
-        this(url, httpMethod, headers, content, null, 0);
+    public UrlLink(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody) {
+        this(url, httpMethod, requestHeaders, requestBody, null, 0);
     }
 
 
-    public UrlLink(String url, String httpMethod, Map<String, String> headers, String content,
+    public UrlLink(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
                    String parentUrl, int depth) {
         this.url = url;
         if (httpMethod.equalsIgnoreCase("POST")) {
             this.httpMethod = SupportHttpMethod.POST;
         }
-        this.headers = headers;
-        this.content = content;
+        this.requestHeaders = requestHeaders;
+        this.requestBody = requestBody;
         this.parentUrl = parentUrl;
         this.depth = depth;
     }
@@ -59,12 +62,12 @@ public class UrlLink {
         this.httpMethod = httpMethod;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public Map<String, String> getRequestHeaders() {
+        return requestHeaders;
     }
 
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
+    public void setRequestHeaders(Map<String, String> requestHeaders) {
+        this.requestHeaders = requestHeaders;
     }
 
     public long getCreateTime() {
@@ -83,12 +86,12 @@ public class UrlLink {
         this.parentUrl = parentUrl;
     }
 
-    public String getContent() {
-        return content;
+    public String getRequestBody() {
+        return requestBody;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setRequestBody(String requestBody) {
+        this.requestBody = requestBody;
     }
 
     public String getWebsite() {
@@ -97,5 +100,29 @@ public class UrlLink {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public String getResponseContent() {
+        return responseContent;
+    }
+
+    public void setResponseContent(String responseContent) {
+        this.responseContent = responseContent;
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getResponseContentType() {
+        return responseContentType;
+    }
+
+    public void setResponseContentType(String responseContentType) {
+        this.responseContentType = responseContentType;
     }
 }
