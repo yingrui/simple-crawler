@@ -2,8 +2,8 @@ package me.yingrui.simple.crawler.service;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 import me.yingrui.simple.crawler.model.CrawlerTask;
-import me.yingrui.simple.crawler.util.TemplateUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,23 +16,59 @@ import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 public class JsonLinkExtractor implements LinkExtractor {
 
+    private CrawlerTask crawlerTask;
+
     @Override
     public List<CrawlerTask> extract(CrawlerTask crawlerTask) {
+        setCrawlerTask(crawlerTask);
         if (isNotEmpty(crawlerTask.getResponseContent())) {
             DocumentContext jsonContext = JsonPath.parse(crawlerTask.getResponseContent());
 
-            String linkPath = crawlerTask.getLinkExtractorSettings().getPath();
-            List<String> srcList = jsonContext.read(linkPath);
-            List<CrawlerTask> urls = srcList.stream()
-                    .map(src -> createChildTask(crawlerTask, src))
+            String srcPath = crawlerTask.getLinkExtractorSettings().getPath();
+            List<String> srcList = jsonContext.read(srcPath);
+            List<CrawlerTask> tasks = srcList.stream()
+                    .map(src -> createChildTask(src))
                     .collect(Collectors.toList());
-            return urls;
+
+            CrawlerTask nextPage = extractNextPage(jsonContext);
+            if (nextPage != null) {
+                tasks.add(nextPage);
+            }
+
+            return tasks;
         }
         return new ArrayList<>();
     }
 
+    private CrawlerTask extractNextPage(DocumentContext jsonContext) {
+        if (crawlerTask.getPaginationSettings() != null) {
+            PaginationSettings paginationSettings = crawlerTask.getPaginationSettings();
+            String srcPath = paginationSettings.getPath();
+            List<String> srcLinks = jsonContext.read(srcPath);
+            if (srcLinks.size() == 1) {
+                String src = String.valueOf(srcLinks.get(0));
+                String url = getUrl(src, paginationSettings.getPrefix());
 
-    private CrawlerTask createChildTask(CrawlerTask crawlerTask, String src) {
+                Map<String, String> context = new HashMap<>();
+                context.put("src", src);
+                context.put("url", url);
+
+                String requestUrl = render(paginationSettings.getUrlTemplate(), context);
+                String requestBody = render(paginationSettings.getBodyTemplate(), context);
+
+                CrawlerTask nextPage = new CrawlerTask(requestUrl,
+                        crawlerTask.getLinkExtractorSettings().getHttpMethod(),
+                        crawlerTask.getRequestHeaders(),
+                        requestBody,
+                        crawlerTask.getLinkExtractorSettings(),
+                        paginationSettings);
+                return nextPage;
+            }
+        }
+        return null;
+    }
+
+    private CrawlerTask createChildTask(String src) {
         Map<String, String> context = getContext(crawlerTask, src);
 
         String url = getCrawlerTaskUrl(crawlerTask, context);
@@ -44,6 +80,7 @@ public class JsonLinkExtractor implements LinkExtractor {
                 headers,
                 requestBody,
                 crawlerTask.getLinkExtractorSettings(),
+                null,
                 crawlerTask.getUrl(),
                 crawlerTask.getDepth() + 1);
 
@@ -52,7 +89,7 @@ public class JsonLinkExtractor implements LinkExtractor {
 
     private Map<String, String> getRequestHeaders(CrawlerTask crawlerTask, Map<String, String> context) {
         Map<String, String> headers = new HashMap<>();
-        for (String name: crawlerTask.getLinkExtractorSettings().getHeaders().keySet()) {
+        for (String name : crawlerTask.getLinkExtractorSettings().getHeaders().keySet()) {
             String template = crawlerTask.getLinkExtractorSettings().getHeaders().get(name);
             String value = render(template, context);
             headers.put(name, value);
@@ -61,7 +98,7 @@ public class JsonLinkExtractor implements LinkExtractor {
     }
 
     private String getRequestBody(CrawlerTask crawlerTask, Map<String, String> context) {
-        String bodyTemplate= crawlerTask.getLinkExtractorSettings().getBodyTemplate();
+        String bodyTemplate = crawlerTask.getLinkExtractorSettings().getBodyTemplate();
         if (isNotEmpty(bodyTemplate)) {
             return render(bodyTemplate, context);
         }
@@ -80,16 +117,24 @@ public class JsonLinkExtractor implements LinkExtractor {
         Map<String, String> context = new HashMap<>();
 
         context.put("src", src);
-        String url = getUrl(crawlerTask, src);
+        String url = getUrl(src, crawlerTask.getLinkExtractorSettings().getPrefix());
         context.put("url", url);
         return context;
     }
 
-    private String getUrl(CrawlerTask crawlerTask, String src) {
-        if (isNotEmpty(crawlerTask.getLinkExtractorSettings().getPrefix())) {
-            return crawlerTask.getLinkExtractorSettings().getPrefix() + src;
+    private String getUrl(String src, String prefix) {
+        if (isNotEmpty(prefix)) {
+            return prefix + src;
         } else {
             return src;
         }
+    }
+
+    public CrawlerTask getCrawlerTask() {
+        return crawlerTask;
+    }
+
+    private void setCrawlerTask(CrawlerTask crawlerTask) {
+        this.crawlerTask = crawlerTask;
     }
 }

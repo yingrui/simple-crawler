@@ -14,7 +14,12 @@ crawler:
       headers:
         referer: https://www.infoq.cn/topic/cloud-computing
         content-type: application/json
-      body: '{"type": 1, "size": 1}'
+      body-template: '{"type": 1, "size": 2}'
+      pagination:
+        path: data[-1:].score
+        prefix: https://www.infoq.cn/article/
+        url-template: https://www.infoq.cn/public/v1/article/getList
+        body-template: '{"type": 1, "size": 2, "score": [(${src})]}'
       links:
         path: data[*].uuid
         prefix: https://www.infoq.cn/article/
@@ -25,3 +30,6 @@ crawler:
           referer: '[(${url})]'
         body-template: '{"uuid":"[(${src})]"}'
 
+logging:
+  level:
+    me.yingrui: DEBUG

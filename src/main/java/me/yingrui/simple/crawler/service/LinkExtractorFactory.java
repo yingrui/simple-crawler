@@ -6,22 +6,21 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.commons.lang.StringUtils.isNotEmpty;
+
 @Service
 public class LinkExtractorFactory {
 
     public LinkExtractor create(CrawlerTask crawlerTask) {
-        if (crawlerTask.getResponseContentType() != null) {
+        if (isNotEmpty(crawlerTask.getResponseContentType())) {
             if (crawlerTask.getResponseContentType().startsWith("application/json")) {
                 return new JsonLinkExtractor();
             }
         }
 
-        return new LinkExtractor() {
-            @Override
-            public List<CrawlerTask> extract(CrawlerTask crawlerTask) {
-                return new ArrayList<>();
-            }
-        };
+        return stubLinkExtractor;
     }
+
+    private LinkExtractor stubLinkExtractor = crawlerTask -> new ArrayList<>();
 
 }

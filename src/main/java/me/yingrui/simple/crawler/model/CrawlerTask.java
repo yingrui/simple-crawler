@@ -2,6 +2,7 @@ package me.yingrui.simple.crawler.model;
 
 
 import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
+import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ public class CrawlerTask {
 
     private String url;
     private LinkExtractorSettings linkExtractorSettings;
+    private PaginationSettings paginationSettings;
     private int depth = 0;
     private SupportHttpMethod httpMethod = SupportHttpMethod.GET;
     private Map<String, String> requestHeaders = new HashMap<>();
@@ -21,19 +23,18 @@ public class CrawlerTask {
     private String website = null;
     private String parentUrl = null;
 
-    public CrawlerTask() {
-    }
-
     public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
-                       LinkExtractorSettings linkExtractorSettings) {
-        this(url, httpMethod, requestHeaders, requestBody, linkExtractorSettings, null, 0);
+                       LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings) {
+        this(url, httpMethod, requestHeaders, requestBody, linkExtractorSettings, paginationSettings, null, 0);
     }
 
 
     public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
-                       LinkExtractorSettings linkExtractorSettings, String parentUrl, int depth) {
+                       LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings,
+                       String parentUrl, int depth) {
         this.url = url;
         this.linkExtractorSettings = linkExtractorSettings;
+        this.paginationSettings = paginationSettings;
         if (httpMethod.equalsIgnoreCase("POST")) {
             this.httpMethod = SupportHttpMethod.POST;
         }
@@ -137,5 +138,13 @@ public class CrawlerTask {
 
     public void setLinkExtractorSettings(LinkExtractorSettings linkExtractorSettings) {
         this.linkExtractorSettings = linkExtractorSettings;
+    }
+
+    public PaginationSettings getPaginationSettings() {
+        return paginationSettings;
+    }
+
+    public void setPaginationSettings(PaginationSettings paginationSettings) {
+        this.paginationSettings = paginationSettings;
     }
 }

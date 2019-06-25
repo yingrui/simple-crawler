@@ -14,11 +14,12 @@ public class StartUrlSettings {
     private String startUrl;
     private String httpMethod;
     private Map<String, String> headers;
-    private String body;
+    private String bodyTemplate;
     private LinkExtractorSettings links;
+    private PaginationSettings pagination;
 
     public CrawlerTask toCrawlerTask() {
-        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, body, links);
+        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, bodyTemplate, links, pagination);
         return crawlerTask;
     }
 
@@ -46,15 +47,23 @@ public class StartUrlSettings {
         this.headers = headers;
     }
 
-    public String getBody() {
-        return body;
+    public String getBodyTemplate() {
+        return bodyTemplate;
     }
 
-    public void setBody(String body) {
-        this.body = body;
+    public void setBodyTemplate(String bodyTemplate) {
+        this.bodyTemplate = bodyTemplate;
     }
 
     public void setLinks(LinkExtractorSettings links) {
         this.links = links;
+    }
+
+    public PaginationSettings getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(PaginationSettings pagination) {
+        this.pagination = pagination;
     }
 }

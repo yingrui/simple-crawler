@@ -1,7 +1,5 @@
 package me.yingrui.simple.crawler;
 
-import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
-import me.yingrui.simple.crawler.configuration.properties.StartUrlSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,9 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 public class Application implements CommandLineRunner {
 
     @Autowired
-    Crawler crawler;
-    @Autowired
-    CrawlerSettings crawlerSettings;
+    private Crawler crawler;
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -23,9 +19,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        for (StartUrlSettings startUrl : crawlerSettings.getStartUrls()) {
-            crawler.add(startUrl.toCrawlerTask());
-        }
         crawler.run();
     }
 }
