@@ -24,7 +24,7 @@ public class Application implements CommandLineRunner {
     @Override
     public void run(String... args) {
         for (StartUrlConfiguration startUrl : crawlerConfiguration.getStartUrls()) {
-            crawler.add(startUrl.toUrlLink());
+            crawler.add(startUrl.toCrawlerTask());
         }
         crawler.run();
     }

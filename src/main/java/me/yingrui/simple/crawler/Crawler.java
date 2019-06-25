@@ -2,7 +2,7 @@ package me.yingrui.simple.crawler;
 
 
 import me.yingrui.simple.crawler.dao.ArticleRepository;
-import me.yingrui.simple.crawler.model.UrlLink;
+import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.service.DataFetcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,20 +24,20 @@ public class Crawler {
     @Autowired
     private DataFetcher dataFetcher;
 
-    private Queue<UrlLink> queue = new LinkedList<>();
+    private Queue<CrawlerTask> queue = new LinkedList<>();
 
     public void run() {
         while (!this.queue.isEmpty()) {
-            UrlLink urlLink = this.queue.poll();
-            LOGGER.info(urlLink.getUrl());
-            fetchAndProcess(urlLink);
+            CrawlerTask crawlerTask = this.queue.poll();
+            LOGGER.info(crawlerTask.getUrl());
+            fetchAndProcess(crawlerTask);
         }
     }
 
-    private void fetchAndProcess(UrlLink urlLink) {
+    private void fetchAndProcess(CrawlerTask crawlerTask) {
         try {
-            dataFetcher.fetch(urlLink);
-            System.out.println(urlLink.getResponseContent());
+            dataFetcher.fetch(crawlerTask);
+            System.out.println(crawlerTask.getResponseContent());
 
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -46,7 +46,7 @@ public class Crawler {
         }
     }
 
-    public boolean add(UrlLink urlLink) {
-        return this.queue.add(urlLink);
+    public boolean add(CrawlerTask crawlerTask) {
+        return this.queue.add(crawlerTask);
     }
 }

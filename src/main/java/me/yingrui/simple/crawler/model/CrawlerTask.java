@@ -4,7 +4,7 @@ package me.yingrui.simple.crawler.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UrlLink {
+public class CrawlerTask {
 
     private String url;
     private int depth = 0;
@@ -18,16 +18,16 @@ public class UrlLink {
     private String website = null;
     private String parentUrl = null;
 
-    public UrlLink() {
+    public CrawlerTask() {
     }
 
-    public UrlLink(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody) {
+    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody) {
         this(url, httpMethod, requestHeaders, requestBody, null, 0);
     }
 
 
-    public UrlLink(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
-                   String parentUrl, int depth) {
+    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+                       String parentUrl, int depth) {
         this.url = url;
         if (httpMethod.equalsIgnoreCase("POST")) {
             this.httpMethod = SupportHttpMethod.POST;

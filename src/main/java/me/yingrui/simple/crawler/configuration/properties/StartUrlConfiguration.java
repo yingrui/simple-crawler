@@ -1,7 +1,7 @@
 package me.yingrui.simple.crawler.configuration.properties;
 
 
-import me.yingrui.simple.crawler.model.UrlLink;
+import me.yingrui.simple.crawler.model.CrawlerTask;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,9 +16,9 @@ public class StartUrlConfiguration {
     private Map<String, String> headers;
     private String body;
 
-    public UrlLink toUrlLink() {
-        UrlLink urlLink = new UrlLink(startUrl, httpMethod, headers, body);
-        return urlLink;
+    public CrawlerTask toCrawlerTask() {
+        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, body);
+        return crawlerTask;
     }
 
     public String getHttpMethod() {

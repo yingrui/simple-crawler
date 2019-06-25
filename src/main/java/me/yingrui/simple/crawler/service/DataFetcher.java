@@ -1,7 +1,7 @@
 package me.yingrui.simple.crawler.service;
 
 import me.yingrui.simple.crawler.model.SupportHttpMethod;
-import me.yingrui.simple.crawler.model.UrlLink;
+import me.yingrui.simple.crawler.model.CrawlerTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,50 +23,50 @@ public class DataFetcher {
         this.httpClient = httpClient;
     }
 
-    public void fetch(UrlLink urlLink) throws IOException {
-        HttpRequestBase request = getRequest(urlLink);
+    public void fetch(CrawlerTask crawlerTask) throws IOException {
+        HttpRequestBase request = getRequest(crawlerTask);
         HttpResponse response = httpClient.execute(request);
 
         int statusCode = response.getStatusLine().getStatusCode();
-        urlLink.setStatusCode(statusCode);
+        crawlerTask.setStatusCode(statusCode);
         if (statusCode == 200) {
             String contentType = response.getFirstHeader("Content-Type").getValue();
-            urlLink.setResponseContentType(contentType);
-            urlLink.setResponseContent(EntityUtils.toString(response.getEntity()));
+            crawlerTask.setResponseContentType(contentType);
+            crawlerTask.setResponseContent(EntityUtils.toString(response.getEntity()));
         }
     }
 
-    private HttpRequestBase getRequest(UrlLink urlLink) {
-        HttpRequestBase request = createHttpRequest(urlLink);
-        setHeaders(urlLink, request);
+    private HttpRequestBase getRequest(CrawlerTask crawlerTask) {
+        HttpRequestBase request = createHttpRequest(crawlerTask);
+        setHeaders(crawlerTask, request);
         return request;
     }
 
-    private void setHeaders(UrlLink urlLink, HttpRequestBase request) {
-        for (String headerName : urlLink.getRequestHeaders().keySet()) {
-            request.setHeader(headerName, urlLink.getRequestHeaders().get(headerName));
+    private void setHeaders(CrawlerTask crawlerTask, HttpRequestBase request) {
+        for (String headerName : crawlerTask.getRequestHeaders().keySet()) {
+            request.setHeader(headerName, crawlerTask.getRequestHeaders().get(headerName));
         }
     }
 
-    private HttpRequestBase createHttpRequest(UrlLink urlLink) {
-        if (urlLink.getHttpMethod() == SupportHttpMethod.POST) {
-            return newHttpPostRequest(urlLink);
+    private HttpRequestBase createHttpRequest(CrawlerTask crawlerTask) {
+        if (crawlerTask.getHttpMethod() == SupportHttpMethod.POST) {
+            return newHttpPostRequest(crawlerTask);
         } else {
-            return new HttpGet(urlLink.getUrl());
+            return new HttpGet(crawlerTask.getUrl());
         }
     }
 
-    private HttpRequestBase newHttpPostRequest(UrlLink urlLink) {
-        HttpPost request = new HttpPost(urlLink.getUrl());
-        StringEntity entity = createRequestEntity(urlLink);
+    private HttpRequestBase newHttpPostRequest(CrawlerTask crawlerTask) {
+        HttpPost request = new HttpPost(crawlerTask.getUrl());
+        StringEntity entity = createRequestEntity(crawlerTask);
         request.setEntity(entity);
         return request;
     }
 
-    private StringEntity createRequestEntity(UrlLink urlLink) {
+    private StringEntity createRequestEntity(CrawlerTask crawlerTask) {
         StringEntity reqEntity = null;
         try {
-            reqEntity = new StringEntity(urlLink.getRequestBody());
+            reqEntity = new StringEntity(crawlerTask.getRequestBody());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
