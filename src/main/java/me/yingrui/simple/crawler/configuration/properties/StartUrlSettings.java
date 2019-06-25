@@ -9,15 +9,16 @@ import java.util.Map;
 
 @Configuration
 @ConfigurationProperties
-public class StartUrlConfiguration {
+public class StartUrlSettings {
 
     private String startUrl;
     private String httpMethod;
     private Map<String, String> headers;
     private String body;
+    private LinkExtractorSettings links;
 
     public CrawlerTask toCrawlerTask() {
-        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, body);
+        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, body, links);
         return crawlerTask;
     }
 
@@ -51,5 +52,9 @@ public class StartUrlConfiguration {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void setLinks(LinkExtractorSettings links) {
+        this.links = links;
     }
 }

@@ -8,15 +8,15 @@ import java.util.List;
 
 @Configuration
 @ConfigurationProperties(prefix = "crawler")
-public class CrawlerConfigurationProperties {
+public class CrawlerSettings {
 
-    private List<StartUrlConfiguration> startUrls;
+    private List<StartUrlSettings> startUrls;
 
-    public List<StartUrlConfiguration> getStartUrls() {
+    public List<StartUrlSettings> getStartUrls() {
         return startUrls;
     }
 
-    public void setStartUrls(List<StartUrlConfiguration> startUrls) {
+    public void setStartUrls(List<StartUrlSettings> startUrls) {
         this.startUrls = startUrls;
     }
 }

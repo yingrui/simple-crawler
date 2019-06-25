@@ -14,4 +14,14 @@ crawler:
       headers:
         referer: https://www.infoq.cn/topic/cloud-computing
         content-type: application/json
-      body: '{"type": 1, "size": 12}'
+      body: '{"type": 1, "size": 1}'
+      links:
+        path: data[*].uuid
+        prefix: https://www.infoq.cn/article/
+        http-method: POST
+        url-template: https://www.infoq.cn/public/v1/article/getDetail
+        headers:
+          content-type: application/json
+          referer: '[(${url})]'
+        body-template: '{"uuid":"[(${src})]"}'
+

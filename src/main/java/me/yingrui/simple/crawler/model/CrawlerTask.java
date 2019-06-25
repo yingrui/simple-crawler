@@ -1,12 +1,15 @@
 package me.yingrui.simple.crawler.model;
 
 
+import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class CrawlerTask {
 
     private String url;
+    private LinkExtractorSettings linkExtractorSettings;
     private int depth = 0;
     private SupportHttpMethod httpMethod = SupportHttpMethod.GET;
     private Map<String, String> requestHeaders = new HashMap<>();
@@ -21,14 +24,16 @@ public class CrawlerTask {
     public CrawlerTask() {
     }
 
-    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody) {
-        this(url, httpMethod, requestHeaders, requestBody, null, 0);
+    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+                       LinkExtractorSettings linkExtractorSettings) {
+        this(url, httpMethod, requestHeaders, requestBody, linkExtractorSettings, null, 0);
     }
 
 
     public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
-                       String parentUrl, int depth) {
+                       LinkExtractorSettings linkExtractorSettings, String parentUrl, int depth) {
         this.url = url;
+        this.linkExtractorSettings = linkExtractorSettings;
         if (httpMethod.equalsIgnoreCase("POST")) {
             this.httpMethod = SupportHttpMethod.POST;
         }
@@ -124,5 +129,13 @@ public class CrawlerTask {
 
     public void setResponseContentType(String responseContentType) {
         this.responseContentType = responseContentType;
+    }
+
+    public LinkExtractorSettings getLinkExtractorSettings() {
+        return linkExtractorSettings;
+    }
+
+    public void setLinkExtractorSettings(LinkExtractorSettings linkExtractorSettings) {
+        this.linkExtractorSettings = linkExtractorSettings;
     }
 }
