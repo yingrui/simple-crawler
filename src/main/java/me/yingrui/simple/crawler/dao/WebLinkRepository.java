@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 @Service
-public class ArticleRepository {
+public class WebLinkRepository {
 
     private HbaseTemplate hbaseTemplate;
-    private String tableName = "articles";
+    private String tableName = "links";
     private String columnFamilyName = "crawler";
 
-    public ArticleRepository(HbaseTemplate hbaseTemplate, HBaseAdmin hBaseAdmin) throws IOException {
+    public WebLinkRepository(HbaseTemplate hbaseTemplate, HBaseAdmin hBaseAdmin) throws IOException {
         this.hbaseTemplate = hbaseTemplate;
 
         if (!hBaseAdmin.isTableAvailable(tableName)) {
