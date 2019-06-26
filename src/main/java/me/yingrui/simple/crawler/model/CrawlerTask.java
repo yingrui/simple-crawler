@@ -10,6 +10,7 @@ import java.util.Map;
 public class CrawlerTask {
 
     private String url;
+    private String requestUrl;
     private LinkExtractorSettings linkExtractorSettings;
     private PaginationSettings paginationSettings;
     private int depth = 0;
@@ -20,19 +21,18 @@ public class CrawlerTask {
     private int statusCode = 0;
     private String responseContent = null;
     private String responseContentType = null;
-    private String website = null;
     private String parentUrl = null;
 
-    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+    public CrawlerTask(String url, String requestUrl, String httpMethod, Map<String, String> requestHeaders, String requestBody,
                        LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings) {
-        this(url, httpMethod, requestHeaders, requestBody, linkExtractorSettings, paginationSettings, null, 0);
+        this(url, requestUrl, httpMethod, requestHeaders, requestBody, linkExtractorSettings, paginationSettings, null, 0);
     }
 
-
-    public CrawlerTask(String url, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+    public CrawlerTask(String url, String requestUrl, String httpMethod, Map<String, String> requestHeaders, String requestBody,
                        LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings,
                        String parentUrl, int depth) {
         this.url = url;
+        this.requestUrl = requestUrl;
         this.linkExtractorSettings = linkExtractorSettings;
         this.paginationSettings = paginationSettings;
         if (httpMethod.equalsIgnoreCase("POST")) {
@@ -42,6 +42,10 @@ public class CrawlerTask {
         this.requestBody = requestBody;
         this.parentUrl = parentUrl;
         this.depth = depth;
+    }
+
+    public WebLink toWebLink() {
+        return new WebLink(url, createTime, responseContent, responseContentType, parentUrl, depth);
     }
 
     public int getDepth() {
@@ -100,14 +104,6 @@ public class CrawlerTask {
         this.requestBody = requestBody;
     }
 
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
     public String getResponseContent() {
         return responseContent;
     }
@@ -146,5 +142,13 @@ public class CrawlerTask {
 
     public void setPaginationSettings(PaginationSettings paginationSettings) {
         this.paginationSettings = paginationSettings;
+    }
+
+    public String getRequestUrl() {
+        return requestUrl;
+    }
+
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
     }
 }

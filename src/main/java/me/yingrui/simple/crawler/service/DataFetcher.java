@@ -2,6 +2,7 @@ package me.yingrui.simple.crawler.service;
 
 import me.yingrui.simple.crawler.model.SupportHttpMethod;
 import me.yingrui.simple.crawler.model.CrawlerTask;
+import me.yingrui.simple.crawler.model.WebLink;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,7 +24,7 @@ public class DataFetcher {
         this.httpClient = httpClient;
     }
 
-    public void fetch(CrawlerTask crawlerTask) throws IOException {
+    public WebLink fetch(CrawlerTask crawlerTask) throws IOException {
         HttpRequestBase request = getRequest(crawlerTask);
         HttpResponse response = httpClient.execute(request);
 
@@ -33,7 +34,9 @@ public class DataFetcher {
             String contentType = response.getFirstHeader("Content-Type").getValue();
             crawlerTask.setResponseContentType(contentType);
             crawlerTask.setResponseContent(EntityUtils.toString(response.getEntity()));
+            return crawlerTask.toWebLink();
         }
+        return null;
     }
 
     private HttpRequestBase getRequest(CrawlerTask crawlerTask) {
@@ -52,12 +55,12 @@ public class DataFetcher {
         if (crawlerTask.getHttpMethod() == SupportHttpMethod.POST) {
             return newHttpPostRequest(crawlerTask);
         } else {
-            return new HttpGet(crawlerTask.getUrl());
+            return new HttpGet(crawlerTask.getRequestUrl());
         }
     }
 
     private HttpRequestBase newHttpPostRequest(CrawlerTask crawlerTask) {
-        HttpPost request = new HttpPost(crawlerTask.getUrl());
+        HttpPost request = new HttpPost(crawlerTask.getRequestUrl());
         StringEntity entity = createRequestEntity(crawlerTask);
         request.setEntity(entity);
         return request;

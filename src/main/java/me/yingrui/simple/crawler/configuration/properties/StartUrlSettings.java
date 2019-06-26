@@ -11,6 +11,7 @@ import java.util.Map;
 @ConfigurationProperties
 public class StartUrlSettings {
 
+    private String url;
     private String startUrl;
     private String httpMethod;
     private Map<String, String> headers;
@@ -19,7 +20,7 @@ public class StartUrlSettings {
     private PaginationSettings pagination;
 
     public CrawlerTask toCrawlerTask() {
-        CrawlerTask crawlerTask = new CrawlerTask(startUrl, httpMethod, headers, bodyTemplate, links, pagination);
+        CrawlerTask crawlerTask = new CrawlerTask(url, startUrl, httpMethod, headers, bodyTemplate, links, pagination);
         return crawlerTask;
     }
 
@@ -65,5 +66,13 @@ public class StartUrlSettings {
 
     public void setPagination(PaginationSettings pagination) {
         this.pagination = pagination;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

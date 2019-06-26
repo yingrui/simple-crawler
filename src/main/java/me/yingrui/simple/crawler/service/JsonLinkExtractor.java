@@ -49,14 +49,13 @@ public class JsonLinkExtractor implements LinkExtractor {
                 String src = String.valueOf(srcLinks.get(0));
                 String url = getUrl(src, paginationSettings.getPrefix());
 
-                Map<String, String> context = new HashMap<>();
-                context.put("src", src);
-                context.put("url", url);
+                Map<String, String> context = getContext(src, url);
 
                 String requestUrl = render(paginationSettings.getUrlTemplate(), context);
                 String requestBody = render(paginationSettings.getBodyTemplate(), context);
 
-                CrawlerTask nextPage = new CrawlerTask(requestUrl,
+                CrawlerTask nextPage = new CrawlerTask(url,
+                        requestUrl,
                         crawlerTask.getLinkExtractorSettings().getHttpMethod(),
                         crawlerTask.getRequestHeaders(),
                         requestBody,
@@ -69,13 +68,14 @@ public class JsonLinkExtractor implements LinkExtractor {
     }
 
     private CrawlerTask createChildTask(String src) {
-        Map<String, String> context = getContext(crawlerTask, src);
+        String url = getUrl(src, crawlerTask.getLinkExtractorSettings().getPrefix());
+        Map<String, String> context = getContext(src, url);
 
-        String url = getCrawlerTaskUrl(crawlerTask, context);
+        String requestUrl = getCrawlerTaskUrl(crawlerTask, context);
         String requestBody = getRequestBody(crawlerTask, context);
         Map<String, String> headers = getRequestHeaders(crawlerTask, context);
 
-        CrawlerTask childTask = new CrawlerTask(url,
+        CrawlerTask childTask = new CrawlerTask(url, requestUrl,
                 crawlerTask.getLinkExtractorSettings().getHttpMethod(),
                 headers,
                 requestBody,
@@ -113,11 +113,10 @@ public class JsonLinkExtractor implements LinkExtractor {
         return context.get("url");
     }
 
-    private Map<String, String> getContext(CrawlerTask crawlerTask, String src) {
+    private Map<String, String> getContext(String src, String url) {
         Map<String, String> context = new HashMap<>();
 
         context.put("src", src);
-        String url = getUrl(src, crawlerTask.getLinkExtractorSettings().getPrefix());
         context.put("url", url);
         return context;
     }

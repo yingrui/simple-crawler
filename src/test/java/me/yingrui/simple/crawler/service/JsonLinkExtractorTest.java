@@ -24,7 +24,7 @@ public class JsonLinkExtractorTest {
         LinkExtractorSettings linkExtractorSettings = new LinkExtractorSettings(linkPath, prefix, "POST",
                 urlTemplate, headers, bodyTemplate);
 
-        CrawlerTask crawlerTask = new CrawlerTask("homepage.html", "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
                 linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
@@ -42,7 +42,7 @@ public class JsonLinkExtractorTest {
         LinkExtractorSettings linkExtractorSettings = new LinkExtractorSettings(linkPath, prefix, "POST",
                 urlTemplate, headers, bodyTemplate);
 
-        CrawlerTask crawlerTask = new CrawlerTask("homepage.html", "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
                 linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
@@ -50,7 +50,8 @@ public class JsonLinkExtractorTest {
         LinkExtractor linkExtractor = new JsonLinkExtractor();
         List<CrawlerTask> links = linkExtractor.extract(crawlerTask);
         CrawlerTask child = links.get(0);
-        assertEquals(urlTemplate, child.getUrl());
+        assertEquals("https://www.infoq.cn/article/hds2GVBZcs6Ezvt7K*M5", child.getUrl());
+        assertEquals(urlTemplate, child.getRequestUrl());
         assertEquals("{\"uuid\":\"hds2GVBZcs6Ezvt7K*M5\"}", child.getRequestBody());
 
         Map<String, String> childRequestHeaders = child.getRequestHeaders();
@@ -62,7 +63,7 @@ public class JsonLinkExtractorTest {
     public void should_extract_next_page_crawler_task() {
         String startUrl = "homepage.html";
         String nextPagePath = "data[-1:].score";
-        String nextPagePathPrefix = "";
+        String nextPagePathPrefix = "https://www.infoq.cn/?score=";
         String nextPageUrlTemplate = "nextpage-url";
         String nextPageBodyTemplate = "{\"type\": 1, \"size\": 12, \"score\": [(${src})]}";
 
@@ -71,7 +72,7 @@ public class JsonLinkExtractorTest {
 
         PaginationSettings paginationSettings = new PaginationSettings(nextPagePath, nextPagePathPrefix, nextPageUrlTemplate, nextPageBodyTemplate);
 
-        CrawlerTask crawlerTask = new CrawlerTask(startUrl, "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "POST", defaultHeaders(), "",
                 linkExtractorSettings, paginationSettings);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
@@ -81,7 +82,8 @@ public class JsonLinkExtractorTest {
         assertEquals(13, links.size());
 
         CrawlerTask lastCrawlerTask = links.get(links.size() - 1);
-        assertEquals(nextPageUrlTemplate, lastCrawlerTask.getUrl());
+        assertEquals("https://www.infoq.cn/?score=1561009115698", lastCrawlerTask.getUrl());
+        assertEquals(nextPageUrlTemplate, lastCrawlerTask.getRequestUrl());
         assertEquals("{\"type\": 1, \"size\": 12, \"score\": 1561009115698}", lastCrawlerTask.getRequestBody());
     }
 

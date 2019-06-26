@@ -3,7 +3,9 @@ package me.yingrui.simple.crawler;
 
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
 import me.yingrui.simple.crawler.configuration.properties.StartUrlSettings;
+import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
+import me.yingrui.simple.crawler.model.WebLink;
 import me.yingrui.simple.crawler.service.DataFetcher;
 import me.yingrui.simple.crawler.service.LinkExtractor;
 import me.yingrui.simple.crawler.service.LinkExtractorFactory;
@@ -26,11 +28,13 @@ public class Crawler {
     private DataFetcher dataFetcher;
     private LinkExtractorFactory linkExtractorFactory;
     private CrawlerSettings crawlerSettings;
+    private WebLinkRepository webLinkRepository;
 
-    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings) {
+    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository) {
         this.dataFetcher = dataFetcher;
         this.linkExtractorFactory = linkExtractorFactory;
         this.crawlerSettings = crawlerSettings;
+        this.webLinkRepository = webLinkRepository;
         initializeQueue();
     }
 
@@ -51,8 +55,9 @@ public class Crawler {
 
     private void fetchAndProcess(CrawlerTask crawlerTask) {
         try {
-            dataFetcher.fetch(crawlerTask);
-            LOGGER.debug(crawlerTask.getResponseContent());
+            WebLink webLink = dataFetcher.fetch(crawlerTask);
+            LOGGER.debug(webLink.getContent());
+            webLinkRepository.save(webLink);
 
             extractLinks(crawlerTask);
 
