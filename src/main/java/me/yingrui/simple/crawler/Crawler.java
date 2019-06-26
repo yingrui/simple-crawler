@@ -56,12 +56,14 @@ public class Crawler {
     private void fetchAndProcess(CrawlerTask crawlerTask) {
         try {
             WebLink webLink = dataFetcher.fetch(crawlerTask);
-            LOGGER.debug(webLink.getContent());
-            webLinkRepository.save(webLink);
+            if (webLink != null) {
+                LOGGER.debug(webLink.getContent());
+                webLinkRepository.save(webLink);
 
-            extractLinks(crawlerTask);
+                extractLinks(crawlerTask);
 
-            Thread.sleep(random.nextInt(2000));
+                Thread.sleep(random.nextInt(2000));
+            }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         } catch (RuntimeException e) {
