@@ -15,7 +15,7 @@ crawler:
       headers:
         referer: https://www.infoq.cn/topic/cloud-computing
         content-type: application/json
-      body-template: '{"type": 1, "size": 12, "score": 1519120800000}'
+      body-template: '{"type": 1, "size": 12}'
       pagination:
         path: data[-1:].score
         prefix: https://www.infoq.cn/?score=

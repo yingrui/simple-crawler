@@ -27,8 +27,10 @@ public class WebLink {
     private void calculateRowKey() {
         try {
             URL u = new URL(url);
-            this.website = u.getHost();
-            this.rowKey = getDepth() + "+" + this.website + "+" + this.url;
+            if (this.website == null) {
+                this.website = u.getHost();
+            }
+            this.rowKey = this.website + "+" + this.url;
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -40,6 +42,11 @@ public class WebLink {
 
     public void setRowKey(String rowKey) {
         this.rowKey = rowKey;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+        calculateRowKey();
     }
 
     public String getUrl() {
