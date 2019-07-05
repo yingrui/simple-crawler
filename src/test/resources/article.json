@@ -1,0 +1,461 @@
+{
+  "code": 0,
+  "data": {
+    "id": 23394,
+    "aid": 23627,
+    "type": 1,
+    "views": 1033,
+    "uuid": "lO41KaRSdjPOEx*oDO8i",
+    "info": "{\"is_hidden\":false}",
+    "status": 1,
+    "publish_time": 1561898887422,
+    "ctime": 1561898887006,
+    "utime": 1561898887006,
+    "score": 1561898887422,
+    "article_title": "想接管别人的整个Java生态系统？只需一次中间人攻击",
+    "article_sharetitle": "想接管别人的整个Java生态系统？只需一次中间人攻击",
+    "article_subtitle": "",
+    "article_summary": "大受欢迎且广泛部署的几百个Java库和JVM编译器，它们下载依赖项时，仍在用HTTP协议，却没有校验完整性。",
+    "article_cover": "https://static001.infoq.cn/resource/image/bc/93/bc90a93778cb103d89f40b3f5e44ae93.jpeg",
+    "article_cover_point": "{\"big\":{\"point\":{\"x\":0,\"y\":84,\"w\":1919,\"h\":989}},\"small\":{\"point\":{\"x\":303,\"y\":0,\"w\":1453,\"h\":1079}},\"width\":1920,\"height\":1080}",
+    "author": [
+      {
+        "uid": 1594085,
+        "nickname": "Jonathan Leitschuh",
+        "avatar": ""
+      }
+    ],
+    "translator": [
+      {
+        "uid": 1564201,
+        "nickname": "叙缘",
+        "avatar": ""
+      }
+    ],
+    "topic": [
+      {
+        "id": 21,
+        "name": "安全",
+        "alias": "Security"
+      },
+      {
+        "id": 6,
+        "name": "Java",
+        "alias": "java"
+      },
+      {
+        "id": 95,
+        "name": "JetBrains",
+        "alias": "JetBrains"
+      },
+      {
+        "id": 59,
+        "name": "JVM",
+        "alias": "JVM"
+      },
+      {
+        "id": 148,
+        "name": "信息泄露",
+        "alias": "information disclosure"
+      }
+    ],
+    "is_collect": false,
+    "no_author": "",
+    "is_promotion": false,
+    "share_pic": "",
+    "content": "<p>大受欢迎且广泛部署的几百个Java库和JVM编译器，它们下载依赖项时，仍在用HTTP协议，却没有校验完整性。本来只是想给一个小型项目做一个简单漏洞报告，不料猛地发现了这个安全漏洞，影响了基于Java虚拟机（JVM）做开发的整个生态系统。</p>\n<h2>初探</h2>\n<p><a href=\"https://max.computer/about/\">Max Veytsman</a>于2014年发表了一篇很棒的文章，名为《<a href=\"https://max.computer/blog/how-to-take-over-the-computer-of-any-java-or-clojure-or-scala-developer/\">如何接管任意Java（或Closure或Scala）开发人员的计算机</a>》，这项工作正是基于这篇文章开展的。</p>\n<p>当时，由Sonatype运行的Maven中央仓库在提供JAR文件时，还不支持SSL（HTTPS）。多亏Max的文章，Sonatype几天内就修复了这个问题。我强烈建议你在阅读本文之前，至少先略读一下那篇文章。虽然它已经发表了5年，但其中的警告仍然有效，不仅如此，现在还能适用于Kotlin和Groovy的开发人员。</p>\n<p>然而，这一次不是因为存储库主机缺乏对HTTPS的支持，而是因为普遍都在采用“一字之差”的HTTP，所以直到今天，仍有成千上万的开源项目易受攻击。</p>\n<p>Max在他的文章中介绍了一个名为Dilettante的工具，“它是一个中间人代理，拦截来自【任何工件（artifact）仓库】的JAR包，并将恶意代码注入其中。通过Dilettante代理HTTP流量，将会在【从工件仓库下载的】任何JAR包里开后门。”</p>\n<p>Dilettante是一个简单的POC，它所做的仅仅是让Java在屏幕上展现猫图片。但就是这种非常简单的技术，却可以用来大面积恶意破坏Java生态系统——只要项目是通过HTTP而不是HTTPS下载依赖项的。</p>\n<p><img src=\"https://static001.infoq.cn/resource/image/20/23/200757b1e7b9bb957cfdc5b3f107c523.jpg\" alt=\"\" /></p>\n<p>图中猫咪说：听说你提供JAR包不用ssl？</p>\n<p>HTTPS不仅能加密客户端和服务器之间的流量，还能保证客户端是在与其所请求的服务器进行通信，避免有人在中间冒名顶替（即MITM，中间人攻击）。</p>\n<h2>我是怎么发现的？</h2>\n<p>有一次，我发现自己的项目中有一个工件用的是HTTP。</p>\n<pre><code>// Ktor没有发布到jcenter仓库。\n\tmaven {\n\t    setUrl(&quot;http://dl.bintray.com/kotlin/ktor&quot;)\n\t}\n</code></pre>\n<p>这是怎么来的？</p>\n<p>这是从<a href=\"https://github.com/ktorio/ktor\">Ktor仓库</a>复制和粘贴来的。我深入研究Ktor仓库的历史，发现直到最近，<a href=\"https://github.com/ktorio/ktor/issues/953\">Ktor还在用HTTP来解析依赖关系</a>。有一点要注意，Ktor是JetBrains的一个官方库。就连JetBrains的官方库都这样？我十分好奇，开始寻找其他哪里还有这个库。</p>\n<h2>谁容易遭受攻击？</h2>\n<p>长话短说：GitHub上一些最流行的基于JVM的项目，它们曾经或仍然容易受到攻击。</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left\">组织</th>\n<th style=\"text-align:left\">项目</th>\n<th style=\"text-align:left\">加星数</th>\n<th style=\"text-align:left\">已完成</th>\n<th style=\"text-align:left\">GitHub上的问题</th>\n<th style=\"text-align:left\">已确认</th>\n<th style=\"text-align:left\">已修复</th>\n<th style=\"text-align:left\">会审核</th>\n<th style=\"text-align:left\">不审核</th>\n<th style=\"text-align:left\">审核结果</th>\n<th style=\"text-align:left\">保证影响</th>\n<th style=\"text-align:left\">CVE（漏洞和披露）</th>\n<th style=\"text-align:left\">无已发布的发行版本</th>\n<th style=\"text-align:left\">备注</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left\">arrow-kt</td>\n<td style=\"text-align:left\">arrow</td>\n<td style=\"text-align:left\">2718</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/arrow-kt/arrow/issues/1310\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-11404</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ben-manes</td>\n<td style=\"text-align:left\">caffeine</td>\n<td style=\"text-align:left\">6021</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/ben-manes/caffeine/issues/301\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">无妨</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">cbeust</td>\n<td style=\"text-align:left\">jcommander</td>\n<td style=\"text-align:left\">1287</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/cbeust/jcommander/issues/465\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">cbeust</td>\n<td style=\"text-align:left\">testng</td>\n<td style=\"text-align:left\">1285</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/cbeust/testng/issues/2018\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">cbeust</td>\n<td style=\"text-align:left\">kobalt</td>\n<td style=\"text-align:left\">370</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/cbeust/kobalt/issues/499\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">构建工具。影响到用户。</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">CodeNarc</td>\n<td style=\"text-align:left\">CodeNarc</td>\n<td style=\"text-align:left\">204</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/CodeNarc/CodeNarc/issues/403\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">controlsfx</td>\n<td style=\"text-align:left\">controlsfx</td>\n<td style=\"text-align:left\">229</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/controlsfx/controlsfx/issues/1153\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">diffplug</td>\n<td style=\"text-align:left\">spotless</td>\n<td style=\"text-align:left\">700</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/diffplug/spotless/issues/360\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">尚无定论</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">vorto</td>\n<td style=\"text-align:left\">103</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/vorto/issues/1434\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-10248</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">buildship</td>\n<td style=\"text-align:left\">422</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/buildship/issues/855\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">xtext-maven</td>\n<td style=\"text-align:left\">6</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/xtext-maven/issues/74\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-10249</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">hawkbit</td>\n<td style=\"text-align:left\">184</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/hawkbit/issues/812\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-10240</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">xtext-xtend</td>\n<td style=\"text-align:left\">55</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/xtext-xtend/issues/759\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-10249</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Eclipse</td>\n<td style=\"text-align:left\">sw360</td>\n<td style=\"text-align:left\">23</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/eclipse/sw360/issues/500\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ehcache</td>\n<td style=\"text-align:left\">ehcache3</td>\n<td style=\"text-align:left\">1323</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/ehcache/ehcache3/issues/2588\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">无妨</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/ehcache/ehcache3-release-validation/pull/1\">提交请求（pr）</a></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">FasterXML</td>\n<td style=\"text-align:left\">jackson-module-scala</td>\n<td style=\"text-align:left\">385</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/FasterXML/jackson-module-scala/issues/400\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">grails</td>\n<td style=\"text-align:left\">grails-core</td>\n<td style=\"text-align:left\">2474</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/grails/grails-core/issues/11250\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">无妨</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-12728</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">HellFirePvP</td>\n<td style=\"text-align:left\">AstralSorcery</td>\n<td style=\"text-align:left\">99</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/HellFirePvP/AstralSorcery/issues/1009\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">“我的世界”模组</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">immutables</td>\n<td style=\"text-align:left\">immutables</td>\n<td style=\"text-align:left\">2409</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/immutables/immutables/issues/919\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ktorio</td>\n<td style=\"text-align:left\">ktor</td>\n<td style=\"text-align:left\">5290</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/ktorio/ktor/issues/953\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">CVE-2019-10102</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">MightyPirates</td>\n<td style=\"text-align:left\">OpenComputers</td>\n<td style=\"text-align:left\">792</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/MightyPirates/OpenComputers/issues/3048\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">“我的世界”模组</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">MinecraftForge</td>\n<td style=\"text-align:left\">CoreMods</td>\n<td style=\"text-align:left\">22</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/MinecraftForge/CoreMods/issues/4\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">“我的世界”模组</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">NationalSecurityAgency</td>\n<td style=\"text-align:left\">datawave</td>\n<td style=\"text-align:left\">243</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/NationalSecurityAgency/datawave/issues/373\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">nebula-plugins</td>\n<td style=\"text-align:left\">nebula-kotlin-plugin</td>\n<td style=\"text-align:left\">54</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/nebula-plugins/nebula-kotlin-plugin/issues/27\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">nebula-plugins</td>\n<td style=\"text-align:left\">nebula-test</td>\n<td style=\"text-align:left\">37</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/nebula-plugins/nebula-test/issues/106\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">nebula-plugins</td>\n<td style=\"text-align:left\">nebula-grails-plugin</td>\n<td style=\"text-align:left\">2</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/nebula-plugins/nebula-grails-plugin/issues/12\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">nebula-plugins</td>\n<td style=\"text-align:left\">nebula-clojure-plugin</td>\n<td style=\"text-align:left\">12</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/nebula-plugins/nebula-clojure-plugin/issues/21\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">nextflow-io</td>\n<td style=\"text-align:left\">nextflow</td>\n<td style=\"text-align:left\">818</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/nextflow-io/nextflow/pull/1063\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">OpenAPITools</td>\n<td style=\"text-align:left\">openapi-generator</td>\n<td style=\"text-align:left\">2456</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/OpenAPITools/openapi-generator/issues/2253\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">CVE-2019-11405</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">代码生成器</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">Gibberish-Detector-Java</td>\n<td style=\"text-align:left\">18</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/Gibberish-Detector-Java/issues/2\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">digraph-parser</td>\n<td style=\"text-align:left\">21</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/digraph-parser/issues/2\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">SeLion</td>\n<td style=\"text-align:left\">213</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/SeLion/issues/387\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">NNAnalytics</td>\n<td style=\"text-align:left\">60</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/NNAnalytics/issues/198\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">无妨</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">gimel</td>\n<td style=\"text-align:left\">152</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/gimel/issues/154\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">PayPal</td>\n<td style=\"text-align:left\">aurora</td>\n<td style=\"text-align:left\">81</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/paypal/aurora/issues/4\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">powermock</td>\n<td style=\"text-align:left\">powermock</td>\n<td style=\"text-align:left\">2599</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/powermock/powermock/issues/973\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">SlimeKnights</td>\n<td style=\"text-align:left\">TinkersConstruct</td>\n<td style=\"text-align:left\">592</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/SlimeKnights/TinkersConstruct/issues/3764\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">“我的世界”模组</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">sourcerer-io</td>\n<td style=\"text-align:left\">sourcerer-app</td>\n<td style=\"text-align:left\">4523</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/sourcerer-io/sourcerer-app/issues/478\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">spinnaker</td>\n<td style=\"text-align:left\">spinnaker</td>\n<td style=\"text-align:left\">6213</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/spinnaker/spinnaker/issues/3997\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">spockframework</td>\n<td style=\"text-align:left\">spock</td>\n<td style=\"text-align:left\">2368</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/spockframework/spock/issues/974\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">swagger-api</td>\n<td style=\"text-align:left\">swagger-codegen</td>\n<td style=\"text-align:left\">9540</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/swagger-api/swagger-codegen/issues/9210\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">代码生成器</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">target</td>\n<td style=\"text-align:left\">data-validator</td>\n<td style=\"text-align:left\">12</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/target/data-validator/issues/8\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">TheGreyGhost</td>\n<td style=\"text-align:left\">MinecraftByExample</td>\n<td style=\"text-align:left\">549</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/TheGreyGhost/MinecraftByExample/issues/50\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">typelevel</td>\n<td style=\"text-align:left\">cats</td>\n<td style=\"text-align:left\">3261</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/typelevel/cats/issues/2820\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">无妨</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">uber</td>\n<td style=\"text-align:left\">uReplicator</td>\n<td style=\"text-align:left\">493</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/uber/uReplicator/issues/234\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">uber</td>\n<td style=\"text-align:left\">uberscriptquery</td>\n<td style=\"text-align:left\">42</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/uber/uberscriptquery/issues/2\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">uber</td>\n<td style=\"text-align:left\">chaperone</td>\n<td style=\"text-align:left\">603</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/uber/chaperone/issues/12\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">WebGoat</td>\n<td style=\"text-align:left\">WebGoat</td>\n<td style=\"text-align:left\">2546</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/WebGoat/WebGoat/issues/558\">链接</a></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">xtext</td>\n<td style=\"text-align:left\">maven-xtext-example</td>\n<td style=\"text-align:left\">51</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"><a href=\"https://github.com/xtext/maven-xtext-example/issues/61\">链接</a></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\">未完成</td>\n<td style=\"text-align:left\">否</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">是</td>\n<td style=\"text-align:left\"></td>\n</tr>\n<tr>\n<td style=\"text-align:left\">总加星数</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\">63960</td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n<td style=\"text-align:left\"></td>\n</tr>\n</tbody>\n</table>\n<center>由<a href=\"https://sheetsu.com/table\">Sheetsu.com</a>提供</center>\n<p>注意：“已完成”列写着“是”的项目已完全解决了问题，并且已审核过，或为其之前的版本发布了CVE编号。</p>\n<p>下面是上表的Google Sheets地址，有兴趣可以去看看。</p>\n<p><a href=\"https://docs.google.com/spreadsheets/d/1zemxj8QdIp0saqvwJx6Po1KnyEmJXl2KC_0j0SLd_2E/edit?usp=sharing\">不安全依赖的解决方案</a></p>\n<p>除了上面列出的项目之外，还有一些大型社区和组织也会受此漏洞影响。</p>\n<h3>“我的世界（Minecraft）”游戏模组</h3>\n<p>这是我找的第一个地方，不出所料，马上就找到了这个漏洞，在几乎所有模组的构建的基础架构中都有它。</p>\n<h3>JetBrains</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/c4/0d/c4ca0776971710bd553b2963a26b8c0d.jpg\" alt=\"\" /></p>\n<p>考虑到Ktor事件可能不是一次性事件，我开始关注JetBrains在GitHub上的项目。<br />\n<strong>Kotlin 编译器</strong></p>\n<p><img src=\"https://static001.infoq.cn/resource/image/11/84/11ad18d61d637847b7cc4afe58892084.png\" alt=\"\" /></p>\n<p>Kotlin是JetBrains开发的编程语言，可编译为JVM、LLVM和JavaScript，在Android开发人员中很受欢迎。谷歌最近指定<a href=\"https://techcrunch.com/2019/05/07/kotlin-is-now-googles-preferred-language-for-android-app-development/\">Kotlin现在成为Android开发的首选语言</a>。</p>\n<p>我在Kotlin编译器代码库中，发现了许多实例，它们的构建的基础设施和测试都通过HTTP下载依赖项.</p>\n<p>不仅Kotlin编译器的源代码的依赖容易受到攻击，而且易受攻击的代码仓库也用在了Gradle的“buildscript”类路径，这增加了把牵连到的工件发布出去的潜在风险。</p>\n<p>如果这还不够糟糕，那么buildscript类路径也用于解析以前版本的Kotlin编译器，从而使编译器可能遭受“Trusting Trust”攻击（参见下面更详细的内容）。</p>\n<p><strong>IntelliJ IDEA</strong><br />\nIntelliJ和一些官方插件不仅容易受到攻击，而且很多情况下，创建启动项目会用到代码生成器，所以IntelliJ生成的项目也容易受到攻击。</p>\n<h3>Gradle</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/f7/64/f7cf801ed1b4a7107cf8f23174d9e164.png\" alt=\"\" /></p>\n<p>Gradle是一个有趣的案例。作为Gradle的贡献者，你不会受到此漏洞的影响。但是，当在Gradle公司的Team City CI基础设施上，用Gradle构建Gradle代码库时，该基础设施会覆盖一些默认值，改成用HTTP从JFrog Artifactory实例上获取工件。幸运的是，该基础设施与Gradle JFrog Artifactory服务器位于同一网络中。</p>\n<p>话又说回来，Gradle公司的JFrog Artifactory服务器还通过HTTP为其他工件服务器建立镜像，因此可能会将这些镜像暴露给基于MITM的缓存中毒（cache poisoning）攻击。</p>\n<h3>Elastic Search</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/29/cd/29c620f267ed1982d1c6b683d2737fcd.jpeg\" alt=\"\" /></p>\n<p>在撰写本文时，Elastic Search代码库有3.86万次加星，是GitHub上最受瞩目的Java项目。Elastic Search的主工程有超过1100个贡献者。因此我确定，Elastic构建里的测试逻辑部分易受此漏洞影响。</p>\n<h3>Apache</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/de/ad/de493f2cd847076e61671bbbd3ac81ad.png\" alt=\"\" /></p>\n<p>我在Apache软件基金会（Apache Software Foundation）的几个项目中发现了这个漏洞。</p>\n<p>其中值得注意的将在下文列出。</p>\n<p>截至本文发布之日，Apache软件基金会已决定不给受影响项目发布CVE编号。虽然这些项目大多没有统计过是否被此漏洞攻陷。<br />\n<strong>Groovy 编译器</strong></p>\n<p><img src=\"https://static001.infoq.cn/resource/image/fc/5c/fc982c51da15c2866816b0edef7a515c.png\" alt=\"\" /><br />\nApache Groovy是在JVM上做开发最流行的替代品之一，也容易受到攻击。在撰写本文时，根据<a href=\"https://www.tiobe.com/tiobe-index/\">Tiobe索引</a>，Groovy在世界​编程语言中受欢迎程度排名第19。与Kotlin类似，Groovy编译器的buildscript类路径有通过HTTP解析的依赖关系。这也导致了工件被破坏的可能性。</p>\n<p>幸运的是，构建Groovy编译器的引导编译器完全用Java编写，因此受“Trusting Trust”攻击的可能性非常小。<br />\n此外，我还发现Groovy的Eclipse插件易受攻击。</p>\n<p><strong>Hadoop</strong><br />\nApache Hadoop有超过193个贡献者，成为贡献者最多的项目。所有贡献者在他们机器上运行的Hadoop构建都可能被MITM攻陷。<br />\n<strong>Kafka</strong><br />\nApache Kafka最初由LinkedIn团队编写，是一个快速的事件代理。LinkedIn在内部使用Kafka，<a href=\"https://www.confluent.io/blog/apache-kafka-hits-1-1-trillion-messages-per-day-joins-the-4-comma-club/\">每天摄取的信息条数已经超过1万亿条</a>。我发现Kafka的构建系统是通过HTTP而不是HTTPS加载Gradle插件。</p>\n<p><strong>Apache其他项目</strong><br />\n我发现，易受攻击的Apache项目包括但不限于以下项目：Casandra、Geode、Storm、Bigtop、Fink、OpenJPA、Royal Compiler和Airavata。</p>\n<h3>Jenkins</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/12/3e/126b8cade2ff8ec404c8835d5bc6393e.png\" alt=\"\" /></p>\n<blockquote></blockquote>\n<p>Jenkins在全球有超过100万用户，是使用最广泛的开源自动化服务器。</p>\n<p><a href=\"https://www.cloudbees.com/press/jenkins-community-announces-record-growth-and-innovation-2017\">Jenkins社区宣布2017年的纪录增长和创新</a>。</p>\n<p>Jenkins被用作自托管的CI管道，用于自动构建和测试软件。Jenkins和许多Jenkins官方插件都附带了通过HTTP下载的依赖项。</p>\n<h3>Spring</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/fc/c4/fc91c6c1d0076dc9576ad4640daf71c4.png\" alt=\"\" /></p>\n<p>我在spring-security-oauth项目发现了第一个（漏洞）位置。Spring项目是我开始研究基于Maven的第一个项目，因此不得不找了一种完全不同的搜索方法，用来通过GitHub搜索功能检查Maven POM文件。我一开始寻找，就发现这个漏洞存在于Spring组织下的许多其他项目中。</p>\n<p>Spring团队立即做出响应，开始修补他们的所有项目。因受Pivotal项目重度影响，Pivotal开发了一个工具，用以查找和替换整个代码库中所有使用HTTP的地方。该工具在此：<br />\n<a href=\"https://github.com/spring-io/nohttp\">spring-io/nohttp</a>。</p>\n<h3>Red Hat</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/d3/12/d3f5955af63265f239152ac2ee8a7b12.jpeg\" alt=\"\" /></p>\n<p>这个漏洞还影响了Red Hat维护的许多项目。这些项目包括但不限于Hibernate ORM、RestEasy和Wildfly（旧称JBoss）生态系统中的许多项目。</p>\n<h3>Eclipse基金会</h3>\n<p><img src=\"https://static001.infoq.cn/resource/image/95/e9/95f6280a9757d80ba608fab72956f6e9.png\" alt=\"\" /></p>\n<p>与Red Hat和Apache基金会类似，漏洞也影响了Eclipse基金会的项目Vorto、Buildship、xtext、Orion和Birt。</p>\n<h3>Oracle</h3>\n<p>此漏洞还影响了Oracle的一些开源项目，包括VisualVM、PGQL、OpenGrok和Helidon。</p>\n<h3>测试库和框架</h3>\n<p>一些非常流行的JVM测试库和框架也很容易受到攻击，包括TestNG、Spock和PowerMock。</p>\n<h3>其他项目</h3>\n<p>其他项目，包括Grails、FasterJacksonXML和Ehcache3的Scala模块也发现了此漏洞。此外，我在网飞（Netflix）、谷歌、Twitter、美国国家安全局（NSA）、Stripe、Gluon（Scene Builder）PortSwigger、Black Duck、Snyk、LinkedIn和PayPal的开源项目中也发现了这个漏洞。讽刺的是，当我向PayPal的安全团队提交问题报告漏洞时，他们关闭了这个问题，因为他们认为MITM “<a href=\"https://hackerone.com/paypal#out-of-scope-vulnerabilities\">超出了他们的HackerOne</a><a href=\"https://hackerone.com/paypal#out-of-scope-vulnerabilities\">的</a><a href=\"https://hackerone.com/paypal#out-of-scope-vulnerabilities\">计划范围</a>”。</p>\n<h2>MITM的常见程度如何？</h2>\n<p>我对常见的MITM的初步研究，源于我研究恶意破坏XML的解析器。这些解析器加载了通过HTTP加载的DTD文件，以实现<a href=\"https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing\">XXE</a>。相关信息以后找机会另写文章详述。我发现MITM的常见程度相当惊人。</p>\n<h3>互联网服务提供商</h3>\n<p>令我惊讶的是，互联网服务提供商（ISP）似乎经常做MITM。</p>\n<blockquote>\n<p>康卡斯特开始向我在互联网上请求的页面注入400多行JavaScript代码，以便当浏览器渲染页面时，用JavaScript生成弹出窗口，向我推销新的调制解调器。</p>\n</blockquote>\n<blockquote>\n<p>引用自：<a href=\"https://thenextweb.com/insights/2017/12/11/comcast-continues-to-inject-its-own-code-into-websites-you-visit/\">康卡斯特持续将自己的代码注入您访问的网站</a></p>\n</blockquote>\n<p>印度的<a href=\"http://www.bsnl.co.in/\">Bharat Sanchar Nigam Limited</a>（BSNL）也曾将广告注入用户通过HTTP访问的网页。</p>\n<p>这就说明，MITM的基础条件早已具备，稍加利用就能影响JAR文件。</p>\n<h3>恶意行为者</h3>\n<p>当恶意行为者获得对系统的访问权限时，他们通常会迅速利用新的立足点来建立MITM。Verizon每年都会发布数据泄露调查报告（Data Breach Investigation Report，DBIR），分析每年最常被利用的各种攻击媒介。下面引用自他们的一份报告。</p>\n<blockquote>\n<p>行为<br />\n三大威胁行为是黑客入侵、恶意软件和社会工程学。最常见的黑客入侵行为的类型是使用被盗的登录凭据、利用后门程序和中间人（man-in-the-middle，即MITM的全写）攻击。<br />\n引用自： <a href=\"https://www.verizonenterprise.com/resources/reports/rp_data-breach-investigations-report-2011_en_xg.pdf\">Verizon 2011数据违规调查报告</a>；第69页</p>\n</blockquote>\n<p>引用自该报告的分析：</p>\n<blockquote>\n<p>我推测，一旦黑客已在系统中立足，MITM就比较次要了。但荷兰高科技犯罪部门的数据显示，MITM本身就值得关注的——在他们统计到的32个数据泄露事件中，有15个涉及MITM行为。<br />\n引用自：<a href=\"https://security.stackexchange.com/a/12050\">Stack Exchange上的回答：“中间人”攻击极为罕见吗？</a></p>\n</blockquote>\n<p>应把MITM攻击视为软件安全中确定存在的威胁。</p>\n<h3>通过公共WiFi连接</h3>\n<p>抛开所有其他攻击媒介，开发人员通过公共WiFi从事这些项目的工作，都等同于放开了他们的电脑，可能会受到恶意攻击。这种攻击可以用著名的Firefox插件<a href=\"https://en.wikipedia.org/wiki/Firesheep\">Firesheep</a>演示。</p>\n<p>WiFi热点的潜在危害可能会对开发人员产生重大影响，因为他们很多人会在咖啡店、开发者大会等地方使用公共WiFi。只需要<a href=\"https://shop.hak5.org/products/wifi-pineapple\">WiFi Pineapple</a>，加上他们电脑未缓存过的依赖就可以感染他们的电脑了。</p>\n<h3>政府机构</h3>\n<p>拜斯诺登所赐，我们现在知道了美国政府三个邮件中介（letter agencies）对美国公民进行MITM攻击的各种方法。</p>\n<blockquote>\n<p>NSA靠跟美国电信公司的秘密合作伙伴关系，诱使目标访问FoxAcid服务器。作为Turmoil系统的一部分，NSA将秘密服务器（代号为Quantum）放置在互联网骨干网的关键位置，确保它们可以比其他网站更快响应。靠这个速度差，这些服务器可以在合法网站响应之前，模拟成目标要访问的网站，从而欺骗目标的浏览器访问Foxacid服务器。<br />\n引用自： <a href=\"https://www.schneier.com/blog/archives/2013/10/how_the_nsa_att.html\">NSA如何使用QUANTUM和FOXACID攻击Tor/Firefox用户</a></p>\n</blockquote>\n<p>以前，由于<a href=\"https://www.wired.com/story/google-internet-traffic-china-russia-rerouted/\">BGP路由配置错误</a>，美国国内的互联网流量也有过通过国外路由的历史。</p>\n<h2>通过HTTP加载的最常见的存储库</h2>\n<p>让我们看一下使用HTTP的最常见代码库的一些统计信息。请注意，这些数字并不精确，可能略微大些，因为GitHub的搜索本质上是模糊搜索。</p>\n<h3>Maven中央仓库（Maven Central）</h3>\n<p>Maven中央仓库是JVM生态系统中最常用的工件服务器，是Maven使用的默认工件服务器，是JVM工件托管空间中的第一个主要参与者。</p>\n<h3>JFrog JCenter</h3>\n<p>JCenter是Maven中央仓库的超集。开发人员把他们的工件发布到JFrog Bintray后，可以请求在此创建他们工件的镜像。</p>\n<h3>JFrog Bintray</h3>\n<p>JFrog Bintray让开发人员可以为开源项目免费创建自己的工件服务器。</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left\">公司</th>\n<th style=\"text-align:left\">服务器</th>\n<th style=\"text-align:left\">URL</th>\n<th style=\"text-align:left\">使用Maven数</th>\n<th style=\"text-align:left\">使用Gradle数</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left\">Sonatype</td>\n<td style=\"text-align:left\">Maven Central</td>\n<td style=\"text-align:left\"><a href=\"http://repo1.maven.org/maven2\">链接</a></td>\n<td style=\"text-align:left\">~4万</td>\n<td style=\"text-align:left\">~5600</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Sonatype</td>\n<td style=\"text-align:left\">Maven Central</td>\n<td style=\"text-align:left\"><a href=\"http://repo.maven.apache.org/maven2\">链接</a></td>\n<td style=\"text-align:left\">偏斜数据（Skewed Data）</td>\n<td style=\"text-align:left\">~11800</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">JFrog</td>\n<td style=\"text-align:left\">JCenter</td>\n<td style=\"text-align:left\"><a href=\"http://jcenter.bintray.com\">链接</a></td>\n<td style=\"text-align:left\">~15200</td>\n<td style=\"text-align:left\">~37200</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">JFrog</td>\n<td style=\"text-align:left\">Bintray</td>\n<td style=\"text-align:left\"><a href=\"http://dl.bintray.com\">链接</a></td>\n<td style=\"text-align:left\">~7300</td>\n<td style=\"text-align:left\">~17300</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">Pivotal</td>\n<td style=\"text-align:left\">Spring</td>\n<td style=\"text-align:left\"><a href=\"http://repo.spring.io\">链接</a></td>\n<td style=\"text-align:left\">~187000</td>\n<td style=\"text-align:left\">~27000</td>\n</tr>\n</tbody>\n</table>\n<center>由<a href=\"https://sheetsu.com/table\">Sheetsu.com</a>提供</center>\n<p>显然，这是Gradle和Maven项目中广泛存在的一个安全漏洞。</p>\n<h2>编写一个（理论上的）Java库蠕虫</h2>\n<p>作为一个思维实验，我草拟了滥用此MITM漏洞来创建Java库蠕虫的理论。实验结果参见此处：<br />\n<a href=\"https://medium.com/@jonathan.leitschuh/lets-write-a-theoretical-java-library-worm-9a6edff87cf5\">让咱们写一个（理论上的）Java库蠕虫</a><br />\n若你觉得“太长不看”，简单说来如下图：</p>\n<p><img src=\"https://static001.infoq.cn/resource/image/1a/41/1a3cc677c83518bba0274cb7f5ac6f41.jpeg\" alt=\"\" /></p>\n<p>该漏洞的后果是，在发布期间使用有MITM漏洞的依赖，可能会让恶意代码攻陷构建出来的工件，从而感染下游用户。</p>\n<h2>修复过去</h2>\n<p>对于已经发布的库，除非这些项目构建是<a href=\"https://en.wikipedia.org/wiki/Reproducible_builds\">完全可重复的</a>，否则无可奈何。</p>\n<p>对于易受此影响的编译器（Kotlin）、用于测试自己的测试库（Spock和TestNG）、用于构建自己的构建工具（Gradle），这可能是一个问题，因为信任链已被打破。大多数编译器都用于编译自己。有关此主题的更多信息，请参阅Ken Thompson写的论文《<a href=\"https://www.archive.ece.cmu.edu/~ganger/712.fall02/papers/p761-thompson.pdf\">Reflections on Trusting Trust</a>》，这篇相对较短。</p>\n<h2>修复未来</h2>\n<p>我认为像Gradle、Maven和SBT这样的构建工具，应该默认用HTTPS解析依赖关系，除非用户明确声明不用HTTPS。这将迫使用户明确声明使用不安全的协议，从而防止不小心写错。我向Gradle和Maven都提出了要求实现该功能的提案，链接如下，请帮我投个赞成票！</p>\n<p><a href=\"https://github.com/gradle/gradle/pull/9419\">Deprecate HTTP Download by JLLeitschuh · Pull Request #9419 · gradle/gradle</a></p>\n<p><a href=\"https://issues.apache.org/jira/browse/MNG-6673\">[MNG-6673] Deprecate HTTP Download &amp; Upload - ASF JIRA</a></p>\n<h3>代码仓库的自动审查</h3>\n<p>Pivotal开发的nohttp工具可以查找所有出现的HTTP，除了列入白名单的HTTP（比如XML命名空间名称）。这将确保HTTP不会在其他地方引起问题（比如Gradle Wrapper位置，DTD声明等）。它可以寻找和替换“HTTP”，并集成在构建里，确保将来不使用HTTP。<br />\n<a href=\"https://github.com/spring-io/nohttp\">spring-io/nohttp</a></p>\n<h3>工件主机将在2020年1月弃用HTTP</h3>\n<p>随着此漏洞的范围变得越来越大，我很快意识到，修复这个漏洞的一些责任在Maven Central和JCenter等工件主机上。我联系了两个最大的工件主机Sonatype（Maven Central）、JFrog（JCenter），以及Pivotal（Spring）、Eclipse Foundation、Jenkins、Red Hat和JetBrains等较小的主机，询问它们是否愿意从2020年1月15日起完全阻止通过HTTP发出的下载请求。</p>\n<p><strong>25％的Maven Central下载仍在使用HTTP</strong></p>\n<p>JFrog和Pivotal很快就都告诉我他们会跟进。</p>\n<h2>个人容易受到这种影响吗？</h2>\n<p>鉴于我发现许多广泛使用的开源项目都存在这个漏洞，我建议任何开发JVM软件的人，都应检查代码库的构建逻辑，以解决使用HTTP依赖的问题。</p>\n<h3>我需要找什么？</h3>\n<p>对于Gradle，你应该寻找像这样的代码库配置。</p>\n<pre><code>// 这些依赖项用于整个构建的类路径\n\tbuildscript {\n\t    repositories {\n\t        maven {\n\t            url 'http://[SOME URL HERE]'\n\t        }\n\t    }\n\t    // ...\n\t}\n\t\n\n\t// 这些依赖项用作编译器的输入，并用于测试的类路径\n\trepositories {\n\t    maven {\n\t        url 'http://[SOME URL HERE]'\n\t    }\n\t}\n\t// ...\n\t\n\n\t// 这是没有安全上传构建工件的一个例子。\n\t// 若你找到了这个，那么用于上传的证书可能就受到了威胁。\n\tuploadArchives {\n\t    repositories {\n\t        mavenDeployer {\n\t            snapshotRepository(url: 'http://[SOME URL HERE]') {\n\t                authentication userName: repoUser, password: repoPassword\n\t            }\n\t            repository(url: 'http://[SOME URL HERE]') {\n\t                authentication(userName: repoUser, password: repoPassword);\n\t            }\n\t        }\n\t    }\n\t}\n</code></pre>\n<p>Gradle开发人员可能还应检查所有init.gradle脚本，它们在其公司内部分发，但一般不检入源代码管理系统。</p>\n<p>对于基于Maven的项目，你要寻找像这样的代码库配置。</p>\n<pre><code>&lt;!-- 这些依赖项用作编译器的输入，并用于测试的类路径 --&gt;\n\t&lt;repositories&gt;\n\t  &lt;repository&gt;\n\t    &lt;id&gt;[SOME ID]&lt;/id&gt;\n\t    &lt;name&gt;Example insecure repository&lt;/name&gt;\n\t    &lt;url&gt;http://[SOME URL HERE]&lt;/url&gt;\n\t  &lt;/repository&gt;\n\t&lt;/repositories&gt;\n\t\n\t&lt;!-- ... --&gt;\t\n\n\t&lt;!-- 这是没有安全上传构建工件的一个例子。 --&gt;\n\t&lt;!-- 若你找到了这个，那么用于上传的证书可能就受到了威胁。 --&gt;\n\t&lt;distributionManagement&gt;\n\t  &lt;repository&gt;\n\t    &lt;id&gt;[SOME ID]&lt;/id&gt;\n\t    &lt;name&gt;Example insecure repository&lt;/name&gt;\n\t    &lt;url&gt;http://[SOME URL HERE]&lt;/url&gt;\n\t  &lt;/repository&gt;\n\t&lt;/distributionManagement&gt;\n\t\n\n\t&lt;!-- 这些依赖项用于整个构建的类路径 --&gt;\n\t&lt;pluginRepositories&gt;\n\t  &lt;pluginRepository&gt;\n\t    &lt;id&gt;[SOME ID]&lt;/id&gt;\n\t    &lt;name&gt;Example insecure repository&lt;/name&gt;\n\t    &lt;url&gt;http://[SOME URL HERE]&lt;/url&gt;\n\t  &lt;/pluginRepository&gt;\n\t&lt;/pluginRepositories&gt;\n</code></pre>\n<p>Maven开发人员还应该检查~/.m2/settings.xml文件中的配置，因为代码库凭据通常就存在这里。</p>\n<p>此外，JFrog Artifactory或Sonatype的Nexus的企业用户，应检查其服务器的配置，看它们是否通过HTTP创建了其他工件服务器的镜像。</p>\n<p><img src=\"https://static001.infoq.cn/resource/image/01/a7/010657932294101992ffc155da4e3ca7.png\" alt=\"\" /></p>\n<center>在JFrog Artifactory中不安全的配置的例子</center>\n<p>我已经联系了Sonatype和JFrog，要求他们在未来的更新中，对不安全的配置向用户/管理员提出警告。</p>\n<p>JFrog回应说，该功能已正式成为他们路线图的一部分，但还没有计划发布日期。</p>\n<h3>如果发现此漏洞，该怎么办？</h3>\n<p>要把执行潜在恶意Jar的整个机器（开发机、构建机等）看成可能被攻陷了。这也意味着该机器可以访问的任何内容（其他项目、凭据、其他主机等）也应该视为可能被攻陷了。共享工件的缓存，如~/.gradle和~/.m2目录，其中的Gradle和Maven的缓存工件都应视为已受污染，应该删除。为避免单个易受攻击的应用程序连累其构建的每个项目，最佳做法是隔离构建。</p>\n<p>如果你是易受此攻击的开源项目的维护者，那么你有责任审查先前的版本，或提交CVE编号，通知下游用户可能存在的危害。</p>\n<h2>结束语</h2>\n<p>不幸的是，我只能联系受此漏洞影响的一小部分项目。你在工作中依赖的许多开源项目可能都容易受此影响。如果你可以，请联系你发现的受影响项目，一起保护Java生态系统。</p>\n<p>如果你使用开源软件，或用这些构建工具开发商业软件，我强烈建议：为整个软件供应链的安全，请审查你的构建。</p>\n<h2>特别鸣谢</h2>\n<p>感谢我联系的所有组织中，所有真正令人敬畏的专业安全团队和项目维护人员。我自己是绝不可能修补所有地方的。其中一些团队，在我报告后几小时内就做出回应，并在第二天就推出修复程序。另外，我要感谢<a href=\"https://snyk.io/\">Snyk</a>愿意做这些CVE报告的CNA。我还要感谢Max Veytsman创造了Dilettante。用POC使披露流程更加顺畅。</p>\n<h2>深入研究的附注</h2>\n<p>如果你是一名安全研究人员，并希望在其他Java项目中发现这些安全漏洞，我可能漏了说明我在Github搜索时用的查询条件，补充如下：</p>\n<h3>在GitHub搜索功能里查询漏洞时可用以下查询条件</h3>\n<p>在GITHUB_ORGANIZATION的Gradle构建文件里搜索使用“http://”之处</p>\n<pre><code>https://github.com/search?l=Gradle&amp;q=org%3A[GITHUB_ORGANIZATION]+http%3A%2F%2F&amp;type=Code\n</code></pre>\n<p>在工程的源代码里搜索代码仓库的通用查询条件</p>\n<pre><code>https://github.com/search?q=org%3A[GITHUB_ORGANIZATION]+repositories&amp;type=Code\n</code></pre>\n<p>在Gradle Builds里搜索的特殊查询条件</p>\n<pre><code>https://github.com/search?l=Gradle&amp;q=org%3A[GITHUB_ORGANIZATION]+repositories&amp;type=Code\n</code></pre>\n<p>在Maven POM文件里搜索的特殊查询条件</p>\n<pre><code>https://github.com/search?l=Maven+POM&amp;q=org%[GITHUB_ORGANIZATION]+repositories&amp;type=Code\nhttps://github.com/search?l=Maven+POM&amp;q=org%[GITHUB_ORGANIZATION]+repository&amp;type=Code\n</code></pre>\n<p>如果你用这些查询条件在某项目中发现此问题，请指回本文。</p>\n<h3>检查发布版本异同的工具</h3>\n<ul>\n<li><a href=\"https://reproducible-builds.org/tools/\">https://reproducible-builds.org/tools/</a></li>\n<li><a href=\"https://github.com/scala/jardiff\">https://github.com/scala/jardiff</a></li>\n</ul>\n<p><strong>原文链接：</strong></p>\n<p><a href=\"https://medium.com/bugbountywriteup/want-to-take-over-the-java-ecosystem-all-you-need-is-a-mitm-1fc329d898fb\">https://medium.com/bugbountywriteup/want-to-take-over-the-java-ecosystem-all-you-need-is-a-mitm-1fc329d898fb</a></p>\n",
+    "ebook": {},
+    "love": 0,
+    "is_love": false,
+    "copyright": 1,
+    "recommend_list": [
+      {
+        "id": 21677,
+        "aid": 21866,
+        "type": 1,
+        "views": 4797,
+        "uuid": "fVSzGT-qRQqSgmb0i7OB",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1550219635244,
+        "ctime": 1550219636902,
+        "utime": 1561480860851,
+        "score": 1550219635244,
+        "article_title": "国内AI企业深网视界数据库未加密，200多万条敏感个人信息“裸奔”",
+        "article_sharetitle": "国内AI企业深网视界数据库未加密，200多万条敏感个人信息“裸奔”",
+        "article_subtitle": "",
+        "article_summary": "荷兰安全研究人员 Victor Gevers 近日发现一家中国面部识别公司的数据库没设密码，完全暴露在网上，其中包含的数百万人信息可被随意访问。",
+        "article_cover": "https://static001.infoq.cn/resource/image/97/9c/9750ff79473d58ba68065a64af21109c.jpg",
+        "article_cover_point": "{\"big\":{\"point\":{\"x\":0,\"y\":0,\"w\":1499,\"h\":773}},\"small\":{\"point\":{\"x\":153,\"y\":0,\"w\":1346,\"h\":1000}},\"width\":1500,\"height\":1000}",
+        "author": [
+          {
+            "uid": 1369966,
+            "nickname": "甜梨",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 21,
+            "name": "安全",
+            "alias": "Security"
+          },
+          {
+            "id": 29,
+            "name": "数据库",
+            "alias": "Database"
+          },
+          {
+            "id": 148,
+            "name": "信息泄露",
+            "alias": "information disclosure"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 22475,
+        "aid": 22686,
+        "type": 1,
+        "views": 1003,
+        "uuid": "pm3oEOw_CNi7iLIJtkXv",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1555912151372,
+        "ctime": 1555912152749,
+        "utime": 1557376821074,
+        "score": 1555912151372,
+        "article_title": "从文科男到云安全专家，Killer首谈企业上云利弊",
+        "article_sharetitle": "从文科男到云安全专家，Killer首谈企业上云利弊",
+        "article_subtitle": "",
+        "article_summary": "企业上云，带来的不仅仅是企业技术架构的变更，更是安全的博弈。",
+        "article_cover": "https://static001.infoq.cn/resource/image/af/ee/af04204778126c40361959dae554c8ee.jpg",
+        "article_cover_point": "{\"big\":{\"point\":{\"x\":0,\"y\":0,\"w\":1920,\"h\":989}},\"small\":{\"point\":{\"x\":109,\"y\":0,\"w\":1723,\"h\":1279}},\"width\":1920,\"height\":1280}",
+        "author": [
+          {
+            "uid": 1439149,
+            "nickname": "邓艳琴",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 21,
+            "name": "安全",
+            "alias": "Security"
+          },
+          {
+            "id": 11,
+            "name": "云计算",
+            "alias": "cloud-computing"
+          },
+          {
+            "id": 30,
+            "name": "QCon",
+            "alias": "QCon"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 14552,
+        "aid": 14551,
+        "type": 1,
+        "views": 4408,
+        "uuid": "2015/06/Building-Distributed-Systems",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1435000020000,
+        "ctime": 1540958433101,
+        "utime": 1560573678878,
+        "score": 1435000020000,
+        "article_title": "构建分布式系统——技术考量",
+        "article_sharetitle": "构建分布式系统——技术考量",
+        "article_subtitle": "",
+        "article_summary": "不久前成功举办的RICON大会证明了当下大型应用的重要性。InfoQ有幸采访了RICON组织者Basho Technologies，谈到了构建分布式系统的技术考量以及从此次大会上学到的经验。",
+        "article_cover": "",
+        "article_cover_point": "",
+        "author": [
+          {
+            "uid": 1277500,
+            "nickname": "Victor Grazi",
+            "avatar": ""
+          }
+        ],
+        "translator": [
+          {
+            "uid": 1277178,
+            "nickname": "张龙",
+            "avatar": ""
+          }
+        ],
+        "topic": [
+          {
+            "id": 6,
+            "name": "Java",
+            "alias": "java"
+          },
+          {
+            "id": 4,
+            "name": "DevOps",
+            "alias": "Devops"
+          },
+          {
+            "id": 1,
+            "name": "语言 & 开发",
+            "alias": "development"
+          },
+          {
+            "id": 8,
+            "name": "架构",
+            "alias": "architecture"
+          },
+          {
+            "id": 31,
+            "name": "AI",
+            "alias": "AI"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 19464,
+        "aid": 19660,
+        "type": 8,
+        "views": 3796,
+        "uuid": "aws-minibook-201601",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1453379460000,
+        "ctime": 1540958590087,
+        "utime": 1541487309652,
+        "score": 1453379460000,
+        "article_title": "AWS迷你书：云计算让数据管理变得更轻松",
+        "article_sharetitle": "AWS迷你书：云计算让数据管理变得更轻松",
+        "article_subtitle": "",
+        "article_summary": "随着云服务应用范围的愈加广泛，越来越多的云服务供应商开始布局自己的云计算生态圈，以便为用户带来更好的云服务落地体验。然而优质的云服务产品从开发、测试、上线到客户端部署这一系列环节，往往需要借助强大的技术实力以及积累多年的实践经验作为支撑。AWS作为全球规模最大的云服务供应商之一，在过去的一年当中同样也积累了相当丰富的云服务实践经验，尤其是在数据存储与管理方面。在本期AWS迷你书《云计算让数据管理变得更轻松》中，InfoQ会将过去一年中AWS在数据存储与管理方面的案例与技术方案解析等内容进行整编之后再呈现给各位读者。",
+        "article_cover": "https://static001.infoq.cn/resource/image/f8/cd/f81011ebf1552f6c864cc21847af40cd.jpg",
+        "article_cover_point": "",
+        "author": [
+          {
+            "uid": 1277413,
+            "nickname": "刘羽飞",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 21,
+            "name": "安全",
+            "alias": "Security"
+          },
+          {
+            "id": 26,
+            "name": "AWS",
+            "alias": "AWS"
+          },
+          {
+            "id": 4,
+            "name": "DevOps",
+            "alias": "Devops"
+          },
+          {
+            "id": 1,
+            "name": "语言 & 开发",
+            "alias": "development"
+          },
+          {
+            "id": 8,
+            "name": "架构",
+            "alias": "architecture"
+          },
+          {
+            "id": 31,
+            "name": "AI",
+            "alias": "AI"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 21338,
+        "aid": 21524,
+        "type": 1,
+        "views": 151,
+        "uuid": "XCqXa-Jfhmh4ZF0Re2aw",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1547791050528,
+        "ctime": 1547778176104,
+        "utime": 1547791052885,
+        "score": 1547791050528,
+        "article_title": "数据库“裸奔”再引祸端：VOIPO数百万呼叫和短信日志流出",
+        "article_sharetitle": "数据库“裸奔”再引祸端：VOIPO数百万呼叫和短信日志流出",
+        "article_subtitle": "",
+        "article_summary": "据外媒报道，VOIPO因公共数据库保护不当造成数据泄露，数据内容包括从通话记录到内部系统凭证的所有内容。",
+        "article_cover": "https://static001.infoq.cn/resource/image/a5/60/a5e922727ab9e8d2a0d341d809e10260.jpg",
+        "article_cover_point": "{\"big\":{\"point\":{\"x\":0,\"y\":568,\"w\":5999,\"h\":3092}},\"small\":{\"point\":{\"x\":391,\"y\":0,\"w\":5384,\"h\":4000}},\"width\":6000,\"height\":4000}",
+        "author": [
+          {
+            "uid": 1369966,
+            "nickname": "甜梨",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 29,
+            "name": "数据库",
+            "alias": "Database"
+          },
+          {
+            "id": 21,
+            "name": "安全",
+            "alias": "Security"
+          },
+          {
+            "id": 148,
+            "name": "信息泄露",
+            "alias": "information disclosure"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 11251,
+        "aid": 11199,
+        "type": 1,
+        "views": 944,
+        "uuid": "2015/12/zerodb-open-source-announcement",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1449741600000,
+        "ctime": 1540958331876,
+        "utime": 1541475742553,
+        "score": 1449741600000,
+        "article_title": "端到端的加密数据库ZeroDB开源",
+        "article_sharetitle": "端到端的加密数据库ZeroDB开源",
+        "article_subtitle": "",
+        "article_summary": "ZeroDB是一个端到端的加密数据库，它是基于ZODB使用Python实现的，在设计时大量借鉴了Django ORM和SQLAlchemy的经验。ZeroDB让应用程序能够查询加密的数据，让开发人员能够更容易地开发安全性更好、更能保证隐私的应用程序。最近，该数据库宣布开源，代码托管到了GitHub上，目前开源的是Python实现，后续还会开源一个JavaScript客户端。",
+        "article_cover": "",
+        "article_cover_point": "",
+        "author": [
+          {
+            "uid": 1277342,
+            "nickname": "孙镜涛",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 21,
+            "name": "安全",
+            "alias": "Security"
+          },
+          {
+            "id": 50,
+            "name": "Python",
+            "alias": "python"
+          },
+          {
+            "id": 1,
+            "name": "语言 & 开发",
+            "alias": "development"
+          },
+          {
+            "id": 8,
+            "name": "架构",
+            "alias": "architecture"
+          },
+          {
+            "id": 31,
+            "name": "AI",
+            "alias": "AI"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      },
+      {
+        "id": 9921,
+        "aid": 9803,
+        "type": 1,
+        "views": 2213,
+        "uuid": "2017/09/IBM-JVM-OpenJ9-Eclipse",
+        "info": "{\"is_hidden\":false}",
+        "status": 1,
+        "publish_time": 1506423600000,
+        "ctime": 1540958286834,
+        "utime": 1561452042358,
+        "score": 1506423600000,
+        "article_title": "IBM开源JVM实现OpenJ9，并提交Eclipse基金会托管",
+        "article_sharetitle": "IBM开源JVM实现OpenJ9，并提交Eclipse基金会托管",
+        "article_subtitle": "",
+        "article_summary": "近日，IBM将其J9 Java 虚拟机命名为OpenJ9，托管至Eclipse基金会并在GitHub上开源，OpenJ9的定位是企业级的开源Java虚拟机。",
+        "article_cover": "",
+        "article_cover_point": "",
+        "author": [
+          {
+            "uid": 1277237,
+            "nickname": "张卫滨",
+            "avatar": ""
+          }
+        ],
+        "translator": null,
+        "topic": [
+          {
+            "id": 58,
+            "name": "IBM",
+            "alias": "IBM"
+          },
+          {
+            "id": 59,
+            "name": "JVM",
+            "alias": "JVM"
+          },
+          {
+            "id": 1,
+            "name": "语言 & 开发",
+            "alias": "development"
+          },
+          {
+            "id": 8,
+            "name": "架构",
+            "alias": "architecture"
+          }
+        ],
+        "is_collect": false,
+        "no_author": "",
+        "is_promotion": false,
+        "share_pic": ""
+      }
+    ]
+  },
+  "error": {},
+  "extra": {
+    "cost": 0.064753584,
+    "request-id": "5e8cd35f810d1f60868cc2861e57d7a3@2@infoq"
+  }
+}
