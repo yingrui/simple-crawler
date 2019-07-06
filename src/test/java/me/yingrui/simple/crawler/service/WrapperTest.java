@@ -48,6 +48,16 @@ public class WrapperTest {
     }
 
     @Test
+    public void should_be_null_if_list_is_empty() {
+        Wrapper wrapper = new Wrapper();
+        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.nothing[*].nickname", "test", "Array")));
+
+        Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
+
+        assertNull(result.get("test"));
+    }
+
+    @Test
     public void should_get_datetime_from_content() {
         Wrapper wrapper = new Wrapper();
         wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.publish_time", "publish_time", "Datetime", "DatetimeExtractor")));

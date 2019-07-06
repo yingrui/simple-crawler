@@ -2,11 +2,15 @@ package me.yingrui.simple.crawler.service;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import me.yingrui.simple.crawler.configuration.properties.ExtractorSettings;
 import me.yingrui.simple.crawler.configuration.properties.WrapperSettings;
 import me.yingrui.simple.crawler.model.WebLink;
 import me.yingrui.simple.crawler.service.extractor.Extractor;
 import me.yingrui.simple.crawler.service.extractor.ExtractorFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
@@ -16,6 +20,9 @@ import java.util.Map;
 @Service
 public class Wrapper {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Wrapper.class);
+
+    @Autowired
     private WrapperSettings wrapperSettings;
 
     public Map<String, Object> wrap(WebLink webLink) {
@@ -63,8 +70,12 @@ public class Wrapper {
     }
 
     private void extractListValues(ExtractorSettings extractorSettings, DocumentContext jsonContext, Map<String, Object> map) {
-        List<String> list = jsonContext.read(extractorSettings.getPath());
-        afterValueSelected(extractorSettings, map, list);
+        try {
+            List<String> list = jsonContext.read(extractorSettings.getPath());
+            afterValueSelected(extractorSettings, map, list);
+        } catch (PathNotFoundException e) {
+            LOGGER.error("extractListValues: " + e.getMessage());
+        }
     }
 
     private void extractStringValue(ExtractorSettings extractorSettings, DocumentContext jsonContext, Map<String, Object> map) {
