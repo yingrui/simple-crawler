@@ -1,6 +1,7 @@
 package me.yingrui.simple.crawler;
 
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
+import me.yingrui.simple.crawler.service.Crawler;
 import me.yingrui.simple.crawler.service.Wrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

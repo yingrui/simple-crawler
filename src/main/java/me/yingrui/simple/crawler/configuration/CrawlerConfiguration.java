@@ -1,6 +1,6 @@
 package me.yingrui.simple.crawler.configuration;
 
-import me.yingrui.simple.crawler.Crawler;
+import me.yingrui.simple.crawler.service.Crawler;
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.service.DataFetcher;

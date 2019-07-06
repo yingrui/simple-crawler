@@ -1,4 +1,4 @@
-package me.yingrui.simple.crawler;
+package me.yingrui.simple.crawler.service;
 
 
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
@@ -6,9 +6,6 @@ import me.yingrui.simple.crawler.configuration.properties.StartUrlSettings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.WebLink;
-import me.yingrui.simple.crawler.service.DataFetcher;
-import me.yingrui.simple.crawler.service.LinkExtractor;
-import me.yingrui.simple.crawler.service.LinkExtractorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
