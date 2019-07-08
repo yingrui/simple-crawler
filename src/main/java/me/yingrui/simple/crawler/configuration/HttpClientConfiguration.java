@@ -2,6 +2,7 @@ package me.yingrui.simple.crawler.configuration;
 
 import org.apache.http.HeaderElement;
 import org.apache.http.HeaderElementIterator;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
@@ -10,7 +11,6 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeaderElementIterator;
@@ -90,7 +90,7 @@ public class HttpClientConfiguration {
     }
 
     @Bean
-    public CloseableHttpClient httpClient() {
+    public HttpClient httpClient() {
         RequestConfig requestConfig = RequestConfig.custom()
                 .setConnectionRequestTimeout(REQUEST_TIMEOUT)
                 .setConnectTimeout(CONNECT_TIMEOUT)

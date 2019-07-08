@@ -2,6 +2,7 @@ package me.yingrui.simple.crawler;
 
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.service.Crawler;
+import me.yingrui.simple.crawler.service.ElasticSearchIndexer;
 import me.yingrui.simple.crawler.service.Wrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -22,6 +23,8 @@ public class Application implements CommandLineRunner {
     @Autowired
     private Wrapper wrapper;
     @Autowired
+    private ElasticSearchIndexer elasticSearchIndexer;
+    @Autowired
     private WebLinkRepository webLinkRepository;
 
     public static void main(String[] args) {
@@ -36,7 +39,10 @@ public class Application implements CommandLineRunner {
                 System.out.println(webLink.getRowKey());
                 Map<String, Object> obj = wrapper.wrap(webLink);
                 System.out.println(toJson(obj));
+                elasticSearchIndexer.index(obj);
             });
+            elasticSearchIndexer.close();
+            System.out.println("Exit...");
         } else if (args.length > 0 && args[0].equalsIgnoreCase("--crawler-run")) {
             crawler.run();
         }
