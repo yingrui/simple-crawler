@@ -1,26 +1,29 @@
 package me.yingrui.simple.crawler.service.link;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
+import com.google.common.collect.Lists;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JsonLinkExtractor extends AbstractLinkExtractor {
+public class HtmlLinkExtractor extends AbstractLinkExtractor {
 
-    private DocumentContext jsonContext;
+    private Document doc;
 
-    public JsonLinkExtractor(WebLinkRepository webLinkRepository) {
+    public HtmlLinkExtractor(WebLinkRepository webLinkRepository) {
         this.setWebLinkRepository(webLinkRepository);
     }
 
-    public JsonLinkExtractor() {
+    public HtmlLinkExtractor() {
     }
 
     public void parseContent(CrawlerTask crawlerTask) {
-        jsonContext = JsonPath.parse(crawlerTask.getResponseContent());
+        doc = Jsoup.parse(crawlerTask.getResponseContent());
     }
 
     public List<CrawlerTask> getCrawlerTasks(CrawlerTask crawlerTask, List<String> srcList) {
@@ -36,6 +39,18 @@ public class JsonLinkExtractor extends AbstractLinkExtractor {
     }
 
     public List<String> getLinks(String path) {
-        return jsonContext.read(path);
+        Elements elements = doc.select(path);
+
+        List<String> hrefList = Lists.newArrayList();
+        for (int i = 0; i < elements.size(); i++) {
+            Element element = elements.get(i);
+            String nodeName = element.nodeName();
+
+            if (nodeName.equals("a")) {
+                hrefList.add(element.attr("href"));
+            }
+        }
+        return hrefList;
     }
+
 }

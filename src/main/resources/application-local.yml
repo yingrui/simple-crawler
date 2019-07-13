@@ -14,10 +14,10 @@ crawler:
       pagination:
         no-pagination: false
         stop-when-all-links-crawled: true
-        path: a
+        path: a.next
       links:
         new-links-only: true
-        path: data[*].uuid
+        path: .entry-title a
 
 wrappers:
   websites:

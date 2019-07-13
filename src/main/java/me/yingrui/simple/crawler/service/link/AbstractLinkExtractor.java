@@ -1,6 +1,7 @@
 package me.yingrui.simple.crawler.service.link;
 
 import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
+import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.WebLink;
@@ -51,7 +52,7 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
 
     public abstract List<CrawlerTask> getCrawlerTasks(CrawlerTask crawlerTask, List<String> srcList);
 
-    public abstract CrawlerTask extractNextPage();
+    public abstract List<String> getLinks(String path);
 
     public WebLinkRepository getWebLinkRepository() {
         return webLinkRepository;
@@ -68,6 +69,49 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
             return !exists;
         } else {
             return true;
+        }
+    }
+
+    public CrawlerTask extractNextPage() {
+        if (getCrawlerTask().getPaginationSettings() != null && !getCrawlerTask().getPaginationSettings().isNoPagination()) {
+            PaginationSettings paginationSettings = getCrawlerTask().getPaginationSettings();
+            String srcPath = paginationSettings.getPath();
+            List<String> srcLinks = getLinks(srcPath);
+            if (srcLinks.size() == 1) {
+                String src = String.valueOf(srcLinks.get(0));
+                String url = getUrl(src, paginationSettings.getPrefix());
+
+                Map<String, String> context = getContext(src, url);
+
+                String requestUrl = getRequestUrl(paginationSettings, context);
+                String requestBody = getRequestBody(paginationSettings, context);
+
+                CrawlerTask nextPage = new CrawlerTask(url,
+                        requestUrl,
+                        getCrawlerTask().getLinkExtractorSettings().getHttpMethod(),
+                        getCrawlerTask().getRequestHeaders(),
+                        requestBody,
+                        getCrawlerTask().getLinkExtractorSettings(),
+                        paginationSettings);
+                return nextPage;
+            }
+        }
+        return null;
+    }
+
+    private String getRequestBody(PaginationSettings paginationSettings, Map<String, String> context) {
+        if (isNotEmpty(paginationSettings.getBodyTemplate())) {
+            return render(paginationSettings.getBodyTemplate(), context);
+        } else {
+            return "";
+        }
+    }
+
+    private String getRequestUrl(PaginationSettings paginationSettings, Map<String, String> context) {
+        if (isNotEmpty(paginationSettings.getUrlTemplate())) {
+            return render(paginationSettings.getUrlTemplate(), context);
+        } else {
+            return context.get("url");
         }
     }
 

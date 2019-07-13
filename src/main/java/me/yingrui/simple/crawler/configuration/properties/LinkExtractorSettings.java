@@ -12,7 +12,7 @@ public class LinkExtractorSettings {
     private boolean newLinksOnly = true;
     private String path;
     private String prefix;
-    private String httpMethod;
+    private String httpMethod = "GET";
     private String urlTemplate = "[(${url})]";
     private Map<String, String> headers;
     private String bodyTemplate;
