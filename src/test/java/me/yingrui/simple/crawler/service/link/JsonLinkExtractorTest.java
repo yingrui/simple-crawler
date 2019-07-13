@@ -1,8 +1,10 @@
-package me.yingrui.simple.crawler.service;
+package me.yingrui.simple.crawler.service.link;
 
 import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
 import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 import me.yingrui.simple.crawler.model.CrawlerTask;
+import me.yingrui.simple.crawler.service.link.JsonLinkExtractor;
+import me.yingrui.simple.crawler.service.link.LinkExtractor;
 import org.junit.Test;
 
 import java.util.HashMap;

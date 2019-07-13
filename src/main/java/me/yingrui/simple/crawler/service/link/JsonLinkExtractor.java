@@ -1,20 +1,16 @@
-package me.yingrui.simple.crawler.service;
+package me.yingrui.simple.crawler.service.link;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import static me.yingrui.simple.crawler.util.TemplateUtils.render;
-import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 public class JsonLinkExtractor extends AbstractLinkExtractor {
 

@@ -4,7 +4,7 @@ import me.yingrui.simple.crawler.service.Crawler;
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.service.DataFetcher;
-import me.yingrui.simple.crawler.service.LinkExtractorFactory;
+import me.yingrui.simple.crawler.service.link.LinkExtractorFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

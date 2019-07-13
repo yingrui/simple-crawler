@@ -1,4 +1,4 @@
-package me.yingrui.simple.crawler.service;
+package me.yingrui.simple.crawler.service.link;
 
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
