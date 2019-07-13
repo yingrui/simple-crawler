@@ -9,21 +9,35 @@ spring:
 
 crawler:
   start-urls:
-    - start-url: https://insights.thoughtworks.cn/
-      url: https://insights.thoughtworks.cn/
+    - start-url: https://www.infoq.cn/public/v1/article/getList
+      url: https://www.infoq.cn/
+      http-method: POST
+      headers:
+        referer: https://www.infoq.cn/topic/cloud-computing
+        content-type: application/json
+      body-template: '{"type": 1, "size": 12}'
       pagination:
         no-pagination: false
         stop-when-all-links-crawled: true
-        path: a
+        path: data[-1:].score
+        prefix: https://www.infoq.cn/?score=
+        url-template: https://www.infoq.cn/public/v1/article/getList
+        body-template: '{"type": 1, "size": 12, "score": [(${src})]}'
       links:
         new-links-only: true
         path: data[*].uuid
+        prefix: https://www.infoq.cn/article/
+        http-method: POST
+        url-template: https://www.infoq.cn/public/v1/article/getDetail
+        headers:
+          content-type: application/json
+          referer: '[(${url})]'
+        body-template: '{"uuid":"[(${src})]"}'
 
 wrappers:
   websites:
-    - website: insights.thoughtworks.cn
-      matched-url: https://insights.thoughtworks.cn/.*
-      not-matched-url: https://insights.thoughtworks.cn/page/.*
+    - website: www.infoq.cn
+      matched-url: https://www.infoq.cn/article/.*
       extractors:
         - field: title
           path: data.article_title

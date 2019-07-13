@@ -27,7 +27,7 @@ public class Wrapper {
 
     public Map<String, Object> wrap(WebLink webLink) {
         Map<String, Object> map = initialize(webLink);
-        if (wrapperSettings.isMatch(webLink.getUrl())) {
+        if (wrapperSettings!= null && wrapperSettings.isMatch(webLink.getUrl())) {
             extract(webLink, map);
         }
         return map;

@@ -40,6 +40,6 @@ public class WrapperSettings {
     }
 
     public boolean isMatch(String url) {
-        return url.matches(matchedUrl);
+        return matchedUrl != null ? url.matches(matchedUrl) : true;
     }
 }

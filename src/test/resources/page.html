@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <title>ThoughtWorks洞见</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content="WordPress 5.2.2" />
+    <link rel='dns-prefetch' href='//insights.thoughtworks.cn' />
+    <link rel='dns-prefetch' href='//cdn.jsdelivr.net' />
+    <link rel='dns-prefetch' href='//s.w.org' />
+    <link rel="alternate" type="application/rss+xml" title="ThoughtWorks洞见 &raquo; Feed" href="https://insights.thoughtworks.cn/feed/" />
+    <link rel="alternate" type="application/rss+xml" title="ThoughtWorks洞见 &raquo; 评论Feed" href="https://insights.thoughtworks.cn/comments/feed/" />
+    <link rel="pingback" href="https://insights.thoughtworks.cn/xmlrpc.php" />
+    <!-- This site uses the Google Analytics by MonsterInsights plugin v7.7.1 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+    <script type="text/javascript" data-cfasync="false">
+        var mi_version         = '7.7.1';
+        var mi_track_user      = true;
+        var mi_no_track_reason = '';
+
+        var disableStr = 'ga-disable-UA-106120408-1';
+
+        /* Function to detect opted out users */
+        function __gaTrackerIsOptedOut() {
+            return document.cookie.indexOf(disableStr + '=true') > -1;
+        }
+
+        /* Disable tracking if the opt-out cookie exists. */
+        if ( __gaTrackerIsOptedOut() ) {
+            window[disableStr] = true;
+        }
+
+        /* Opt-out function */
+        function __gaTrackerOptout() {
+            document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+            window[disableStr] = true;
+        }
+
+        if ( mi_track_user ) {
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+            __gaTracker('create', 'UA-106120408-1', 'auto');
+            __gaTracker('set', 'forceSSL', true);
+            __gaTracker('require', 'displayfeatures');
+            __gaTracker('send','pageview');
+        } else {
+            console.log( "" );
+            (function() {
+                /* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+                var noopfn = function() {
+                    return null;
+                };
+                var noopnullfn = function() {
+                    return null;
+                };
+                var Tracker = function() {
+                    return null;
+                };
+                var p = Tracker.prototype;
+                p.get = noopfn;
+                p.set = noopfn;
+                p.send = noopfn;
+                var __gaTracker = function() {
+                    var len = arguments.length;
+                    if ( len === 0 ) {
+                        return;
+                    }
+                    var f = arguments[len-1];
+                    if ( typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function' ) {
+                        console.log( 'Not running function __gaTracker(' + arguments[0] + " ....) because you are not being tracked. " + mi_no_track_reason );
+                        return;
+                    }
+                    try {
+                        f.hitCallback();
+                    } catch (ex) {
+
+                    }
+                };
+                __gaTracker.create = function() {
+                    return new Tracker();
+                };
+                __gaTracker.getByName = noopnullfn;
+                __gaTracker.getAll = function() {
+                    return [];
+                };
+                __gaTracker.remove = noopfn;
+                window['__gaTracker'] = __gaTracker;
+            })();
+        }
+    </script>
+    <!-- / Google Analytics by MonsterInsights -->
+    <script type="text/javascript">
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/insights.thoughtworks.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.2.2"}};
+        !function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script>
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <link rel='stylesheet' id='magazine-bootstrap-css'  href='https://insights.thoughtworks.cn/wp-content/themes/magazine/css/bootstrap.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='wp-block-library-css'  href='https://insights.thoughtworks.cn/wp-includes/css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='email-subscribers-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/email-subscribers/public/css/email-subscribers-public.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='paginationstyle-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/faster-pagination/assests/pagination.css?ver=2' type='text/css' media='all' />
+    <link rel='stylesheet' id='prism-theme-style-css'  href='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/themes/prism-okaidia.css?ver=1.15.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='prism-plugin-line-numbers-css'  href='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/line-numbers/prism-line-numbers.css?ver=1.15.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='omega-style-css'  href='https://insights.thoughtworks.cn/wp-content/themes/magazine/style.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='arigato-css-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/bft-autoresponder/front.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='addtoany-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/add-to-any/addtoany.min.css?ver=1.15' type='text/css' media='all' />
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/wp-analytics-pro/js/jquery.flot.min.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/wp-analytics-pro/js/jquery.flot.time.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/themes/magazine/js/bootstrap.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/themes/magazine/js/init.js?ver=5.2.2'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var monsterinsights_frontend = {"js_events_tracking":"true","download_extensions":"doc,exe,js,pdf,ppt,tgz,zip,xls","inbound_paths":"[]","home_url":"https:\/\/insights.thoughtworks.cn","hash_tracking":"false"};
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/google-analytics-for-wordpress/assets/js/frontend.min.js?ver=7.7.1'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/add-to-any/addtoany.min.js?ver=1.1'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var es_data = {"messages":{"es_empty_email_notice":"Please enter email address","es_rate_limit_notice":"You need to wait for sometime before subscribing again","es_single_optin_success_message":"Successfully Subscribed.","es_double_optin_success_message":"Your subscription was successful! Kindly check your mailbox and confirm your subscription. If you don't see the email within a few minutes, check the spam\/junk folder.","es_email_exists_notice":"Email Address already exists!","es_unexpected_error_notice":"Oops.. Unexpected error occurred.","es_invalid_email_notice":"Invalid email address","es_try_later_notice":"Please try after some time"},"es_ajax_url":"https:\/\/insights.thoughtworks.cn\/wp-admin\/admin-ajax.php"};
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/email-subscribers/public/js/email-subscribers-public.js'></script>
+    <!-- This site uses the Better Analytics plugin.  https://marketplace.digitalpoint.com/better-analytics.3354/item -->
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/better-analytics/js/loader.php?ver=1.2.3.js' ></script><link rel='https://api.w.org/' href='https://insights.thoughtworks.cn/wp-json/' />
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://insights.thoughtworks.cn/xmlrpc.php?rsd" />
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://insights.thoughtworks.cn/wp-includes/wlwmanifest.xml" />
+
+    <script data-cfasync="false">
+        window.a2a_config=window.a2a_config||{};a2a_config.callbacks=[];a2a_config.overlays=[];a2a_config.templates={};a2a_localize = {
+            Share: "分享",
+            Save: "收藏",
+            Subscribe: "订阅",
+            Email: "Email",
+            Bookmark: "书签",
+            ShowAll: "显示全部服务",
+            ShowLess: "显示部分服务",
+            FindServices: "查找服务",
+            FindAnyServiceToAddTo: "动态查找任何用以添加的服务",
+            PoweredBy: "Powered by",
+            ShareViaEmail: "Share via email",
+            SubscribeViaEmail: "Subscribe via email",
+            BookmarkInYourBrowser: "添加为浏览器书签",
+            BookmarkInstructions: "Press Ctrl+D or \u2318+D to bookmark this page",
+            AddToYourFavorites: "添加至收藏夹",
+            SendFromWebOrProgram: "Send from any email address or email program",
+            EmailProgram: "Email program",
+            More: "More&#8230;",
+            ThanksForSharing: "Thanks for sharing!",
+            ThanksForFollowing: "Thanks for following!"
+        };
+
+        (function(d,s,a,b){a=d.createElement(s);b=d.getElementsByTagName(s)[0];a.async=1;a.src="https://static.addtoany.com/menu/page.js";b.parentNode.insertBefore(a,b);})(document,"script");
+    </script>
+    <!--[if lt IE 9]>
+    <script src="https://insights.thoughtworks.cn/wp-content/themes/omega/js/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <style type="text/css" id="custom-css"></style>
+    <style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+    <link rel="icon" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon-precomposed" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-180x180.png" />
+    <meta name="msapplication-TileImage" content="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-270x270.png" />
+</head>
+<body class="wordpress ltr child-theme y2019 m07 d13 h18 saturday logged-out plural home blog group-blog" dir="ltr" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://insights.thoughtworks.cn"  title="ThoughtWorks洞见"><span>ThoughtWorks洞见</span></a>    </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-%e9%a6%96%e9%a1%b5%e8%8f%9c%e5%8d%95" class="nav navbar-nav"><li id="menu-item-9707" class="menu-item menu-item-type-post_type menu-item-object-page first menu-item-9707"><a title="ThoughtWorks的敏捷开发" href="https://insights.thoughtworks.cn/thoughtworks-agile/">ThoughtWorks的敏捷开发</a></li>
+            <li id="menu-item-9695" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9695"><a title="技术雷达" href="https://insights.thoughtworks.cn/tag/techradar/">技术雷达</a></li>
+            <li id="menu-item-9708" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9708"><a title="读书雷达" href="https://insights.thoughtworks.cn/reading-radar-2016/">读书雷达</a></li>
+            <li id="menu-item-9709" class="menu-item menu-item-type-post_type menu-item-object-page last menu-item-9709"><a title="版权声明" href="https://insights.thoughtworks.cn/copyright/">版权声明</a></li>
+        </ul></div>  </div><!-- /.container -->
+</nav>
+<div class="site-container">
+    <header id="header" class="site-header" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader"><div class="container"><div class="row"><div class="title-area col-xs-12 col-md-4"><h1 class="site-title" itemprop="headline"><a href="https://insights.thoughtworks.cn" title="ThoughtWorks洞见" rel="home">ThoughtWorks洞见</a></h1></div>
+    </div><!-- .row --></div><!-- .container --></header><!-- .site-header -->
+    <div class="container">
+        <nav class="navbar navbar-default nav-secondary" role="navigation" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu-secondary">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Menu</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse menu-secondary"><ul id="menu-%e5%89%af%e8%8f%9c%e5%8d%95" class="nav navbar-nav"><li id="menu-item-9699" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag first menu-item-9699"><a title="精选" href="https://insights.thoughtworks.cn/tag/%e7%b2%be%e9%80%89/">精选</a></li>
+                <li id="menu-item-9701" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9701"><a title="敏捷" href="https://insights.thoughtworks.cn/tag/agile/">敏捷</a></li>
+                <li id="menu-item-9700" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9700"><a title="微服务" href="https://insights.thoughtworks.cn/tag/microservices/">微服务</a></li>
+                <li id="menu-item-9703" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9703"><a title="DDD" href="https://insights.thoughtworks.cn/tag/ddd/">DDD</a></li>
+                <li id="menu-item-9704" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9704"><a title="DevOps" href="https://insights.thoughtworks.cn/tag/devops/">DevOps</a></li>
+                <li id="menu-item-9712" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9712"><a title="软件测试" href="https://insights.thoughtworks.cn/category/testing/">软件测试</a></li>
+                <li id="menu-item-9702" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9702"><a title="女性" href="https://insights.thoughtworks.cn/tag/%e5%a5%b3%e6%80%a7/">女性</a></li>
+                <li id="menu-item-9713" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9713"><a title="职业发展" href="https://insights.thoughtworks.cn/category/career/">职业发展</a></li>
+                <li id="menu-item-9714" class="menu-item menu-item-type-taxonomy menu-item-object-category last menu-item-9714"><a title="中台" href="https://insights.thoughtworks.cn/category/zhongtai/">中台</a></li>
+            </ul></div>
+        </nav><!-- .nav-secondary -->
+    </div><!-- /.container -->
+    <div class="site-inner">
+        <div class="container"><div class="row">
+            <main class="content  col-xs-12 col-sm-8" role="main" itemprop="mainEntityOfPage" itemscope="itemscope" itemtype="http://schema.org/Blog">
+
+                <div class='mymasonry row'>				<article id="post-10214" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                    <div class="entry-wrap">
+
+                        <header class="entry-header">
+                            <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/container-technology-and-micro-services/" rel="bookmark">从技术雷达看​DevOps的十年——容器技术和微服务</a></h4>
+
+                            <div class="entry-meta">
+                                <time class="entry-time" datetime="2019-07-11T16:16:52+08:00" itemprop="datePublished" title="星期四, 七月 11, 2019, 4:16 下午">2019年7月11日</time>
+                                <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/guyu/" title="由顾宇发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">顾宇</span></a></span>
+                                <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/container-technology-and-micro-services/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                        </header>
+                        <div class="entry-content">
+
+                            <a href="https://insights.thoughtworks.cn/container-technology-and-micro-services/" title="从技术雷达看​DevOps的十年——容器技术和微服务">
+                                <img width="1034" height="580" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0.png 1034w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-300x168.png 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-768x431.png 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-1024x574.png 1024w" sizes="(max-width: 1034px) 100vw, 1034px" itemprop="image" />									</a>
+                            <p>在上一篇文章中，我们讲到了基础设施即代码和云计算给运维领域带来的深远影响。而 DevOps 运动不仅仅改变了运 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/container-technology-and-micro-services/">[阅读更多]</a></span></p>
+
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-footer"><div class="entry-meta">
+                            <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/tech-radar/" rel="tag">技术雷达</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/techradar/" rel="tag">技术雷达</a></span>
+                        </div></footer>
+                    </div><!-- .entry-wrap -->
+
+                </article><!-- #post-## -->
+                    <article id="post-10193" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/create-perfect-training-2/" rel="bookmark">以提升员工绩效为目标，打造完美培训</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-09T16:58:39+08:00" itemprop="datePublished" title="星期二, 七月 9, 2019, 4:58 下午">2019年7月9日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/meixuesong/" title="由梅雪松发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">梅雪松</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/create-perfect-training-2/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/create-perfect-training-2/" title="以提升员工绩效为目标，打造完美培训">
+                                    <img width="6000" height="4000" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-3.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-3.jpg 6000w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-3-300x200.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-3-768x512.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-3-1024x683.jpg 1024w" sizes="(max-width: 6000px) 100vw, 6000px" itemprop="image" />									</a>
+                                <p>培训是企业提升员工能力最常见的方式，对于转型期的企业来说更是如此。管理层希望通过培训导入理念、普及知识，从而推 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/create-perfect-training-2/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10171" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/move-an-asset-oriented-programming-language/" rel="bookmark">Move: 一门面向资产的编程语言</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-08T14:06:56+08:00" itemprop="datePublished" title="星期一, 七月 8, 2019, 2:06 下午">2019年7月8日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/wangruipeng/" title="由王瑞鹏发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">王瑞鹏</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/move-an-asset-oriented-programming-language/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/move-an-asset-oriented-programming-language/" title="Move: 一门面向资产的编程语言">
+                                    <img width="1976" height="1186" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/5-1.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/5-1.png 1976w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/5-1-300x180.png 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/5-1-768x461.png 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/5-1-1024x615.png 1024w" sizes="(max-width: 1976px) 100vw, 1976px" itemprop="image" />									</a>
+                                <p>最近被 Libra 刷了屏。好多人都在谈论 Libra 对未来的影响，有从正面讨论的，认为会影响未来的数字经济 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/move-an-asset-oriented-programming-language/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/move/" rel="tag">Move</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10157" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/how-does-micro-front-end-land/" rel="bookmark">微前端如何落地？</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-04T10:59:00+08:00" itemprop="datePublished" title="星期四, 七月 4, 2019, 10:59 上午">2019年7月4日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/huangfengda/" title="由黄峰达发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">黄峰达</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/how-does-micro-front-end-land/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/how-does-micro-front-end-land/" title="微前端如何落地？">
+                                    <img width="6000" height="4000" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-2.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-2.jpg 6000w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-2-300x200.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-2-768x512.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-2-1024x683.jpg 1024w" sizes="(max-width: 6000px) 100vw, 6000px" itemprop="image" />									</a>
+                                <p>在过去的几个星期里，随着 Martin Fowler 博客上那篇 Cam Jackson 写的微前端的文章发布 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/how-does-micro-front-end-land/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/microservices/" rel="tag">微服务</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/frontend/" rel="tag">前端</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10145" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/libra-monetary-epoch/" rel="bookmark">Libra——货币新纪元</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-03T14:48:09+08:00" itemprop="datePublished" title="星期三, 七月 3, 2019, 2:48 下午">2019年7月3日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/zhuxueqing/" title="由朱雪晴发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">朱雪晴</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/libra-monetary-epoch/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/libra-monetary-epoch/" title="Libra——货币新纪元">
+                                    <img width="1280" height="853" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/4.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/4.jpg 1280w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/4-300x200.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/4-768x512.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/4-1024x682.jpg 1024w" sizes="(max-width: 1280px) 100vw, 1280px" itemprop="image" />									</a>
+                                <p>1971年8月15日，美元与黄金脱钩，世界进入无锚货币时代。 1999年1月1日，欧元在德国、法国、意大利、荷 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/libra-monetary-epoch/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10140" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/does-sala-3-no-longer-support-xml/" rel="bookmark">Scala 3 不再支持 XML 了吗？</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-02T15:31:32+08:00" itemprop="datePublished" title="星期二, 七月 2, 2019, 3:31 下午">2019年7月2日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/yangbo/" title="由杨博发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">杨博</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/does-sala-3-no-longer-support-xml/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/does-sala-3-no-longer-support-xml/" title="Scala 3 不再支持 XML 了吗？">
+                                    <img width="2350" height="1000" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/scala.png" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/scala.png 2350w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/scala-300x128.png 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/scala-768x327.png 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/scala-1024x436.png 1024w" sizes="(max-width: 2350px) 100vw, 2350px" itemprop="image" />									</a>
+                                <p>前段时间，我为Scala 3提出了XML字面量语法提案，在社区中正在讨论。这个提案可能预示着 Scala 3、 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/does-sala-3-no-longer-support-xml/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10127" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/react-strategies-for-unit-testing/" rel="bookmark">React单元测试策略及落地</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-07-01T16:54:17+08:00" itemprop="datePublished" title="星期一, 七月 1, 2019, 4:54 下午">2019年7月1日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/lincongyu/" title="由林从羽发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">林从羽</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/react-strategies-for-unit-testing/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/react-strategies-for-unit-testing/" title="React单元测试策略及落地">
+                                    <img width="3149" height="1775" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0.jpg 3149w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-300x169.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-768x433.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/07/0-1024x577.jpg 1024w" sizes="(max-width: 3149px) 100vw, 3149px" itemprop="image" />									</a>
+                                <p>单元测试是现代软件开发最基本，也普遍落地不力的实践。市面关于React单元测试的文章，普遍停留在“可以如何写” &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/react-strategies-for-unit-testing/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/testing/" rel="tag">软件测试</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/react/" rel="tag">React</a>, <a href="https://insights.thoughtworks.cn/tag/%e5%8d%95%e5%85%83%e6%b5%8b%e8%af%95/" rel="tag">单元测试</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10099" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/facebook-libra/" rel="bookmark">数字主权国家颁布了它的加密货币</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-20T19:16:02+08:00" itemprop="datePublished" title="星期四, 六月 20, 2019, 7:16 下午">2019年6月20日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/liushangqi/" title="由刘尚奇发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">刘尚奇</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/facebook-libra/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/facebook-libra/" title="数字主权国家颁布了它的加密货币">
+                                    <img width="6000" height="3284" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0.jpg 6000w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-300x164.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-768x420.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1024x560.jpg 1024w" sizes="(max-width: 6000px) 100vw, 6000px" itemprop="image" />									</a>
+                                <p>多年以后，当我们回顾facebook发币这一事件，会发现其意义远不止一个商业巨头的自我转身。这会是由加密经济掀 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/facebook-libra/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/blockchain/" rel="tag">区块链</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/facebook/" rel="tag">Facebook</a>, <a href="https://insights.thoughtworks.cn/tag/%e5%8a%a0%e5%af%86%e8%b4%a7%e5%b8%81/" rel="tag">加密货币</a>, <a href="https://insights.thoughtworks.cn/tag/%e5%8c%ba%e5%9d%97%e9%93%be/" rel="tag">区块链</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10086" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/familiar-with-new-agile-project/" rel="bookmark">开发者如何快速熟悉一个新敏捷项目</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-17T18:12:18+08:00" itemprop="datePublished" title="星期一, 六月 17, 2019, 6:12 下午">2019年6月17日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/linning/" title="由林宁发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">林宁</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/familiar-with-new-agile-project/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/familiar-with-new-agile-project/" title="开发者如何快速熟悉一个新敏捷项目">
+                                    <img width="1350" height="900" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-2.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-2.jpeg 1350w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-2-300x200.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-2-768x512.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-2-1024x683.jpeg 1024w" sizes="(max-width: 1350px) 100vw, 1350px" itemprop="image" />									</a>
+                                <p>在ThoughWorks有一句流传甚广的话 —— “在ThoughtWorks需要有拥抱随时变化的心态“，因为 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/familiar-with-new-agile-project/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/agile/" rel="tag">敏捷</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e6%95%8f%e6%8d%b7%e5%bc%80%e5%8f%91/" rel="tag">敏捷开发</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10064" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/software-testing/" rel="bookmark">软件测试人员的挑战与机遇</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-14T18:05:59+08:00" itemprop="datePublished" title="星期五, 六月 14, 2019, 6:05 下午">2019年6月14日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/linbingyu/" title="由林冰玉发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">林冰玉</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/software-testing/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/software-testing/" title="软件测试人员的挑战与机遇">
+                                    <img width="1050" height="700" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-5.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-5.jpeg 1050w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-5-300x200.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-5-768x512.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-5-1024x683.jpeg 1024w" sizes="(max-width: 1050px) 100vw, 1050px" itemprop="image" />									</a>
+                                <p>“我们公司的测试好多都转业务或开发了，还有的转管理了，测试做不长久&#8230;” “现在好多公司已经不招测试 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/software-testing/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/testing/" rel="tag">软件测试</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e8%bd%af%e4%bb%b6%e6%b5%8b%e8%af%95/" rel="tag">软件测试</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10038" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/cloud-computing/" rel="bookmark">坐看云起时，谈笑无还期</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-12T16:15:12+08:00" itemprop="datePublished" title="星期三, 六月 12, 2019, 4:15 下午">2019年6月12日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/xuhao/" title="由徐昊（八叉）发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">徐昊（八叉）</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/cloud-computing/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/cloud-computing/" title="坐看云起时，谈笑无还期">
+                                    <img width="1280" height="720" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cloud-computing.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cloud-computing.jpg 1280w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cloud-computing-300x169.jpg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cloud-computing-768x432.jpg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cloud-computing-1024x576.jpg 1024w" sizes="(max-width: 1280px) 100vw, 1280px" itemprop="image" />									</a>
+                                <p>云计算平台在2008年出现在公众面前的时候，我和大多数人一样，并没有意识到这是一场影响深远的技术变革。并不是缺 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/cloud-computing/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e4%ba%91%e8%ae%a1%e7%ae%97/" rel="tag">云计算</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10030" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/open-banking/" rel="bookmark">开放银行能在中国落地吗？</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-10T15:07:01+08:00" itemprop="datePublished" title="星期一, 六月 10, 2019, 3:07 下午">2019年6月10日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/xiaoran/" title="由肖然发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">肖然</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/open-banking/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/open-banking/" title="开放银行能在中国落地吗？">
+                                    <img width="1050" height="700" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-4.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-4.jpeg 1050w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-4-300x200.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-4-768x512.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-4-1024x683.jpeg 1024w" sizes="(max-width: 1050px) 100vw, 1050px" itemprop="image" />									</a>
+                                <p>[摘要] 开放银行（Open Banking）在欧美地区被认为是继FinTech后下一波颠覆银行业的浪潮。开放 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/open-banking/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e5%bc%80%e6%94%be%e9%93%b6%e8%a1%8c/" rel="tag">开放银行</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10013" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/isomorphic/" rel="bookmark">ISOMORPHIC 的升级之路</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-04T11:40:27+08:00" itemprop="datePublished" title="星期二, 六月 4, 2019, 11:40 上午">2019年6月4日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/yuzejiang/" title="由余泽江发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">余泽江</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/isomorphic/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/isomorphic/" title="ISOMORPHIC 的升级之路">
+                                    <img width="3705" height="2468" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1.jpeg 3705w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1-300x200.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1-768x512.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1-1024x682.jpeg 1024w" sizes="(max-width: 3705px) 100vw, 3705px" itemprop="image" />									</a>
+                                <p>近些年来，史诗级网游 Web Online 中，一个新兴职业 —— Isomorphic JavaScript &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/isomorphic/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/isomorphic/" rel="tag">isomorphic</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-10006" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/is-quality-worth-cost/" rel="bookmark">软件的高质量意味着高成本？</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-06-03T17:41:38+08:00" itemprop="datePublished" title="星期一, 六月 3, 2019, 5:41 下午">2019年6月3日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/martin-fowler/" title="由Martin Fowler发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">Martin Fowler</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/is-quality-worth-cost/#respond">Leave a Comment</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/is-quality-worth-cost/" title="软件的高质量意味着高成本？">
+                                    <img width="1050" height="700" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0.jpeg 1050w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-300x200.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-768x512.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/06/0-1024x683.jpeg 1024w" sizes="(max-width: 1050px) 100vw, 1050px" itemprop="image" />									</a>
+                                <p>文：Martin Fowler 译：王薇 审校：刘申 软件开发项目中，一个常见的争论是花时间提高软件质量还是专 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/is-quality-worth-cost/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e8%bd%af%e4%bb%b6%e5%bc%80%e5%8f%91/" rel="tag">软件开发</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                    <article id="post-9993" class="col-xs-12 col-sm-6 grid" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
+
+                        <div class="entry-wrap">
+
+                            <header class="entry-header">
+                                <h4 class="entry-title" itemprop="headline"><a href="https://insights.thoughtworks.cn/response-and-data-capability-of-enterprise/" rel="bookmark">智能商业时代：响应力与数据力</a></h4>
+
+                                <div class="entry-meta">
+                                    <time class="entry-time" datetime="2019-05-29T17:08:30+08:00" itemprop="datePublished" title="星期三, 五月 29, 2019, 5:08 下午">2019年5月29日</time>
+                                    <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/wujunhong/" title="由吴俊宏发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">吴俊宏</span></a></span>
+                                    <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/response-and-data-capability-of-enterprise/#comments">2 Comments</a></span>															</div><!-- .entry-meta -->
+
+                            </header>
+                            <div class="entry-content">
+
+                                <a href="https://insights.thoughtworks.cn/response-and-data-capability-of-enterprise/" title="智能商业时代：响应力与数据力">
+                                    <img width="1489" height="838" src="https://insights.thoughtworks.cn/wp-content/uploads/2019/05/0-2.jpeg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://insights.thoughtworks.cn/wp-content/uploads/2019/05/0-2.jpeg 1489w, https://insights.thoughtworks.cn/wp-content/uploads/2019/05/0-2-300x169.jpeg 300w, https://insights.thoughtworks.cn/wp-content/uploads/2019/05/0-2-768x432.jpeg 768w, https://insights.thoughtworks.cn/wp-content/uploads/2019/05/0-2-1024x576.jpeg 1024w" sizes="(max-width: 1489px) 100vw, 1489px" itemprop="image" />									</a>
+                                <p>[摘要] 新时代的企业需要快速且弹性十足地应对变化中的各种状况，“响应力”来源于创新，通过敏捷和协同发挥其最大 &#8230; <span class="more"><a class="more-link" href="https://insights.thoughtworks.cn/response-and-data-capability-of-enterprise/">[阅读更多]</a></span></p>
+
+                            </div><!-- .entry-content -->
+
+                            <footer class="entry-footer"><div class="entry-meta">
+                                <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/agile/" rel="tag">敏捷</a>, <a href="https://insights.thoughtworks.cn/category/uncategorized/" rel="tag">未分类</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/%e5%93%8d%e5%ba%94%e5%8a%9b/" rel="tag">响应力</a>, <a href="https://insights.thoughtworks.cn/tag/%e6%95%b0%e6%8d%ae%e5%8a%9b/" rel="tag">数据力</a>, <a href="https://insights.thoughtworks.cn/tag/%e6%99%ba%e8%83%bd%e6%97%b6%e4%bb%a3/" rel="tag">智能时代</a></span>
+                            </div></footer>
+                        </div><!-- .entry-wrap -->
+
+                    </article><!-- #post-## -->
+                </div>	<nav role="navigation" id="nav-below" class="navigation  paging-navigation">
+
+                <nav class="pagination loop-pagination"><span aria-current='page' class='page-numbers current'>1</span>
+                    <a class='page-numbers' href='https://insights.thoughtworks.cn/page/2/'>2</a>
+                    <span class="page-numbers dots">&hellip;</span>
+                    <a class='page-numbers' href='https://insights.thoughtworks.cn/page/47/'>47</a>
+                    <a class="next page-numbers" href="https://insights.thoughtworks.cn/page/2/">下一页 &raquo;</a></nav>
+            </nav><!-- #nav-below -->
+
+            </main><!-- .content -->
+
+
+            <aside id="sidebar" class="sidebar col-xs-12 col-sm-4" role="complementary" itemscope itemtype="http://schema.org/WPSideBar">
+                <section id="search-8" class="widget widget-1 even widget-first widget_search"><div class="widget-wrap"><form role="search" method="get" class="search-form" action="https://insights.thoughtworks.cn/">
+                    <input type="search" class="search-field" placeholder="Search ..." value="" name="s" title="Search for:">	<input type="submit" class="search-submit" value="Search">
+                </form></div></section><section id="recent-comments-4" class="widget widget-2 odd widget_recent_comments"><div class="widget-wrap"><h4 class="widget-title">最新评论</h4><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">TWInsights</span>发表在《<a href="https://insights.thoughtworks.cn/the-right-interpretation-of-gocd/#comment-14112">GoCD的正确打开方式</a>》</li><li class="recentcomments"><span class="comment-author-link">Leon</span>发表在《<a href="https://insights.thoughtworks.cn/the-right-interpretation-of-gocd/#comment-14083">GoCD的正确打开方式</a>》</li><li class="recentcomments"><span class="comment-author-link">阿喵</span>发表在《<a href="https://insights.thoughtworks.cn/what-is-zhongtai/#comment-14079">白话中台战略：中台是个什么鬼?</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href='https://www.bylinzi.com/2015/06/04/when-we-talk-about-bdd/' rel='external nofollow' class='url fn n' itemprop="url"><span itemprop="name">说起BDD，你会想到什么？ | 林子的空间</span></a></span>发表在《<a href="https://insights.thoughtworks.cn/when-we-talk-about-bdd/#comment-14057">说起BDD，你会想到什么？</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href='https://www.bylinzi.com/2015/07/04/defect-management/' rel='external nofollow' class='url fn n' itemprop="url"><span itemprop="name">软件缺陷的有效管理 | 林子的空间</span></a></span>发表在《<a href="https://insights.thoughtworks.cn/defect-management/#comment-14056">软件缺陷的有效管理</a>》</li></ul></div></section><section id="tag_cloud-11" class="widget widget-3 even widget-last widget_tag_cloud"><div class="widget-wrap"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://insights.thoughtworks.cn/tag/angular/" class="tag-cloud-link tag-link-122 tag-link-position-1" style="font-size: 9.037037037037pt;" aria-label="Angular (5个项目)">Angular</a>
+                <a href="https://insights.thoughtworks.cn/tag/api/" class="tag-cloud-link tag-link-357 tag-link-position-2" style="font-size: 9.9444444444444pt;" aria-label="API (6个项目)">API</a>
+                <a href="https://insights.thoughtworks.cn/tag/ddd/" class="tag-cloud-link tag-link-129 tag-link-position-3" style="font-size: 15.259259259259pt;" aria-label="DDD (17个项目)">DDD</a>
+                <a href="https://insights.thoughtworks.cn/tag/devops/" class="tag-cloud-link tag-link-344 tag-link-position-4" style="font-size: 12.407407407407pt;" aria-label="DevOps (10个项目)">DevOps</a>
+                <a href="https://insights.thoughtworks.cn/tag/javascript/" class="tag-cloud-link tag-link-102 tag-link-position-5" style="font-size: 8pt;" aria-label="javascript (4个项目)">javascript</a>
+                <a href="https://insights.thoughtworks.cn/tag/kubernetes/" class="tag-cloud-link tag-link-224 tag-link-position-6" style="font-size: 9.037037037037pt;" aria-label="Kubernetes (5个项目)">Kubernetes</a>
+                <a href="https://insights.thoughtworks.cn/tag/md%e8%84%91%e6%b4%9e/" class="tag-cloud-link tag-link-1746 tag-link-position-7" style="font-size: 15.518518518519pt;" aria-label="MD脑洞 (18个项目)">MD脑洞</a>
+                <a href="https://insights.thoughtworks.cn/tag/p3/" class="tag-cloud-link tag-link-39 tag-link-position-8" style="font-size: 10.592592592593pt;" aria-label="P3 (7个项目)">P3</a>
+                <a href="https://insights.thoughtworks.cn/tag/qa/" class="tag-cloud-link tag-link-163 tag-link-position-9" style="font-size: 11.888888888889pt;" aria-label="QA (9个项目)">QA</a>
+                <a href="https://insights.thoughtworks.cn/tag/react/" class="tag-cloud-link tag-link-309 tag-link-position-10" style="font-size: 11.888888888889pt;" aria-label="React (9个项目)">React</a>
+                <a href="https://insights.thoughtworks.cn/tag/serverless/" class="tag-cloud-link tag-link-509 tag-link-position-11" style="font-size: 9.037037037037pt;" aria-label="Serverless (5个项目)">Serverless</a>
+                <a href="https://insights.thoughtworks.cn/tag/thoughtworks/" class="tag-cloud-link tag-link-368 tag-link-position-12" style="font-size: 13.314814814815pt;" aria-label="ThoughtWorks (12个项目)">ThoughtWorks</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e4%b8%ad%e5%8f%b0/" class="tag-cloud-link tag-link-1045 tag-link-position-13" style="font-size: 9.037037037037pt;" aria-label="中台 (5个项目)">中台</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e4%ba%ba%e5%b7%a5%e6%99%ba%e8%83%bd/" class="tag-cloud-link tag-link-527 tag-link-position-14" style="font-size: 9.037037037037pt;" aria-label="人工智能 (5个项目)">人工智能</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%88%9b%e6%96%b0/" class="tag-cloud-link tag-link-373 tag-link-position-15" style="font-size: 11.888888888889pt;" aria-label="创新 (9个项目)">创新</a>
+                <a href="https://insights.thoughtworks.cn/tag/frontend/" class="tag-cloud-link tag-link-204 tag-link-position-16" style="font-size: 14.481481481481pt;" aria-label="前端 (15个项目)">前端</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%8c%ba%e5%9d%97%e9%93%be/" class="tag-cloud-link tag-link-361 tag-link-position-17" style="font-size: 9.9444444444444pt;" aria-label="区块链 (6个项目)">区块链</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%92%a8%e8%af%a2/" class="tag-cloud-link tag-link-48 tag-link-position-18" style="font-size: 9.037037037037pt;" aria-label="咨询 (5个项目)">咨询</a>
+                <a href="https://insights.thoughtworks.cn/tag/business-insights/" class="tag-cloud-link tag-link-263 tag-link-position-19" style="font-size: 14.481481481481pt;" aria-label="商业洞见 (15个项目)">商业洞见</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%9b%a2%e9%98%9f/" class="tag-cloud-link tag-link-8 tag-link-position-20" style="font-size: 12.407407407407pt;" aria-label="团队 (10个项目)">团队</a>
+                <a href="https://insights.thoughtworks.cn/tag/training/" class="tag-cloud-link tag-link-377 tag-link-position-21" style="font-size: 11.240740740741pt;" aria-label="培训 (8个项目)">培训</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%a5%b3%e6%80%a7/" class="tag-cloud-link tag-link-22 tag-link-position-22" style="font-size: 13.833333333333pt;" aria-label="女性 (13个项目)">女性</a>
+                <a href="https://insights.thoughtworks.cn/tag/security/" class="tag-cloud-link tag-link-151 tag-link-position-23" style="font-size: 14.87037037037pt;" aria-label="安全 (16个项目)">安全</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%bc%80%e5%8f%91/" class="tag-cloud-link tag-link-332 tag-link-position-24" style="font-size: 9.037037037037pt;" aria-label="开发 (5个项目)">开发</a>
+                <a href="https://insights.thoughtworks.cn/tag/microservices/" class="tag-cloud-link tag-link-30 tag-link-position-25" style="font-size: 19.148148148148pt;" aria-label="微服务 (35个项目)">微服务</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%8a%80%e6%9c%af/" class="tag-cloud-link tag-link-99 tag-link-position-26" style="font-size: 8pt;" aria-label="技术 (4个项目)">技术</a>
+                <a href="https://insights.thoughtworks.cn/tag/techradar/" class="tag-cloud-link tag-link-43 tag-link-position-27" style="font-size: 18.759259259259pt;" aria-label="技术雷达 (33个项目)">技术雷达</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%8a%80%e6%9c%af%e9%9b%b7%e8%be%be%ef%bc%88tech-radar%ef%bc%89/" class="tag-cloud-link tag-link-485 tag-link-position-28" style="font-size: 10.592592592593pt;" aria-label="技术雷达（Tech-radar） (7个项目)">技术雷达（Tech-radar）</a>
+                <a href="https://insights.thoughtworks.cn/tag/continuous-delivery/" class="tag-cloud-link tag-link-98 tag-link-position-29" style="font-size: 11.888888888889pt;" aria-label="持续交付 (9个项目)">持续交付</a>
+                <a href="https://insights.thoughtworks.cn/tag/continuous-integration/" class="tag-cloud-link tag-link-11 tag-link-position-30" style="font-size: 9.037037037037pt;" aria-label="持续集成 (5个项目)">持续集成</a>
+                <a href="https://insights.thoughtworks.cn/tag/agile/" class="tag-cloud-link tag-link-7 tag-link-position-31" style="font-size: 18.111111111111pt;" aria-label="敏捷 (29个项目)">敏捷</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%95%b0%e5%ad%97%e5%8c%96/" class="tag-cloud-link tag-link-648 tag-link-position-32" style="font-size: 9.037037037037pt;" aria-label="数字化 (5个项目)">数字化</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%9e%b6%e6%9e%84/" class="tag-cloud-link tag-link-19 tag-link-position-33" style="font-size: 10.592592592593pt;" aria-label="架构 (7个项目)">架构</a>
+                <a href="https://insights.thoughtworks.cn/tag/testing/" class="tag-cloud-link tag-link-9 tag-link-position-34" style="font-size: 16.555555555556pt;" aria-label="测试 (22个项目)">测试</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98/" class="tag-cloud-link tag-link-330 tag-link-position-35" style="font-size: 9.9444444444444pt;" aria-label="程序员 (6个项目)">程序员</a>
+                <a href="https://insights.thoughtworks.cn/tag/lean/" class="tag-cloud-link tag-link-190 tag-link-position-36" style="font-size: 11.888888888889pt;" aria-label="精益 (9个项目)">精益</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%b2%be%e9%80%89/" class="tag-cloud-link tag-link-1735 tag-link-position-37" style="font-size: 22pt;" aria-label="精选 (59个项目)">精选</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%bb%93%e5%af%b9%e7%bc%96%e7%a8%8b/" class="tag-cloud-link tag-link-665 tag-link-position-38" style="font-size: 9.037037037037pt;" aria-label="结对编程 (5个项目)">结对编程</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%bc%96%e7%a8%8b/" class="tag-cloud-link tag-link-67 tag-link-position-39" style="font-size: 8pt;" aria-label="编程 (4个项目)">编程</a>
+                <a href="https://insights.thoughtworks.cn/tag/career/" class="tag-cloud-link tag-link-135 tag-link-position-40" style="font-size: 8pt;" aria-label="职业发展 (4个项目)">职业发展</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%81%8c%e5%9c%ba/" class="tag-cloud-link tag-link-382 tag-link-position-41" style="font-size: 9.037037037037pt;" aria-label="职场 (5个项目)">职场</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%ae%be%e8%ae%a1/" class="tag-cloud-link tag-link-16 tag-link-position-42" style="font-size: 11.888888888889pt;" aria-label="设计 (9个项目)">设计</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%bd%af%e4%bb%b6%e5%bc%80%e5%8f%91/" class="tag-cloud-link tag-link-93 tag-link-position-43" style="font-size: 9.037037037037pt;" aria-label="软件开发 (5个项目)">软件开发</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e9%87%8d%e6%9e%84/" class="tag-cloud-link tag-link-132 tag-link-position-44" style="font-size: 8pt;" aria-label="重构 (4个项目)">重构</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e9%9b%b6%e5%94%ae/" class="tag-cloud-link tag-link-120 tag-link-position-45" style="font-size: 8pt;" aria-label="零售 (4个项目)">零售</a></div>
+            </div></section>		  	</aside><!-- .sidebar -->
+        </div><!-- .row --></div><!-- .container -->	</div><!-- .site-inner -->
+    <footer id="footer" class="site-footer" role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/WPFooter"><div class="container"><div class="row"><div class="footer-content footer-insert"><p class="copyright">Copyright &#169; 2019 ThoughtWorks洞见.</p>
+
+        <p class="credit"><a class="child-link" href="https://themehall.com/responsive-magazine-theme" title="Magazine WordPress Theme">Magazine</a> WordPress Theme by themehall.com</p></div></div><!-- .row --></div><!-- .container --></footer><!-- .site-footer --></div><!-- .site-container -->
+<meta id="ba_s" property="options" content="" data-o="{&quot;tid&quot;:&quot;UA-64115047-1&quot;,&quot;co&quot;:&quot;auto&quot;,&quot;g&quot;:1073810280,&quot;dl&quot;:&quot;\\.avi|\\.doc|\\.exe|\\.gz|\\.mpg|\\.mp3|\\.pdf|\\.ppt|\\.psd|\\.rar|\\.wmv|\\.xls|\\.zip&quot;,&quot;s&quot;:0,&quot;a&quot;:0}" /><script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/imagesloaded.min.js?ver=3.2.0'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/masonry.min.js?ver=3.3.2'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery.masonry.min.js?ver=3.1.2b'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/components/prism-core.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/autoloader/prism-autoloader.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/line-numbers/prism-line-numbers.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/wp-embed.min.js?ver=5.2.2'></script>
+<script type="text/javascript">
+    Prism.plugins.autoloader.languages_path = "https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/components/";
+</script>
+</body>
+</html>
