@@ -26,10 +26,10 @@ public class Wrapper {
     }
 
     public Map<String, Object> wrap(WebLink webLink) {
-
         Map<String, Object> map = initialize(webLink);
-        extract(webLink, map);
-
+        if (wrapperSettings.isMatch(webLink.getUrl())) {
+            extract(webLink, map);
+        }
         return map;
     }
 
