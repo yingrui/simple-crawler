@@ -25,9 +25,11 @@ public class WebLinkRepository {
     private final HbaseTemplate hbaseTemplate;
     private final String tableName = "links";
     private final String columnFamilyName = "crawler";
+    private Table table;
 
     public WebLinkRepository(HbaseTemplate hbaseTemplate, HBaseAdmin hBaseAdmin) throws IOException {
         this.hbaseTemplate = hbaseTemplate;
+        table = getHTable();
 
         if (!hBaseAdmin.isTableAvailable(tableName)) {
             TableName name = TableName.valueOf(tableName);
@@ -36,6 +38,26 @@ public class WebLinkRepository {
             desc.addFamily(columnFamily);
             hBaseAdmin.createTable(desc);
         }
+    }
+
+    public boolean exists(String rowKey) {
+        Get get = new Get(rowKey.getBytes());
+        try {
+            return table.exists(get);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public WebLink get(String rowKey) {
+        Get get = new Get(rowKey.getBytes());
+        try {
+            Result result = table.get(get);
+            return toWebLink(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void save(WebLink webLink) {
@@ -52,7 +74,6 @@ public class WebLinkRepository {
         Scan scan = getScan();
 
         scan.setRowPrefixFilter(toBytes(website));
-        Table table = getHTable();
         try {
             ResultScanner scanner = table.getScanner(scan);
             for (Result r : scanner) {

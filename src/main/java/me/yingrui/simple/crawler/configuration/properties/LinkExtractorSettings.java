@@ -9,6 +9,7 @@ import java.util.Map;
 @ConfigurationProperties
 public class LinkExtractorSettings {
 
+    private boolean newLinksOnly = true;
     private String path;
     private String prefix;
     private String httpMethod;
@@ -76,5 +77,13 @@ public class LinkExtractorSettings {
 
     public void setBodyTemplate(String bodyTemplate) {
         this.bodyTemplate = bodyTemplate;
+    }
+
+    public boolean isNewLinksOnly() {
+        return newLinksOnly;
+    }
+
+    public void setNewLinksOnly(boolean newLinksOnly) {
+        this.newLinksOnly = newLinksOnly;
     }
 }

@@ -2,8 +2,13 @@ package me.yingrui.simple.crawler.service;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
 import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
+import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
+import me.yingrui.simple.crawler.model.WebLink;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +21,18 @@ import static org.apache.commons.lang.StringUtils.isNotEmpty;
 
 public class JsonLinkExtractor implements LinkExtractor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonLinkExtractor.class);
+
     private CrawlerTask crawlerTask;
+    private WebLinkRepository webLinkRepository;
+
+    public JsonLinkExtractor(WebLinkRepository webLinkRepository) {
+        this.webLinkRepository = webLinkRepository;
+    }
+
+    public JsonLinkExtractor() {
+        this.webLinkRepository = null;
+    }
 
     @Override
     public List<CrawlerTask> extract(CrawlerTask crawlerTask) {
@@ -24,20 +40,38 @@ public class JsonLinkExtractor implements LinkExtractor {
         if (isNotEmpty(crawlerTask.getResponseContent())) {
             DocumentContext jsonContext = JsonPath.parse(crawlerTask.getResponseContent());
 
-            String srcPath = crawlerTask.getLinkExtractorSettings().getPath();
+            LinkExtractorSettings linkExtractorSettings = crawlerTask.getLinkExtractorSettings();
+            String srcPath = linkExtractorSettings.getPath();
             List<String> srcList = jsonContext.read(srcPath);
             List<CrawlerTask> tasks = srcList.stream()
                     .map(src -> createChildTask(src))
+                    .filter(task -> filter(task, linkExtractorSettings))
                     .collect(Collectors.toList());
 
-            CrawlerTask nextPage = extractNextPage(jsonContext);
-            if (nextPage != null) {
-                tasks.add(nextPage);
-            }
+            LOGGER.info("links size: " + srcList.size() + " new task size: " + tasks.size());
 
+            if (srcList.size() > 0 && tasks.size() == 0 && crawlerTask.getPaginationSettings().isStopWhenAllLinksCrawled()) {
+                LOGGER.info("skip pagination");
+            } else {
+                CrawlerTask nextPage = extractNextPage(jsonContext);
+                if (nextPage != null) {
+                    tasks.add(nextPage);
+                }
+
+            }
             return tasks;
         }
         return new ArrayList<>();
+    }
+
+    private boolean filter(CrawlerTask task, LinkExtractorSettings linkExtractorSettings) {
+        if (linkExtractorSettings.isNewLinksOnly() && webLinkRepository != null) {
+            WebLink webLink = task.toWebLink();
+            boolean exists = webLinkRepository.exists(webLink.getRowKey());
+            return !exists;
+        } else {
+            return true;
+        }
     }
 
     private CrawlerTask extractNextPage(DocumentContext jsonContext) {

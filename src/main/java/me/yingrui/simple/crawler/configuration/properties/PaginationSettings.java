@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties
 public class PaginationSettings {
 
+    private boolean stopWhenAllLinksCrawled;
     private String path;
     private String prefix;
     private String urlTemplate = "${url}";
@@ -53,5 +54,13 @@ public class PaginationSettings {
 
     public void setUrlTemplate(String urlTemplate) {
         this.urlTemplate = urlTemplate;
+    }
+
+    public boolean isStopWhenAllLinksCrawled() {
+        return stopWhenAllLinksCrawled;
+    }
+
+    public void setStopWhenAllLinksCrawled(boolean stopWhenAllLinksCrawled) {
+        this.stopWhenAllLinksCrawled = stopWhenAllLinksCrawled;
     }
 }
