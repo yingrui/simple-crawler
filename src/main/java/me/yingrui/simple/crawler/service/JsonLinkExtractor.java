@@ -75,7 +75,7 @@ public class JsonLinkExtractor implements LinkExtractor {
     }
 
     private CrawlerTask extractNextPage(DocumentContext jsonContext) {
-        if (crawlerTask.getPaginationSettings() != null) {
+        if (crawlerTask.getPaginationSettings() != null && !crawlerTask.getPaginationSettings().isNoPagination()) {
             PaginationSettings paginationSettings = crawlerTask.getPaginationSettings();
             String srcPath = paginationSettings.getPath();
             List<String> srcLinks = jsonContext.read(srcPath);

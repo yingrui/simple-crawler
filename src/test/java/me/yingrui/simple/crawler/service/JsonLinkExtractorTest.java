@@ -71,6 +71,7 @@ public class JsonLinkExtractorTest {
                 new LinkExtractorSettings(linkPath, prefix, "POST", urlTemplate, new HashMap<>(), bodyTemplate);
 
         PaginationSettings paginationSettings = new PaginationSettings(nextPagePath, nextPagePathPrefix, nextPageUrlTemplate, nextPageBodyTemplate);
+        paginationSettings.setNoPagination(false);
 
         CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "POST", defaultHeaders(), "",
                 linkExtractorSettings, paginationSettings);

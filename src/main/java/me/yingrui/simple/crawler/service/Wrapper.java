@@ -10,22 +10,23 @@ import me.yingrui.simple.crawler.service.extractor.Extractor;
 import me.yingrui.simple.crawler.service.extractor.ExtractorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
 public class Wrapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Wrapper.class);
 
-    @Autowired
     private WrapperSettings wrapperSettings;
 
+    public Wrapper(WrapperSettings wrapperSettings) {
+        this.wrapperSettings = wrapperSettings;
+    }
+
     public Map<String, Object> wrap(WebLink webLink) {
+
         Map<String, Object> map = initialize(webLink);
         extract(webLink, map);
 
@@ -101,9 +102,5 @@ public class Wrapper {
         map.put("website", webLink.getWebsite());
         map.put("depth", webLink.getDepth());
         return map;
-    }
-
-    public void setWrapperSettings(WrapperSettings wrapperSettings) {
-        this.wrapperSettings = wrapperSettings;
     }
 }

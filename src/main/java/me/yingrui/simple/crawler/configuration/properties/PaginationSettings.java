@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties
 public class PaginationSettings {
 
-    private boolean stopWhenAllLinksCrawled;
+    // If no pagination is true, then never try to extract links from next page. Default is true, no pagination.
+    private boolean noPagination = true;
+    // If extracted links on current page are crawled before, then stop trying to extract links from next page, default is true.
+    private boolean stopWhenAllLinksCrawled = true;
     private String path;
     private String prefix;
     private String urlTemplate = "${url}";
@@ -62,5 +65,13 @@ public class PaginationSettings {
 
     public void setStopWhenAllLinksCrawled(boolean stopWhenAllLinksCrawled) {
         this.stopWhenAllLinksCrawled = stopWhenAllLinksCrawled;
+    }
+
+    public boolean isNoPagination() {
+        return noPagination;
+    }
+
+    public void setNoPagination(boolean noPagination) {
+        this.noPagination = noPagination;
     }
 }

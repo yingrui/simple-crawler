@@ -18,7 +18,7 @@ public class WrapperTest {
     @Test
     public void should_convert_web_link_to_map() {
         WebLink webLink = new WebLinkFixture().stub();
-        Map<String, Object> result = new Wrapper().wrap(webLink);
+        Map<String, Object> result = new Wrapper(null).wrap(webLink);
         assertEquals(webLink.getUrl(), result.getOrDefault("url", ""));
         assertEquals(webLink.getWebsite(), result.getOrDefault("website", ""));
         assertEquals(webLink.getDepth(), result.getOrDefault("depth", 0));
@@ -27,8 +27,8 @@ public class WrapperTest {
 
     @Test
     public void should_get_string_value_from_content() {
-        Wrapper wrapper = new Wrapper();
-        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.article_title", "title")));
+        WrapperSettings wrapperSettings = getWrapperSettings(extractorSettings("data.article_title", "title"));
+        Wrapper wrapper = new Wrapper(wrapperSettings);
 
         Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
 
@@ -37,8 +37,8 @@ public class WrapperTest {
 
     @Test
     public void should_get_list_from_content() {
-        Wrapper wrapper = new Wrapper();
-        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.author[*].nickname", "author", "Array")));
+        WrapperSettings wrapperSettings = getWrapperSettings(extractorSettings("data.author[*].nickname", "author", "Array"));
+        Wrapper wrapper = new Wrapper(wrapperSettings);
 
         Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
 
@@ -49,8 +49,8 @@ public class WrapperTest {
 
     @Test
     public void should_be_null_if_list_is_empty() {
-        Wrapper wrapper = new Wrapper();
-        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.nothing[*].nickname", "test", "Array")));
+        WrapperSettings wrapperSettings = getWrapperSettings(extractorSettings("data.nothing[*].nickname", "test", "Array"));
+        Wrapper wrapper = new Wrapper(wrapperSettings);
 
         Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
 
@@ -59,8 +59,8 @@ public class WrapperTest {
 
     @Test
     public void should_get_datetime_from_content() {
-        Wrapper wrapper = new Wrapper();
-        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.publish_time", "publish_time", "Datetime", "DatetimeExtractor")));
+        WrapperSettings wrapperSettings = getWrapperSettings(extractorSettings("data.publish_time", "publish_time", "Datetime", "DatetimeExtractor"));
+        Wrapper wrapper = new Wrapper(wrapperSettings);
 
         Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
 
@@ -70,8 +70,8 @@ public class WrapperTest {
 
     @Test
     public void should_get_content_from_html() {
-        Wrapper wrapper = new Wrapper();
-        wrapper.setWrapperSettings(getWrapperSettings(extractorSettings("data.content", "content", "String", "HtmlContentExtractor")));
+        WrapperSettings wrapperSettings = getWrapperSettings(extractorSettings("data.content", "content", "String", "HtmlContentExtractor"));
+        Wrapper wrapper = new Wrapper(wrapperSettings);
 
         Map<String, Object> result = wrapper.wrap(new WebLinkFixture().stub());
 
