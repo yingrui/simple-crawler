@@ -20,6 +20,10 @@ public class LinkExtractorFactory {
             if (crawlerTask.getResponseContentType().startsWith("application/json")) {
                 return new JsonLinkExtractor(webLinkRepository);
             }
+
+            if (crawlerTask.getResponseContentType().startsWith("text/html")) {
+                return new HtmlLinkExtractor(webLinkRepository);
+            }
         }
 
         return stubLinkExtractor;
