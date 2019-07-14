@@ -26,27 +26,19 @@ wrappers:
       not-matched-url: https://insights.thoughtworks.cn/page/.*
       extractors:
         - field: title
-          path: data.article_title
+          path: h1.entry-title
         - field: publish_time
-          path: data.publish_time
+          path: time.entry-time
           type: datetime
           extractor: DatetimeExtractor
-        - field: summary
-          path: data.article_summary
-        - field: views
-          path: data.views
         - field: author
-          path: data.author[*].nickname
-          type: array
-        - field: translator
-          path: data.translator[*].nickname
+          path: a[rel=author] span
           type: array
         - field: topic
-          path: data.topic[*].name
+          path: a[rel=tag]
           type: array
         - field: content
-          path: data.content
-          extractor: HtmlContentExtractor
+          path: div.entry-content
 
 indexer:
   cluster-nodes: localhost:9300

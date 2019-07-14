@@ -1,13 +1,10 @@
 package me.yingrui.simple.crawler.service;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import me.yingrui.simple.crawler.configuration.properties.ExtractorSettings;
 import me.yingrui.simple.crawler.configuration.properties.WrapperSettings;
 import me.yingrui.simple.crawler.model.WebLink;
-import me.yingrui.simple.crawler.service.extractor.Extractor;
-import me.yingrui.simple.crawler.service.extractor.ExtractorFactory;
+import me.yingrui.simple.crawler.service.extractor.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +17,7 @@ public class Wrapper {
     private static final Logger LOGGER = LoggerFactory.getLogger(Wrapper.class);
 
     private WrapperSettings wrapperSettings;
+    private ValueSelector valueSelector;
 
     public Wrapper(WrapperSettings wrapperSettings) {
         this.wrapperSettings = wrapperSettings;
@@ -38,23 +36,31 @@ public class Wrapper {
             return;
         }
 
-        List<ExtractorSettings> extractors = wrapperSettings.getExtractors();
+        initValueSelector(webLink);
 
-        String content = webLink.getContent();
-        String contentType = webLink.getContentType();
-        if (contentType.startsWith("application/json")) {
-            DocumentContext jsonContext = JsonPath.parse(content);
-            for (ExtractorSettings extractorSettings : extractors) {
-                extract(extractorSettings, jsonContext, map);
-            }
+        List<ExtractorSettings> extractors = wrapperSettings.getExtractors();
+        for (ExtractorSettings extractorSettings : extractors) {
+            extract(extractorSettings, map);
         }
     }
 
-    private void extract(ExtractorSettings extractorSettings, DocumentContext jsonContext, Map<String, Object> map) {
+    private void initValueSelector(WebLink webLink) {
+        String content = webLink.getContent();
+        String contentType = webLink.getContentType();
+        if (contentType.startsWith("application/json")) {
+            valueSelector = new JsonValueSelector();
+            valueSelector.setContent(content);
+        } else if (contentType.startsWith("text/html")) {
+            valueSelector = new HtmlValueSelector();
+            valueSelector.setContent(content);
+        }
+    }
+
+    private void extract(ExtractorSettings extractorSettings, Map<String, Object> map) {
         if (isFieldTypeString(extractorSettings) || isFieldTypeDatetime(extractorSettings)) {
-            extractStringValue(extractorSettings, jsonContext, map);
+            extractStringValue(extractorSettings, map);
         } else if (isFieldTypeArray(extractorSettings)) {
-            extractListValues(extractorSettings, jsonContext, map);
+            extractListValues(extractorSettings, map);
         }
     }
 
@@ -70,17 +76,17 @@ public class Wrapper {
         return extractorSettings.getType().equalsIgnoreCase("Array");
     }
 
-    private void extractListValues(ExtractorSettings extractorSettings, DocumentContext jsonContext, Map<String, Object> map) {
+    private void extractListValues(ExtractorSettings extractorSettings, Map<String, Object> map) {
         try {
-            List<String> list = jsonContext.read(extractorSettings.getPath());
+            List<String> list = valueSelector.getListValues(extractorSettings.getPath());
             afterValueSelected(extractorSettings, map, list);
         } catch (PathNotFoundException e) {
             LOGGER.error("extractListValues: " + e.getMessage());
         }
     }
 
-    private void extractStringValue(ExtractorSettings extractorSettings, DocumentContext jsonContext, Map<String, Object> map) {
-        Object value = jsonContext.read(extractorSettings.getPath());
+    private void extractStringValue(ExtractorSettings extractorSettings, Map<String, Object> map) {
+        Object value = valueSelector.getValue(extractorSettings.getPath());
         afterValueSelected(extractorSettings, map, value);
     }
 

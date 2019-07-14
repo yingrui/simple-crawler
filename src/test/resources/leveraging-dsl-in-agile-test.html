@@ -1,0 +1,404 @@
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <link rel="profile" href="http://gmpg.org/xfn/11">
+    <title>敏捷测试之借力DSL &#8211; ThoughtWorks洞见</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content="WordPress 5.2.2" />
+    <link rel='dns-prefetch' href='//insights.thoughtworks.cn' />
+    <link rel='dns-prefetch' href='//cdn.jsdelivr.net' />
+    <link rel='dns-prefetch' href='//s.w.org' />
+    <link rel="alternate" type="application/rss+xml" title="ThoughtWorks洞见 &raquo; Feed" href="https://insights.thoughtworks.cn/feed/" />
+    <link rel="alternate" type="application/rss+xml" title="ThoughtWorks洞见 &raquo; 评论Feed" href="https://insights.thoughtworks.cn/comments/feed/" />
+    <link rel="alternate" type="application/rss+xml" title="ThoughtWorks洞见 &raquo; 敏捷测试之借力DSL评论Feed" href="https://insights.thoughtworks.cn/leveraging-dsl-in-agile-test/feed/" />
+    <link rel="pingback" href="https://insights.thoughtworks.cn/xmlrpc.php" />
+    <!-- This site uses the Google Analytics by MonsterInsights plugin v7.7.1 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+    <script type="text/javascript" data-cfasync="false">
+        var mi_version         = '7.7.1';
+        var mi_track_user      = true;
+        var mi_no_track_reason = '';
+
+        var disableStr = 'ga-disable-UA-106120408-1';
+
+        /* Function to detect opted out users */
+        function __gaTrackerIsOptedOut() {
+            return document.cookie.indexOf(disableStr + '=true') > -1;
+        }
+
+        /* Disable tracking if the opt-out cookie exists. */
+        if ( __gaTrackerIsOptedOut() ) {
+            window[disableStr] = true;
+        }
+
+        /* Opt-out function */
+        function __gaTrackerOptout() {
+            document.cookie = disableStr + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+            window[disableStr] = true;
+        }
+
+        if ( mi_track_user ) {
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','__gaTracker');
+
+            __gaTracker('create', 'UA-106120408-1', 'auto');
+            __gaTracker('set', 'forceSSL', true);
+            __gaTracker('require', 'displayfeatures');
+            __gaTracker('send','pageview');
+        } else {
+            console.log( "" );
+            (function() {
+                /* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+                var noopfn = function() {
+                    return null;
+                };
+                var noopnullfn = function() {
+                    return null;
+                };
+                var Tracker = function() {
+                    return null;
+                };
+                var p = Tracker.prototype;
+                p.get = noopfn;
+                p.set = noopfn;
+                p.send = noopfn;
+                var __gaTracker = function() {
+                    var len = arguments.length;
+                    if ( len === 0 ) {
+                        return;
+                    }
+                    var f = arguments[len-1];
+                    if ( typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function' ) {
+                        console.log( 'Not running function __gaTracker(' + arguments[0] + " ....) because you are not being tracked. " + mi_no_track_reason );
+                        return;
+                    }
+                    try {
+                        f.hitCallback();
+                    } catch (ex) {
+
+                    }
+                };
+                __gaTracker.create = function() {
+                    return new Tracker();
+                };
+                __gaTracker.getByName = noopnullfn;
+                __gaTracker.getAll = function() {
+                    return [];
+                };
+                __gaTracker.remove = noopfn;
+                window['__gaTracker'] = __gaTracker;
+            })();
+        }
+    </script>
+    <!-- / Google Analytics by MonsterInsights -->
+    <script type="text/javascript">
+        window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/12.0.0-1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/insights.thoughtworks.cn\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.2.2"}};
+        !function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56424,55356,57342,8205,55358,56605,8205,55357,56424,55356,57340],[55357,56424,55356,57342,8203,55358,56605,8203,55357,56424,55356,57340]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+    </script>
+    <style type="text/css">
+        img.wp-smiley,
+        img.emoji {
+            display: inline !important;
+            border: none !important;
+            box-shadow: none !important;
+            height: 1em !important;
+            width: 1em !important;
+            margin: 0 .07em !important;
+            vertical-align: -0.1em !important;
+            background: none !important;
+            padding: 0 !important;
+        }
+    </style>
+    <link rel='stylesheet' id='magazine-bootstrap-css'  href='https://insights.thoughtworks.cn/wp-content/themes/magazine/css/bootstrap.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='wp-block-library-css'  href='https://insights.thoughtworks.cn/wp-includes/css/dist/block-library/style.min.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='email-subscribers-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/email-subscribers/public/css/email-subscribers-public.css' type='text/css' media='all' />
+    <link rel='stylesheet' id='paginationstyle-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/faster-pagination/assests/pagination.css?ver=2' type='text/css' media='all' />
+    <link rel='stylesheet' id='prism-theme-style-css'  href='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/themes/prism-okaidia.css?ver=1.15.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='prism-plugin-line-numbers-css'  href='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/line-numbers/prism-line-numbers.css?ver=1.15.0' type='text/css' media='all' />
+    <link rel='stylesheet' id='omega-style-css'  href='https://insights.thoughtworks.cn/wp-content/themes/magazine/style.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='arigato-css-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/bft-autoresponder/front.css?ver=5.2.2' type='text/css' media='all' />
+    <link rel='stylesheet' id='addtoany-css'  href='https://insights.thoughtworks.cn/wp-content/plugins/add-to-any/addtoany.min.css?ver=1.15' type='text/css' media='all' />
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery.js?ver=1.12.4-wp'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/wp-analytics-pro/js/jquery.flot.min.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/wp-analytics-pro/js/jquery.flot.time.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/themes/magazine/js/bootstrap.js?ver=5.2.2'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/themes/magazine/js/init.js?ver=5.2.2'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var monsterinsights_frontend = {"js_events_tracking":"true","download_extensions":"doc,exe,js,pdf,ppt,tgz,zip,xls","inbound_paths":"[]","home_url":"https:\/\/insights.thoughtworks.cn","hash_tracking":"false"};
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/google-analytics-for-wordpress/assets/js/frontend.min.js?ver=7.7.1'></script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/add-to-any/addtoany.min.js?ver=1.1'></script>
+    <script type='text/javascript'>
+        /* <![CDATA[ */
+        var es_data = {"messages":{"es_empty_email_notice":"Please enter email address","es_rate_limit_notice":"You need to wait for sometime before subscribing again","es_single_optin_success_message":"Successfully Subscribed.","es_double_optin_success_message":"Your subscription was successful! Kindly check your mailbox and confirm your subscription. If you don't see the email within a few minutes, check the spam\/junk folder.","es_email_exists_notice":"Email Address already exists!","es_unexpected_error_notice":"Oops.. Unexpected error occurred.","es_invalid_email_notice":"Invalid email address","es_try_later_notice":"Please try after some time"},"es_ajax_url":"https:\/\/insights.thoughtworks.cn\/wp-admin\/admin-ajax.php"};
+        /* ]]> */
+    </script>
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/email-subscribers/public/js/email-subscribers-public.js'></script>
+    <!-- This site uses the Better Analytics plugin.  https://marketplace.digitalpoint.com/better-analytics.3354/item -->
+    <script type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/better-analytics/js/loader.php?ver=1.2.3.js' ></script><link rel='https://api.w.org/' href='https://insights.thoughtworks.cn/wp-json/' />
+    <link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://insights.thoughtworks.cn/xmlrpc.php?rsd" />
+    <link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://insights.thoughtworks.cn/wp-includes/wlwmanifest.xml" />
+    <link rel='next' title='我和敏捷团队的五个约定' href='https://insights.thoughtworks.cn/5-appointments-with-agile-team/' />
+    <link rel="canonical" href="https://insights.thoughtworks.cn/leveraging-dsl-in-agile-test/" />
+    <link rel='shortlink' href='https://insights.thoughtworks.cn/?p=8' />
+    <link rel="alternate" type="application/json+oembed" href="https://insights.thoughtworks.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F" />
+    <link rel="alternate" type="text/xml+oembed" href="https://insights.thoughtworks.cn/wp-json/oembed/1.0/embed?url=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&#038;format=xml" />
+
+    <script data-cfasync="false">
+        window.a2a_config=window.a2a_config||{};a2a_config.callbacks=[];a2a_config.overlays=[];a2a_config.templates={};a2a_localize = {
+            Share: "分享",
+            Save: "收藏",
+            Subscribe: "订阅",
+            Email: "Email",
+            Bookmark: "书签",
+            ShowAll: "显示全部服务",
+            ShowLess: "显示部分服务",
+            FindServices: "查找服务",
+            FindAnyServiceToAddTo: "动态查找任何用以添加的服务",
+            PoweredBy: "Powered by",
+            ShareViaEmail: "Share via email",
+            SubscribeViaEmail: "Subscribe via email",
+            BookmarkInYourBrowser: "添加为浏览器书签",
+            BookmarkInstructions: "Press Ctrl+D or \u2318+D to bookmark this page",
+            AddToYourFavorites: "添加至收藏夹",
+            SendFromWebOrProgram: "Send from any email address or email program",
+            EmailProgram: "Email program",
+            More: "More&#8230;",
+            ThanksForSharing: "Thanks for sharing!",
+            ThanksForFollowing: "Thanks for following!"
+        };
+
+        (function(d,s,a,b){a=d.createElement(s);b=d.getElementsByTagName(s)[0];a.async=1;a.src="https://static.addtoany.com/menu/page.js";b.parentNode.insertBefore(a,b);})(document,"script");
+    </script>
+    <!--[if lt IE 9]>
+    <script src="https://insights.thoughtworks.cn/wp-content/themes/omega/js/html5.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <style type="text/css" id="custom-css"></style>
+    <style type="text/css">.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+    <link rel="icon" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-32x32.png" sizes="32x32" />
+    <link rel="icon" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-192x192.png" sizes="192x192" />
+    <link rel="apple-touch-icon-precomposed" href="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-180x180.png" />
+    <meta name="msapplication-TileImage" content="https://insights.thoughtworks.cn/wp-content/uploads/2019/06/cropped-thoughtworks-insights-270x270.png" />
+</head>
+<body class="wordpress ltr child-theme y2019 m07 d14 h01 sunday logged-out singular singular-post singular-post-8 group-blog" dir="ltr" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="https://insights.thoughtworks.cn"  title="ThoughtWorks洞见"><span>ThoughtWorks洞见</span></a>    </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse"><ul id="menu-%e9%a6%96%e9%a1%b5%e8%8f%9c%e5%8d%95" class="nav navbar-nav"><li id="menu-item-9707" class="menu-item menu-item-type-post_type menu-item-object-page first menu-item-9707"><a title="ThoughtWorks的敏捷开发" href="https://insights.thoughtworks.cn/thoughtworks-agile/">ThoughtWorks的敏捷开发</a></li>
+            <li id="menu-item-9695" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9695"><a title="技术雷达" href="https://insights.thoughtworks.cn/tag/techradar/">技术雷达</a></li>
+            <li id="menu-item-9708" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-9708"><a title="读书雷达" href="https://insights.thoughtworks.cn/reading-radar-2016/">读书雷达</a></li>
+            <li id="menu-item-9709" class="menu-item menu-item-type-post_type menu-item-object-page last menu-item-9709"><a title="版权声明" href="https://insights.thoughtworks.cn/copyright/">版权声明</a></li>
+        </ul></div>  </div><!-- /.container -->
+</nav>
+<div class="site-container">
+    <header id="header" class="site-header" role="banner" itemscope="itemscope" itemtype="http://schema.org/WPHeader"><div class="container"><div class="row"><div class="title-area col-xs-12 col-md-4"><h2 class="site-title" itemprop="headline"><a href="https://insights.thoughtworks.cn" title="ThoughtWorks洞见" rel="home">ThoughtWorks洞见</a></h2></div>
+    </div><!-- .row --></div><!-- .container --></header><!-- .site-header -->
+    <div class="container">
+        <nav class="navbar navbar-default nav-secondary" role="navigation" itemscope="itemscope" itemtype="http://schema.org/SiteNavigationElement">
+
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".menu-secondary">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Menu</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse menu-secondary"><ul id="menu-%e5%89%af%e8%8f%9c%e5%8d%95" class="nav navbar-nav"><li id="menu-item-9699" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag first menu-item-9699"><a title="精选" href="https://insights.thoughtworks.cn/tag/%e7%b2%be%e9%80%89/">精选</a></li>
+                <li id="menu-item-9701" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9701"><a title="敏捷" href="https://insights.thoughtworks.cn/tag/agile/">敏捷</a></li>
+                <li id="menu-item-9700" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9700"><a title="微服务" href="https://insights.thoughtworks.cn/tag/microservices/">微服务</a></li>
+                <li id="menu-item-9703" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9703"><a title="DDD" href="https://insights.thoughtworks.cn/tag/ddd/">DDD</a></li>
+                <li id="menu-item-9704" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9704"><a title="DevOps" href="https://insights.thoughtworks.cn/tag/devops/">DevOps</a></li>
+                <li id="menu-item-9712" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-9712"><a title="软件测试" href="https://insights.thoughtworks.cn/category/testing/">软件测试</a></li>
+                <li id="menu-item-9702" class="menu-item menu-item-type-taxonomy menu-item-object-post_tag menu-item-9702"><a title="女性" href="https://insights.thoughtworks.cn/tag/%e5%a5%b3%e6%80%a7/">女性</a></li>
+                <li id="menu-item-9713" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-9713"><a title="职业发展" href="https://insights.thoughtworks.cn/category/career/">职业发展</a></li>
+                <li id="menu-item-9714" class="menu-item menu-item-type-taxonomy menu-item-object-category last menu-item-9714"><a title="中台" href="https://insights.thoughtworks.cn/category/zhongtai/">中台</a></li>
+            </ul></div>
+        </nav><!-- .nav-secondary -->
+    </div><!-- /.container -->
+    <div class="site-inner">
+        <div class="container"><div class="row"><main class="content  col-xs-12 col-sm-8" id="content" role="main" itemprop="mainEntityOfPage" itemscope="itemscope" itemtype="http://schema.org/Blog">
+            <article id="post-8" class="entry post publish author-qinqihui has-excerpt post-8 format-standard category-agile category-testing post_tag-dsl post_tag-testing" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost"><div class="entry-wrap">
+                <header class="entry-header">	<h1 class="entry-title" itemprop="headline">敏捷测试之借力DSL</h1>
+                    <div class="entry-meta">
+                        <time class="entry-time" datetime="2015-03-19T08:18:30+08:00" itemprop="datePublished" title="星期四, 三月 19, 2015, 8:18 上午">2015年3月19日</time>
+                        <span class="entry-author" itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person">by <a href="https://insights.thoughtworks.cn/author/qinqihui/" title="由覃其慧发布" rel="author" class="url fn n" itemprop="url"><span itemprop="name">覃其慧</span></a></span>
+                        <span class="entry-comments-link"><a href="https://insights.thoughtworks.cn/leveraging-dsl-in-agile-test/#respond">Leave a Comment</a></span>	</div><!-- .entry-meta --></header><!-- .entry-header -->
+                <div class="entry-content" itemprop="articleBody">
+                    <p>随着敏捷越来越广为人知，敏捷测试也更多受到了大家的关注。在这里，我想谈一下我在敏捷项目中遇到的一个自动化测试相关问题以及我们如何借助DSL领域专用语言来解决它。</p>
+                    <p>对敏捷软件开发方法有一定了解的人都知道，敏捷软件开发过程是一个迭代式交付的过程。每个迭代相当于比较小型的交付周期。那么，为了配合频繁的软件交付，敏捷测试相对于传统测试必须要做相应的调整。这也导致了敏捷项目中的测试面临几个特有的挑战：</p>
+                    <ol>
+                        <li>频繁的回归测试以确保每个迭代的成果都是可交付的</li>
+                        <li>让整个开发团队参与到测试活动中以缩短质量信息的反馈周期</li>
+                        <li>让客户参与到测试活动中来帮助提高测试的有效性</li>
+                    </ol>
+                    <p>自动化测试在应对频繁的回归测试这个挑战上起着非常关键的作用。自动化测试做不好，团队最终会被每个迭代都会增加的回归测试工作量压垮。我经历过的一个团队，在这个团队中，大家很早就意识到了自动化测试的重要性，在自动化测试上的投入不遗余力。我们相信自动化功能测试增加到足够多的时候，它就能指导手动回归测试，保证整个交付过程顺利进行。</p>
+                    <p>的确，自动化测试刚开始进行的时候，我们收益颇多。每增加一个自动化测试，我们就能减少一些手动测试。自动化测试让我们我们有比较充裕的时间来手动测试那些还没有来得及自动化的、难以被自动化的功能点上，而且还能有时间和精力做探索性测试。这个结果让团队感到生活很美好，也让我们对自动化测试坚信不疑。</p>
+                    <p>然而好景不长，随着自动化测试的不断增加，我们会面临这样一些问题：</p>
+                    <ol>
+                        <li>自动化测试是围绕着实现细节展开的。随着数量的增多，业务的轮廓很容易迷失在细节中。</li>
+                        <li>在功能级别丧失了对测试的追踪。由于测试人员无法具体知晓那些测试案例被自动化测试覆盖。每次回归的时候，团队都需要回归整个测试组。</li>
+                    </ol>
+                    <p>于是，我们的手动测试越来越难得到自动化测试的帮助。它开始成了项目的鸡肋。测试代码阅读困难、维护困难以及测试结果的看起来也很费劲。这直接导致了我们不仅要投入相当的时间来增加自动化测试，也要投入不少时间来阅读并利用测试结果。</p>
+                    <p>于是我们开始重新审视自动化测试的做法，继续摸索更好的方式。</p>
+                    <p>很快，我们发现“能够跑起来”并不是好的自动化测试仅需的特性。让我们通过一段测试代码来看一下具体怎么回事。</p>
+                    <pre>selenium.open(“/”)
+selenium.type(“id=username”, “myname”)
+selenium.type(“id=password”, “mypassword”)
+selenium.click(“id=btnLogin”)
+selenium.waitForPageToLoad(30000)
+assertTrue(selenium.isTextPresent(“Welcome to our website!”))</pre>
+                    <p>这个测试中，我们首先打开了一个页面，在页面中寻找一个id为username的输入框，输入“myname”，然后再寻找一个id为password的输入框，输入“password”，然后点击一个id为btnLogin的按钮，等待30秒以后，断言页面应该出现的文字。</p>
+                    <p>我们可以看到，这个测试的实现很完整的描述了测试的操作过程，是一个面向步骤而不是目的的描述。当然，稍加分析，我们也可以看出来这个测试的目的是测用户登录成功系统。</p>
+                    <p>但是，想象当我们有很多这样面向步骤来描述的测试时，要从中抽离出被无数细碎的操作步骤所淹没的测试意图，并把测试的结果利用起来，其实并没有那么直观。而且，如果在测试中出现了错误，对于问题的具体功能点的定位也不是那么容易。</p>
+                    <p>与此同时，并不是团队中所有的成员都有能力阅读和编写这样的测试。这无疑降低了团队成员对于自动化测试的参与度。对于客户，自动化测试更是一个黑盒子，做了什么，没做什么，基本上搞不清，更谈不上参与到自动化测试中，帮助提高测试的有效性。</p>
+                    <p>种种状况，究其原因就是测试可读性太差，测试意图不够明显。可运行并且容易读的测试才是好的自动化测试。这样才能够保证任何时候，我们不会丧失对于测试案例的跟踪与管理。测试人员随时都可以通过快速阅读测试，了解那些功能已经被自动化测试覆盖，有效规划手工测试的工作量。</p>
+                    <p>怎么提高测试的可读性呢？</p>
+                    <p>我们的解决办法是DSL领域专用语言。</p>
+                    <p>什么是领域专用语言？在<a href="http://www.martinfowler.com/bliki/DomainSpecificLanguage.html">马丁大叔的博客</a>里有比较详细的描述。大致来说，领域专用语言就是针对某个领域的特定目的编程语言。不像Java、C#等通用语言，可以解决任何领域的问题。领域专用语言通过自己独特的语法结构来描述更接近于专业领域语言的业务。</p>
+                    <p>让测试的描述能够接近被测系统的领域语言、使测试意图得到清晰表达就是我们想要得到的效果。DSL正好能够帮我们实现。</p>
+                    <p>让我们再看看之前的那段代码：</p>
+                    <pre>selenium.open(“/”)
+selenium.type(“id=username”, “myname”)
+selenium.type(“id=password”, “mypassword”)
+selenium.click(“id=btnLogin”)
+selenium.waitForPageToLoad(30000)
+assertTrue(selenium.isTextPresent(“Welcome to our website!”))</pre>
+                    <p>由于使用的是通用语言，在我们这个特定的使用场景中显得过于细节化、过程化，不能清晰表达测试意图。</p>
+                    <p>换成DSL，我们的测试就可以直接用验收标准的语言来描述如下：</p>
+                    <pre>Given I am on login page
+When I provide username and password
+Then I can enter the system</pre>
+                    <p>这样测试的内容就直观多了，还包含了一些业务信息，让我们知道这个是在测试一个登录的场景，而不是任意的输入信息，兼顾传递了业务知识的职责。至于这些DSL背后能够运行的代码，也被隐藏起来。如果是不能够阅读原来那样的测试代码的人（不管是需求分析人员还是客户甚至一些对自动化代码关注比较少的测试人员）想要加入到自动化测试活动中进行反馈，就不会被DSL背后的代码带来的“噪音”所影响。</p>
+                    <p>当然，在我们的现实应用场景中，这个需求没有那么简单，我们的验收标准还会考虑不同的数据比如输入不同组合的用户名密码：</p>
+                    <pre>Given I am on login page
+When I provide ‘david’ and ‘davidpassword’
+Then I can enter the system
+Given I am on login page
+When I provide ‘kate’ and ‘kate_p@ssword’
+Then I can enter the system</pre>
+                    <p>以及更多的测试数据。</p>
+                    <p>那么这种情况下，仅仅是比较通俗的语言还是不够的，毕竟测试数量在那摆着。如果测试数量不能减少，维护起来仍然很麻烦。打个比方，如果系统的实现变成了每次都要输入用户名、密码和一个随机验证码，我们就需要在我们的自动化测试中修改多处，比较繁琐。因此，我们需要在可读性比较好的自然语言描述的测试上，把它的抽象层次再提高一点。</p>
+                    <p>幸运的是，我们当时选择的DSL工具是cucumber，它除了提供了几个测试的描述层次：Feature，Scenario，Steps，还提供了非常好的一种组织方式—数据表。</p>
+                    <p>这样，我们的这个自动化测试就可以把之前的那个登录的功能根据特性、场景总结和具体的步骤分离开来，清晰的分层，同时利用数据表我们的测试精简成一系列被重复多次但输入数据有所变化的操作过程，如下：</p>
+                    <pre>Feature: authentication
+In order to have personalized information
+I want to access my account by providing authentication information
+So that the system can know who I am
+Scenario Outline: login successfully
+Given I am on login page
+When I provide ‘&lt;username&gt;’ and ‘&lt;password&gt;’
+Then I can enter the system
+Examples:
+|username |password |
+|david |davidpass |
+|kate |kate_p@ssword|</pre>
+                    <p>测试这下看起来就更清爽了。首先，用Feature关键字，我们把测试分类到login这个大特性下的，并对这个特性本身的业务目的进行相关描述，带进业务目标，传递业务知识；然后用Scenario关键字来提高挈领的标明我们这个测试场景中做的是测试登录成功的情况，并且把步骤都写出来；最后，我们用Examples关键字引出具体的数据表格把用到的数据都展示出来，避免我们的相同步骤因为测试数据的变化而重复若干遍造成冗余。万一碰上了需求的变化，要求同时提供用户名、密码和验证码，那我们的测试也只需要改动较少的地方就足够了。</p>
+                    <p>更棒的是，用了这种数据表的方式，整个团队的协作效率提高了。对于写代码没有那么顺畅的测试人员来说，增加自动化测试也就是增加更多测试数据，填充到数据表里就可以了。</p>
+                    <p>就这样，我们用DSL实现了可执行的可读性高的文档。帮助了回归测试，降低了文档维护难度，也促进团队成员利用测试来传递知识的积极性，让更多人能够参与到测试中。如果您的团队也遇到了类似的问题，不妨也尝试一下。</p>
+                    <hr />
+                    <p>本文原文发表于InfoQ：<a href="http://www.infoq.com/cn/articles/leveraging-dsl-in-agile-test">http://www.infoq.com/cn/articles/leveraging-dsl-in-agile-test</a></p>
+                    <div class="addtoany_share_save_container addtoany_content addtoany_content_bottom"><div class="a2a_kit a2a_kit_size_16 addtoany_list" data-a2a-url="https://insights.thoughtworks.cn/leveraging-dsl-in-agile-test/" data-a2a-title="敏捷测试之借力DSL"><a class="a2a_button_wechat" href="https://www.addtoany.com/add_to/wechat?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="WeChat" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_sina_weibo" href="https://www.addtoany.com/add_to/sina_weibo?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Sina Weibo" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_evernote" href="https://www.addtoany.com/add_to/evernote?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Evernote" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_pocket" href="https://www.addtoany.com/add_to/pocket?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Pocket" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_instapaper" href="https://www.addtoany.com/add_to/instapaper?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Instapaper" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_email" href="https://www.addtoany.com/add_to/email?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Email" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_linkedin" href="https://www.addtoany.com/add_to/linkedin?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="LinkedIn" rel="nofollow noopener" target="_blank"></a><a class="a2a_button_pinterest" href="https://www.addtoany.com/add_to/pinterest?linkurl=https%3A%2F%2Finsights.thoughtworks.cn%2Fleveraging-dsl-in-agile-test%2F&amp;linkname=%E6%95%8F%E6%8D%B7%E6%B5%8B%E8%AF%95%E4%B9%8B%E5%80%9F%E5%8A%9BDSL" title="Pinterest" rel="nofollow noopener" target="_blank"></a><a class="a2a_dd a2a_counter addtoany_share_save addtoany_share" href="https://www.addtoany.com/share"><img src="https://static.addtoany.com/buttons/favicon.png" alt="Share"></a></div></div>
+                </div>
+                <footer class="entry-footer"><div class="entry-meta">
+                    <span class="entry-terms category" itemprop="articleSection">Posted in: <a href="https://insights.thoughtworks.cn/category/agile/" rel="tag">敏捷</a>, <a href="https://insights.thoughtworks.cn/category/testing/" rel="tag">软件测试</a></span>	<span class="entry-terms post_tag" itemprop="keywords">Tagged: <a href="https://insights.thoughtworks.cn/tag/dsl/" rel="tag">DSL</a>, <a href="https://insights.thoughtworks.cn/tag/testing/" rel="tag">测试</a></span>
+                </div></footer>		</div></article>
+            <div id="comments" class="entry-comments">
+            </div><!-- #comments -->
+            <div id="respond" class="comment-respond">
+                <h3 id="reply-title" class="comment-reply-title">发表评论 <small><a rel="nofollow" id="cancel-comment-reply-link" href="/leveraging-dsl-in-agile-test/#respond" style="display:none;">取消回复</a></small></h3>			<form action="https://insights.thoughtworks.cn/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate>
+                <p class="comment-notes"><span id="email-notes">电子邮件地址不会被公开。</span> 必填项已用<span class="required">*</span>标注</p><p class="comment-form-comment"><label for="comment">评论</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></p><p class="comment-form-author"><label for="author">姓名 <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required='required' /></p>
+                <p class="comment-form-email"><label for="email">电子邮件 <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required='required' /></p>
+                <p class="comment-form-url"><label for="url">站点</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+                <p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="发表评论" /> <input type='hidden' name='comment_post_ID' value='8' id='comment_post_ID' />
+                    <input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+                </p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="e1b50bfde0" /></p><p style="display: none;"><input type="hidden" id="ak_js" name="ak_js" value="35"/></p>			</form>
+            </div><!-- #respond -->
+            <p class="akismet_comment_form_privacy_notice">此站点使用Akismet来减少垃圾评论。<a href="https://akismet.com/privacy/" target="_blank" rel="nofollow noopener">了解我们如何处理您的评论数据</a>。</p></main><!-- .content -->
+
+            <aside id="sidebar" class="sidebar col-xs-12 col-sm-4" role="complementary" itemscope itemtype="http://schema.org/WPSideBar">
+                <section id="search-8" class="widget widget-1 even widget-first widget_search"><div class="widget-wrap"><form role="search" method="get" class="search-form" action="https://insights.thoughtworks.cn/">
+                    <input type="search" class="search-field" placeholder="Search ..." value="" name="s" title="Search for:">	<input type="submit" class="search-submit" value="Search">
+                </form></div></section><section id="recent-comments-4" class="widget widget-2 odd widget_recent_comments"><div class="widget-wrap"><h4 class="widget-title">最新评论</h4><ul id="recentcomments"><li class="recentcomments"><span class="comment-author-link">TWInsights</span>发表在《<a href="https://insights.thoughtworks.cn/the-right-interpretation-of-gocd/#comment-14112">GoCD的正确打开方式</a>》</li><li class="recentcomments"><span class="comment-author-link">Leon</span>发表在《<a href="https://insights.thoughtworks.cn/the-right-interpretation-of-gocd/#comment-14083">GoCD的正确打开方式</a>》</li><li class="recentcomments"><span class="comment-author-link">阿喵</span>发表在《<a href="https://insights.thoughtworks.cn/what-is-zhongtai/#comment-14079">白话中台战略：中台是个什么鬼?</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href='https://www.bylinzi.com/2015/06/04/when-we-talk-about-bdd/' rel='external nofollow' class='url fn n' itemprop="url"><span itemprop="name">说起BDD，你会想到什么？ | 林子的空间</span></a></span>发表在《<a href="https://insights.thoughtworks.cn/when-we-talk-about-bdd/#comment-14057">说起BDD，你会想到什么？</a>》</li><li class="recentcomments"><span class="comment-author-link"><a href='https://www.bylinzi.com/2015/07/04/defect-management/' rel='external nofollow' class='url fn n' itemprop="url"><span itemprop="name">软件缺陷的有效管理 | 林子的空间</span></a></span>发表在《<a href="https://insights.thoughtworks.cn/defect-management/#comment-14056">软件缺陷的有效管理</a>》</li></ul></div></section><section id="tag_cloud-11" class="widget widget-3 even widget-last widget_tag_cloud"><div class="widget-wrap"><h4 class="widget-title">标签</h4><div class="tagcloud"><a href="https://insights.thoughtworks.cn/tag/angular/" class="tag-cloud-link tag-link-122 tag-link-position-1" style="font-size: 9.037037037037pt;" aria-label="Angular (5个项目)">Angular</a>
+                <a href="https://insights.thoughtworks.cn/tag/api/" class="tag-cloud-link tag-link-357 tag-link-position-2" style="font-size: 9.9444444444444pt;" aria-label="API (6个项目)">API</a>
+                <a href="https://insights.thoughtworks.cn/tag/ddd/" class="tag-cloud-link tag-link-129 tag-link-position-3" style="font-size: 15.259259259259pt;" aria-label="DDD (17个项目)">DDD</a>
+                <a href="https://insights.thoughtworks.cn/tag/devops/" class="tag-cloud-link tag-link-344 tag-link-position-4" style="font-size: 12.407407407407pt;" aria-label="DevOps (10个项目)">DevOps</a>
+                <a href="https://insights.thoughtworks.cn/tag/javascript/" class="tag-cloud-link tag-link-102 tag-link-position-5" style="font-size: 8pt;" aria-label="javascript (4个项目)">javascript</a>
+                <a href="https://insights.thoughtworks.cn/tag/kubernetes/" class="tag-cloud-link tag-link-224 tag-link-position-6" style="font-size: 9.037037037037pt;" aria-label="Kubernetes (5个项目)">Kubernetes</a>
+                <a href="https://insights.thoughtworks.cn/tag/md%e8%84%91%e6%b4%9e/" class="tag-cloud-link tag-link-1746 tag-link-position-7" style="font-size: 15.518518518519pt;" aria-label="MD脑洞 (18个项目)">MD脑洞</a>
+                <a href="https://insights.thoughtworks.cn/tag/p3/" class="tag-cloud-link tag-link-39 tag-link-position-8" style="font-size: 10.592592592593pt;" aria-label="P3 (7个项目)">P3</a>
+                <a href="https://insights.thoughtworks.cn/tag/qa/" class="tag-cloud-link tag-link-163 tag-link-position-9" style="font-size: 11.888888888889pt;" aria-label="QA (9个项目)">QA</a>
+                <a href="https://insights.thoughtworks.cn/tag/react/" class="tag-cloud-link tag-link-309 tag-link-position-10" style="font-size: 11.888888888889pt;" aria-label="React (9个项目)">React</a>
+                <a href="https://insights.thoughtworks.cn/tag/serverless/" class="tag-cloud-link tag-link-509 tag-link-position-11" style="font-size: 9.037037037037pt;" aria-label="Serverless (5个项目)">Serverless</a>
+                <a href="https://insights.thoughtworks.cn/tag/thoughtworks/" class="tag-cloud-link tag-link-368 tag-link-position-12" style="font-size: 13.314814814815pt;" aria-label="ThoughtWorks (12个项目)">ThoughtWorks</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e4%b8%ad%e5%8f%b0/" class="tag-cloud-link tag-link-1045 tag-link-position-13" style="font-size: 9.037037037037pt;" aria-label="中台 (5个项目)">中台</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e4%ba%ba%e5%b7%a5%e6%99%ba%e8%83%bd/" class="tag-cloud-link tag-link-527 tag-link-position-14" style="font-size: 9.037037037037pt;" aria-label="人工智能 (5个项目)">人工智能</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%88%9b%e6%96%b0/" class="tag-cloud-link tag-link-373 tag-link-position-15" style="font-size: 11.888888888889pt;" aria-label="创新 (9个项目)">创新</a>
+                <a href="https://insights.thoughtworks.cn/tag/frontend/" class="tag-cloud-link tag-link-204 tag-link-position-16" style="font-size: 14.481481481481pt;" aria-label="前端 (15个项目)">前端</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%8c%ba%e5%9d%97%e9%93%be/" class="tag-cloud-link tag-link-361 tag-link-position-17" style="font-size: 9.9444444444444pt;" aria-label="区块链 (6个项目)">区块链</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%92%a8%e8%af%a2/" class="tag-cloud-link tag-link-48 tag-link-position-18" style="font-size: 9.037037037037pt;" aria-label="咨询 (5个项目)">咨询</a>
+                <a href="https://insights.thoughtworks.cn/tag/business-insights/" class="tag-cloud-link tag-link-263 tag-link-position-19" style="font-size: 14.481481481481pt;" aria-label="商业洞见 (15个项目)">商业洞见</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%9b%a2%e9%98%9f/" class="tag-cloud-link tag-link-8 tag-link-position-20" style="font-size: 12.407407407407pt;" aria-label="团队 (10个项目)">团队</a>
+                <a href="https://insights.thoughtworks.cn/tag/training/" class="tag-cloud-link tag-link-377 tag-link-position-21" style="font-size: 11.240740740741pt;" aria-label="培训 (8个项目)">培训</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%a5%b3%e6%80%a7/" class="tag-cloud-link tag-link-22 tag-link-position-22" style="font-size: 13.833333333333pt;" aria-label="女性 (13个项目)">女性</a>
+                <a href="https://insights.thoughtworks.cn/tag/security/" class="tag-cloud-link tag-link-151 tag-link-position-23" style="font-size: 14.87037037037pt;" aria-label="安全 (16个项目)">安全</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e5%bc%80%e5%8f%91/" class="tag-cloud-link tag-link-332 tag-link-position-24" style="font-size: 9.037037037037pt;" aria-label="开发 (5个项目)">开发</a>
+                <a href="https://insights.thoughtworks.cn/tag/microservices/" class="tag-cloud-link tag-link-30 tag-link-position-25" style="font-size: 19.148148148148pt;" aria-label="微服务 (35个项目)">微服务</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%8a%80%e6%9c%af/" class="tag-cloud-link tag-link-99 tag-link-position-26" style="font-size: 8pt;" aria-label="技术 (4个项目)">技术</a>
+                <a href="https://insights.thoughtworks.cn/tag/techradar/" class="tag-cloud-link tag-link-43 tag-link-position-27" style="font-size: 18.759259259259pt;" aria-label="技术雷达 (33个项目)">技术雷达</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%8a%80%e6%9c%af%e9%9b%b7%e8%be%be%ef%bc%88tech-radar%ef%bc%89/" class="tag-cloud-link tag-link-485 tag-link-position-28" style="font-size: 10.592592592593pt;" aria-label="技术雷达（Tech-radar） (7个项目)">技术雷达（Tech-radar）</a>
+                <a href="https://insights.thoughtworks.cn/tag/continuous-delivery/" class="tag-cloud-link tag-link-98 tag-link-position-29" style="font-size: 11.888888888889pt;" aria-label="持续交付 (9个项目)">持续交付</a>
+                <a href="https://insights.thoughtworks.cn/tag/continuous-integration/" class="tag-cloud-link tag-link-11 tag-link-position-30" style="font-size: 9.037037037037pt;" aria-label="持续集成 (5个项目)">持续集成</a>
+                <a href="https://insights.thoughtworks.cn/tag/agile/" class="tag-cloud-link tag-link-7 tag-link-position-31" style="font-size: 18.111111111111pt;" aria-label="敏捷 (29个项目)">敏捷</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%95%b0%e5%ad%97%e5%8c%96/" class="tag-cloud-link tag-link-648 tag-link-position-32" style="font-size: 9.037037037037pt;" aria-label="数字化 (5个项目)">数字化</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e6%9e%b6%e6%9e%84/" class="tag-cloud-link tag-link-19 tag-link-position-33" style="font-size: 10.592592592593pt;" aria-label="架构 (7个项目)">架构</a>
+                <a href="https://insights.thoughtworks.cn/tag/testing/" class="tag-cloud-link tag-link-9 tag-link-position-34" style="font-size: 16.555555555556pt;" aria-label="测试 (22个项目)">测试</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%a8%8b%e5%ba%8f%e5%91%98/" class="tag-cloud-link tag-link-330 tag-link-position-35" style="font-size: 9.9444444444444pt;" aria-label="程序员 (6个项目)">程序员</a>
+                <a href="https://insights.thoughtworks.cn/tag/lean/" class="tag-cloud-link tag-link-190 tag-link-position-36" style="font-size: 11.888888888889pt;" aria-label="精益 (9个项目)">精益</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%b2%be%e9%80%89/" class="tag-cloud-link tag-link-1735 tag-link-position-37" style="font-size: 22pt;" aria-label="精选 (59个项目)">精选</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%bb%93%e5%af%b9%e7%bc%96%e7%a8%8b/" class="tag-cloud-link tag-link-665 tag-link-position-38" style="font-size: 9.037037037037pt;" aria-label="结对编程 (5个项目)">结对编程</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e7%bc%96%e7%a8%8b/" class="tag-cloud-link tag-link-67 tag-link-position-39" style="font-size: 8pt;" aria-label="编程 (4个项目)">编程</a>
+                <a href="https://insights.thoughtworks.cn/tag/career/" class="tag-cloud-link tag-link-135 tag-link-position-40" style="font-size: 8pt;" aria-label="职业发展 (4个项目)">职业发展</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%81%8c%e5%9c%ba/" class="tag-cloud-link tag-link-382 tag-link-position-41" style="font-size: 9.037037037037pt;" aria-label="职场 (5个项目)">职场</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%ae%be%e8%ae%a1/" class="tag-cloud-link tag-link-16 tag-link-position-42" style="font-size: 11.888888888889pt;" aria-label="设计 (9个项目)">设计</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e8%bd%af%e4%bb%b6%e5%bc%80%e5%8f%91/" class="tag-cloud-link tag-link-93 tag-link-position-43" style="font-size: 9.037037037037pt;" aria-label="软件开发 (5个项目)">软件开发</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e9%87%8d%e6%9e%84/" class="tag-cloud-link tag-link-132 tag-link-position-44" style="font-size: 8pt;" aria-label="重构 (4个项目)">重构</a>
+                <a href="https://insights.thoughtworks.cn/tag/%e9%9b%b6%e5%94%ae/" class="tag-cloud-link tag-link-120 tag-link-position-45" style="font-size: 8pt;" aria-label="零售 (4个项目)">零售</a></div>
+            </div></section>		  	</aside><!-- .sidebar -->
+        </div><!-- .row --></div><!-- .container -->	</div><!-- .site-inner -->
+    <footer id="footer" class="site-footer" role="contentinfo" itemscope="itemscope" itemtype="http://schema.org/WPFooter"><div class="container"><div class="row"><div class="footer-content footer-insert"><p class="copyright">Copyright &#169; 2019 ThoughtWorks洞见.</p>
+
+        <p class="credit"><a class="child-link" href="https://themehall.com/responsive-magazine-theme" title="Magazine WordPress Theme">Magazine</a> WordPress Theme by themehall.com</p></div></div><!-- .row --></div><!-- .container --></footer><!-- .site-footer --></div><!-- .site-container -->
+<meta id="ba_s" property="options" content="" data-o="{&quot;tid&quot;:&quot;UA-64115047-1&quot;,&quot;co&quot;:&quot;auto&quot;,&quot;g&quot;:1073810280,&quot;dl&quot;:&quot;\\.avi|\\.doc|\\.exe|\\.gz|\\.mpg|\\.mp3|\\.pdf|\\.ppt|\\.psd|\\.rar|\\.wmv|\\.xls|\\.zip&quot;,&quot;s&quot;:0,&quot;a&quot;:0}" /><script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/imagesloaded.min.js?ver=3.2.0'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/masonry.min.js?ver=3.3.2'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/jquery/jquery.masonry.min.js?ver=3.1.2b'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/components/prism-core.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/autoloader/prism-autoloader.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/plugins/line-numbers/prism-line-numbers.min.js?ver=1.15.0'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/comment-reply.min.js?ver=5.2.2'></script>
+<script type='text/javascript' src='https://insights.thoughtworks.cn/wp-includes/js/wp-embed.min.js?ver=5.2.2'></script>
+<script async="async" type='text/javascript' src='https://insights.thoughtworks.cn/wp-content/plugins/akismet/_inc/form.js?ver=4.1.2'></script>
+<script type="text/javascript">
+    Prism.plugins.autoloader.languages_path = "https://cdn.jsdelivr.net/wp/wp-editormd/tags/10.0.3/assets/Prism.js/components/";
+</script>
+</body>
+</html>
