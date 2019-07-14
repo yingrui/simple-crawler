@@ -74,8 +74,10 @@ public class DataFetcher {
     }
 
     private void setHeaders(CrawlerTask crawlerTask, HttpRequestBase request) {
-        for (String headerName : crawlerTask.getRequestHeaders().keySet()) {
-            request.setHeader(headerName, crawlerTask.getRequestHeaders().get(headerName));
+        if (crawlerTask.getRequestHeaders() != null) {
+            for (String headerName : crawlerTask.getRequestHeaders().keySet()) {
+                request.setHeader(headerName, crawlerTask.getRequestHeaders().get(headerName));
+            }
         }
     }
 

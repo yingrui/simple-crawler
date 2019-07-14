@@ -13,7 +13,7 @@ public class PaginationSettings {
     private boolean stopWhenAllLinksCrawled = true;
     private String path;
     private String prefix;
-    private String urlTemplate = "${url}";
+    private String urlTemplate = "[(${url})]";
     private String bodyTemplate;
 
     public PaginationSettings() {

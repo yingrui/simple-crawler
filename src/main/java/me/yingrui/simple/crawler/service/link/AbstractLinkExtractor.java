@@ -149,10 +149,12 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
 
     private Map<String, String> getRequestHeaders(CrawlerTask crawlerTask, Map<String, String> context) {
         Map<String, String> headers = new HashMap<>();
-        for (String name : crawlerTask.getLinkExtractorSettings().getHeaders().keySet()) {
-            String template = crawlerTask.getLinkExtractorSettings().getHeaders().get(name);
-            String value = render(template, context);
-            headers.put(name, value);
+        if (crawlerTask.getLinkExtractorSettings().getHeaders() != null) {
+            for (String name : crawlerTask.getLinkExtractorSettings().getHeaders().keySet()) {
+                String template = crawlerTask.getLinkExtractorSettings().getHeaders().get(name);
+                String value = render(template, context);
+                headers.put(name, value);
+            }
         }
         return headers;
     }

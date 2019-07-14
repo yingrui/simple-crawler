@@ -35,7 +35,9 @@ public class CrawlerTask {
         this.requestUrl = requestUrl;
         this.linkExtractorSettings = linkExtractorSettings;
         this.paginationSettings = paginationSettings;
-        if (httpMethod.equalsIgnoreCase("POST")) {
+        if (httpMethod == null) {
+            this.httpMethod = SupportHttpMethod.GET;
+        } else if (httpMethod.equalsIgnoreCase("POST")) {
             this.httpMethod = SupportHttpMethod.POST;
         }
         this.requestHeaders = requestHeaders;
