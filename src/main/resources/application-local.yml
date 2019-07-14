@@ -45,7 +45,7 @@ indexer:
   cluster-name: yingrui-laptop
   index: article
   type: _doc
-  string-fields: topic, author, translator
+  string-fields: topic, author, translator, website
 
 
 logging:
