@@ -37,7 +37,7 @@ crawler:
 wrappers:
   websites:
     - website: www.infoq.cn
-      matched-url: https://www.infoq.cn/article/.*
+      match-url: https://www.infoq.cn/article/.*
       extractors:
         - field: title
           path: data.article_title

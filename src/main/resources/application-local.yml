@@ -22,8 +22,8 @@ crawler:
 wrappers:
   websites:
     - website: insights.thoughtworks.cn
-      matched-url: https://insights.thoughtworks.cn/.*
-      not-matched-url: https://insights.thoughtworks.cn/page/.*
+      match-url: https://insights.thoughtworks.cn/.*
+      not-match-url: https://insights.thoughtworks.cn/page/.*
       extractors:
         - field: title
           path: h1.entry-title

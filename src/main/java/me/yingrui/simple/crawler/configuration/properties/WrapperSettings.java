@@ -11,7 +11,8 @@ import java.util.List;
 public class WrapperSettings {
 
     private String website;
-    private String matchedUrl;
+    private String matchUrl;
+    private String notMatchUrl;
 
     private List<ExtractorSettings> extractors;
 
@@ -23,12 +24,20 @@ public class WrapperSettings {
         this.extractors = extractors;
     }
 
-    public String getMatchedUrl() {
-        return matchedUrl;
+    public String getMatchUrl() {
+        return matchUrl;
     }
 
-    public void setMatchedUrl(String matchedUrl) {
-        this.matchedUrl = matchedUrl;
+    public void setMatchUrl(String matchUrl) {
+        this.matchUrl = matchUrl;
+    }
+
+    public String getNotMatchUrl() {
+        return notMatchUrl;
+    }
+
+    public void setNotMatchUrl(String notMatchUrl) {
+        this.notMatchUrl = notMatchUrl;
     }
 
     public String getWebsite() {
@@ -40,6 +49,15 @@ public class WrapperSettings {
     }
 
     public boolean isMatch(String url) {
-        return matchedUrl != null ? url.matches(matchedUrl) : true;
+        if (matchUrl != null) {
+            boolean match = url.matches(matchUrl);
+            if (match && notMatchUrl != null) {
+                return !url.matches(notMatchUrl);
+            } else {
+                return match;
+            }
+        } else {
+            return true;
+        }
     }
 }
