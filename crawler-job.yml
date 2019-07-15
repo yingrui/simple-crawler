@@ -42,7 +42,7 @@ spec:
               args:
                 - /bin/sh
                 - -c
-                - java -jar /app.jar
+                - java -jar /app.jar --crawler-run
           imagePullSecrets:
             - name: docker-secret
           restartPolicy: Never
