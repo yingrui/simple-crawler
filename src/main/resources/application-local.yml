@@ -1,8 +1,4 @@
 spring:
-  hadoop:
-    config:
-      fs:
-        defaultFS: hdfs://192.168.56.101:8020
   zookeeper:
     quorum: 192.168.56.101
     port: 2181

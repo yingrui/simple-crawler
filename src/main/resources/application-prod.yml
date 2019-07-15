@@ -1,8 +1,4 @@
 spring:
-  hadoop:
-    config:
-      fs:
-        defaultFS: hdfs://twdp-nn1:8020
   zookeeper:
     quorum: twdp-nn1
     port: 2181
