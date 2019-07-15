@@ -45,7 +45,7 @@ public class Application implements CommandLineRunner {
 
         elasticSearchIndexer.close();
         System.out.println("Exit...");
-        throw new RuntimeException("Force exit");
+        System.exit(0);
     }
 
     private void wrap(WebLink webLink) {

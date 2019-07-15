@@ -2,9 +2,9 @@ spring:
   hadoop:
     config:
       fs:
-        defaultFS: hdfs://172.30.3.101:8020
+        defaultFS: hdfs://twdp-nn1:8020
   zookeeper:
-    quorum: 172.30.3.101
+    quorum: twdp-nn1
     port: 2181
 
 crawler:

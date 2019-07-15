@@ -1,0 +1,48 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: crawler-job
+spec:
+  schedule: "* * */1 * *"
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          hostAliases:
+            - ip: "172.30.3.101"
+              hostnames:
+                - "twdp-nn1"
+            - ip: "172.30.3.102"
+              hostnames:
+                - "twdp-nn2"
+            - ip: "172.30.3.103"
+              hostnames:
+                - "twdp-dn1"
+            - ip: "172.30.3.104"
+              hostnames:
+                - "twdp-dn2"
+            - ip: "172.30.3.105"
+              hostnames:
+                - "twdp-dn3"
+            - ip: "172.30.3.106"
+              hostnames:
+                - "twdp-dn4"
+            - ip: "172.30.3.108"
+              hostnames:
+                - "twdp-dn5"
+          containers:
+            - name: crawler-job
+              image: 172.30.3.211:30003/simple-crawler
+              imagePullPolicy: Always
+              env:
+                - name: PROFILE
+                  value: "prod"
+              args:
+                - /bin/sh
+                - -c
+                - java -jar /app.jar
+          imagePullSecrets:
+            - name: docker-secret
+          restartPolicy: Never
