@@ -3,6 +3,8 @@ package me.yingrui.simple.crawler.service;
 
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
 import me.yingrui.simple.crawler.configuration.properties.StartUrlSettings;
+import me.yingrui.simple.crawler.configuration.properties.WrapperSettings;
+import me.yingrui.simple.crawler.configuration.properties.Wrappers;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.WebLink;
@@ -13,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
+
+import static me.yingrui.simple.crawler.util.JsonUtils.toJson;
 
 public class Crawler {
 
@@ -25,12 +29,16 @@ public class Crawler {
     private LinkExtractorFactory linkExtractorFactory;
     private CrawlerSettings crawlerSettings;
     private WebLinkRepository webLinkRepository;
+    private Wrappers wrappers;
+    private ElasticSearchIndexer elasticSearchIndexer;
 
-    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository) {
+    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, ElasticSearchIndexer elasticSearchIndexer) {
         this.dataFetcher = dataFetcher;
         this.linkExtractorFactory = linkExtractorFactory;
         this.crawlerSettings = crawlerSettings;
         this.webLinkRepository = webLinkRepository;
+        this.wrappers = wrappers;
+        this.elasticSearchIndexer = elasticSearchIndexer;
         initializeQueue();
     }
 
@@ -57,8 +65,9 @@ public class Crawler {
                 webLinkRepository.save(webLink);
 
                 extractLinks(crawlerTask);
+                wrap(webLink);
 
-                Thread.sleep(random.nextInt(2000));
+                Thread.sleep(random.nextInt(1000));
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -66,6 +75,16 @@ public class Crawler {
             LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void wrap(WebLink webLink) {
+        LOGGER.info(webLink.getRowKey());
+        WrapperSettings wrapperSettings = wrappers.getWrapper(webLink.getWebsite());
+        if (wrapperSettings.isMatch(webLink.getUrl())) {
+            Wrapper wrapper = new Wrapper(wrapperSettings);
+            Map<String, Object> obj = wrapper.wrap(webLink);
+            elasticSearchIndexer.index(obj);
         }
     }
 
