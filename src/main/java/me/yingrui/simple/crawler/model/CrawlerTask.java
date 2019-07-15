@@ -33,6 +33,10 @@ public class CrawlerTask {
                        String parentUrl, int depth) {
         this.url = url;
         this.requestUrl = requestUrl;
+        if (requestUrl != null && url == null) {
+            this.url = requestUrl;
+        }
+
         this.linkExtractorSettings = linkExtractorSettings;
         this.paginationSettings = paginationSettings;
         if (httpMethod == null) {

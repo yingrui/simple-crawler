@@ -2,9 +2,9 @@ spring:
   hadoop:
     config:
       fs:
-        defaultFS: hdfs://192.168.56.101:8020
+        defaultFS: hdfs://172.30.3.101:8020
   zookeeper:
-    quorum: 192.168.56.101
+    quorum: 172.30.3.101
     port: 2181
 
 crawler:
@@ -33,6 +33,14 @@ crawler:
           content-type: application/json
           referer: '[(${url})]'
         body-template: '{"uuid":"[(${src})]"}'
+    - start-url: https://insights.thoughtworks.cn/
+      pagination:
+        no-pagination: false
+        stop-when-all-links-crawled: true
+        path: a.next
+      links:
+        new-links-only: true
+        path: .entry-title a
 
 wrappers:
   websites:
@@ -61,10 +69,28 @@ wrappers:
         - field: content
           path: data.content
           extractor: HtmlContentExtractor
+    - website: insights.thoughtworks.cn
+      match-url: https://insights.thoughtworks.cn/.*
+      not-match-url: https://insights.thoughtworks.cn/page/.*
+      extractors:
+        - field: title
+          path: h1.entry-title
+        - field: publish_time
+          path: time.entry-time
+          type: datetime
+          extractor: DatetimeExtractor
+        - field: author
+          path: a[rel=author] span
+          type: array
+        - field: topic
+          path: a[rel=tag]
+          type: array
+        - field: content
+          path: div.entry-content
 
 indexer:
-  cluster-nodes: localhost:9300
-  cluster-name: yingrui-laptop
+  cluster-nodes: 172.30.3.211:30001
+  cluster-name: elasticsearch-cluster
   index: article
   type: _doc
   string-fields: topic, author, translator, website

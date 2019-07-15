@@ -10,7 +10,6 @@ spring:
 crawler:
   start-urls:
     - start-url: https://insights.thoughtworks.cn/
-      url: https://insights.thoughtworks.cn/
       pagination:
         no-pagination: false
         stop-when-all-links-crawled: true
