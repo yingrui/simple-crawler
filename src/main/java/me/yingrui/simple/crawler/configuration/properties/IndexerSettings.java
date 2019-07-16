@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @ConfigurationProperties(prefix = "indexer")
@@ -57,7 +58,7 @@ public class IndexerSettings {
     }
 
     public List<String> getStringFields() {
-        return Lists.newArrayList(stringFields.split(","));
+        return Lists.newArrayList(stringFields.split(",")).stream().map(f -> f.trim()).collect(Collectors.toList());
     }
 
     public void setStringFields(String stringFields) {
