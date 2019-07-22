@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: crawler-job
 spec:
-  schedule: "* * */1 * *"
+  schedule: "@daily"
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 1
   jobTemplate:
@@ -46,3 +46,4 @@ spec:
           imagePullSecrets:
             - name: docker-secret
           restartPolicy: Never
+      backoffLimit: 0
