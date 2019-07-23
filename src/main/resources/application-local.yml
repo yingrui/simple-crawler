@@ -24,24 +24,8 @@ crawler:
 
 wrappers:
   websites:
-    - website: insights.thoughtworks.cn
-      match-url: https://insights.thoughtworks.cn/.*
-      not-match-url: https://insights.thoughtworks.cn/page/.*
-      extractors:
-        - field: title
-          path: h1.entry-title
-        - field: publish_time
-          path: time.entry-time
-          type: datetime
-          extractor: DatetimeExtractor
-        - field: author
-          path: a[rel=author] span
-          type: array
-        - field: topic
-          path: a[rel=tag]
-          type: array
-        - field: content
-          path: div.entry-content
+    - website: data.stats.gov.cn
+      match-url: .*QueryData.*
 
 indexer:
   cluster-nodes: 172.30.3.211:30001

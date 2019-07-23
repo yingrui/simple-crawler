@@ -6,6 +6,7 @@ import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.WebLink;
 import me.yingrui.simple.crawler.service.Crawler;
 import me.yingrui.simple.crawler.service.ElasticSearchIndexer;
+import me.yingrui.simple.crawler.service.KafkaIndexer;
 import me.yingrui.simple.crawler.service.Wrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -28,6 +29,8 @@ public class Application implements CommandLineRunner {
     @Autowired
     private ElasticSearchIndexer elasticSearchIndexer;
     @Autowired
+    private KafkaIndexer kafkaIndexer;
+    @Autowired
     private WebLinkRepository webLinkRepository;
 
     public static void main(String[] args) {
@@ -44,6 +47,7 @@ public class Application implements CommandLineRunner {
         }
 
         elasticSearchIndexer.close();
+        kafkaIndexer.close();
         System.out.println("Exit...");
         System.exit(0);
     }

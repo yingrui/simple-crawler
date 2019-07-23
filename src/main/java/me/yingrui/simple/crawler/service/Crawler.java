@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.*;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 public class Crawler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Crawler.class);
@@ -29,14 +31,16 @@ public class Crawler {
     private WebLinkRepository webLinkRepository;
     private Wrappers wrappers;
     private ElasticSearchIndexer elasticSearchIndexer;
+    private KafkaIndexer kafkaIndexer;
 
-    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, ElasticSearchIndexer elasticSearchIndexer) {
+    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, ElasticSearchIndexer elasticSearchIndexer, KafkaIndexer kafkaIndexer) {
         this.dataFetcher = dataFetcher;
         this.linkExtractorFactory = linkExtractorFactory;
         this.crawlerSettings = crawlerSettings;
         this.webLinkRepository = webLinkRepository;
         this.wrappers = wrappers;
         this.elasticSearchIndexer = elasticSearchIndexer;
+        this.kafkaIndexer = kafkaIndexer;
         initializeQueue();
     }
 
@@ -61,12 +65,13 @@ public class Crawler {
             WebLink webLink = dataFetcher.fetch(crawlerTask);
             if (webLink != null) {
                 LOGGER.debug(webLink.getContent());
+                webLink.setRowKey(getRowKey(crawlerTask, webLink));
                 webLinkRepository.save(webLink);
 
                 extractLinks(crawlerTask);
                 wrap(webLink);
 
-                Thread.sleep(random.nextInt(1000));
+                Thread.sleep(random.nextInt(3000));
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
@@ -74,6 +79,14 @@ public class Crawler {
             LOGGER.error(e.getMessage(), e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private String getRowKey(CrawlerTask crawlerTask, WebLink webLink) {
+        if (isNullOrEmpty(crawlerTask.getRequestBody())) {
+            return webLink.getRowKey();
+        } else {
+            return webLink.getRowKey() + "+" + crawlerTask.getRequestBody();
         }
     }
 
@@ -85,8 +98,12 @@ public class Crawler {
         }
         if (wrapperSettings.isMatch(webLink.getUrl())) {
             Wrapper wrapper = new Wrapper(wrapperSettings);
-            Map<String, Object> obj = wrapper.wrap(webLink);
-            elasticSearchIndexer.index(obj);
+            if (wrapperSettings.getExtractors() == null || wrapperSettings.getExtractors().isEmpty()) {
+                kafkaIndexer.index(webLink);
+            } else {
+                Map<String, Object> obj = wrapper.wrap(webLink);
+                elasticSearchIndexer.index(obj);
+            }
         }
     }
 

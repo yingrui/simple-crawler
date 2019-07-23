@@ -22,13 +22,12 @@ public class ElasticSearchIndexer {
         this.type = indexerSettings.getType();
     }
 
-    public IndexResponse index(Map<String, Object> obj) {
+    public void index(Map<String, Object> obj) {
         String json = toJson(obj);
         IndexResponse response = client.prepareIndex(index, type)
                 .setSource(json, XContentType.JSON)
                 .setId((String) obj.get("url"))
                 .get();
-        return response;
     }
 
     public void close() {
