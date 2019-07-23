@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class JsonLinkExtractor extends AbstractLinkExtractor {
 
-    private DocumentContext jsonContext;
+    protected DocumentContext jsonContext;
 
     public JsonLinkExtractor(WebLinkRepository webLinkRepository) {
         this.setWebLinkRepository(webLinkRepository);
@@ -19,10 +19,12 @@ public class JsonLinkExtractor extends AbstractLinkExtractor {
     public JsonLinkExtractor() {
     }
 
+    @Override
     public void parseContent(CrawlerTask crawlerTask) {
         jsonContext = JsonPath.parse(crawlerTask.getResponseContent());
     }
 
+    @Override
     public List<CrawlerTask> getCrawlerTasks(CrawlerTask crawlerTask, List<String> srcList) {
         return srcList.stream()
                 .map(src -> createChildTask(src))
@@ -30,11 +32,13 @@ public class JsonLinkExtractor extends AbstractLinkExtractor {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<String> extractLinks(CrawlerTask crawlerTask) {
         String srcPath = crawlerTask.getLinkExtractorSettings().getPath();
         return getLinks(srcPath);
     }
 
+    @Override
     public List<String> getLinks(String path) {
         return jsonContext.read(path);
     }

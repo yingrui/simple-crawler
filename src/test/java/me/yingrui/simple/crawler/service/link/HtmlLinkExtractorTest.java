@@ -25,7 +25,7 @@ public class HtmlLinkExtractorTest {
         LinkExtractorSettings linkExtractorSettings = new LinkExtractorSettings(linkPath, null, "GET",
                 null, new HashMap<>(), null);
 
-        CrawlerTask crawlerTask = new CrawlerTask("url", "https://insights.thoughtworks.cn/", "GET", null, null, linkExtractorSettings, null);
+        CrawlerTask crawlerTask = new CrawlerTask("url", "https://insights.thoughtworks.cn/", "GET", null, null, null, linkExtractorSettings, null);
         crawlerTask.setResponseContent(html());
         crawlerTask.setResponseContentType("text/html; charset=UTF-8");
 
@@ -51,7 +51,7 @@ public class HtmlLinkExtractorTest {
         paginationSettings.setNoPagination(false);
 
         CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "GET", defaultHeaders(), "",
-                linkExtractorSettings, paginationSettings);
+                null, linkExtractorSettings, paginationSettings);
         crawlerTask.setResponseContent(html());
         crawlerTask.setResponseContentType("text/html; charset=UTF-8");
 

@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.*;
 
-import static me.yingrui.simple.crawler.util.JsonUtils.toJson;
-
 public class Crawler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Crawler.class);
@@ -50,6 +48,7 @@ public class Crawler {
 
     public void run() {
         while (!this.queue.isEmpty()) {
+            LOGGER.info("Current queue size: " + this.queue.size());
             CrawlerTask crawlerTask = this.queue.poll();
             LOGGER.info(crawlerTask.getUrl());
             fetchAndProcess(crawlerTask);
@@ -81,6 +80,9 @@ public class Crawler {
     private void wrap(WebLink webLink) {
         LOGGER.info(webLink.getRowKey());
         WrapperSettings wrapperSettings = wrappers.getWrapper(webLink.getWebsite());
+        if (wrapperSettings == null) {
+            return;
+        }
         if (wrapperSettings.isMatch(webLink.getUrl())) {
             Wrapper wrapper = new Wrapper(wrapperSettings);
             Map<String, Object> obj = wrapper.wrap(webLink);
@@ -91,12 +93,14 @@ public class Crawler {
     private void extractLinks(CrawlerTask crawlerTask) {
         LinkExtractor linkExtractor = linkExtractorFactory.create(crawlerTask);
         List<CrawlerTask> links = linkExtractor.extract(crawlerTask);
-        for (CrawlerTask child : links) {
-            this.add(child);
-        }
+        this.addAll(links);
     }
 
     public boolean add(CrawlerTask crawlerTask) {
         return this.queue.add(crawlerTask);
+    }
+
+    public boolean addAll(List<CrawlerTask> crawlerTasks) {
+        return this.queue.addAll(crawlerTasks);
     }
 }

@@ -3,8 +3,6 @@ package me.yingrui.simple.crawler.service.link;
 import me.yingrui.simple.crawler.configuration.properties.LinkExtractorSettings;
 import me.yingrui.simple.crawler.configuration.properties.PaginationSettings;
 import me.yingrui.simple.crawler.model.CrawlerTask;
-import me.yingrui.simple.crawler.service.link.JsonLinkExtractor;
-import me.yingrui.simple.crawler.service.link.LinkExtractor;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -27,7 +25,7 @@ public class JsonLinkExtractorTest {
                 urlTemplate, headers, bodyTemplate);
 
         CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
-                linkExtractorSettings, null);
+                null, linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
 
@@ -45,7 +43,7 @@ public class JsonLinkExtractorTest {
                 urlTemplate, headers, bodyTemplate);
 
         CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
-                linkExtractorSettings, null);
+                null, linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
 
@@ -76,7 +74,7 @@ public class JsonLinkExtractorTest {
         paginationSettings.setNoPagination(false);
 
         CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "POST", defaultHeaders(), "",
-                linkExtractorSettings, paginationSettings);
+                null, linkExtractorSettings, paginationSettings);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
 

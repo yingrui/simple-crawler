@@ -5,10 +5,12 @@ import me.yingrui.simple.crawler.model.SupportHttpMethod;
 import me.yingrui.simple.crawler.model.WebLink;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.google.common.base.Strings.isNullOrEmpty;
 
 @Service
 public class DataFetcher {
@@ -35,9 +43,16 @@ public class DataFetcher {
             int statusCode = response.getStatusLine().getStatusCode();
             crawlerTask.setStatusCode(statusCode);
             if (statusCode == 200) {
-                String contentType = response.getFirstHeader("Content-Type").getValue();
-                crawlerTask.setResponseContentType(contentType);
-                crawlerTask.setResponseContent(EntityUtils.toString(response.getEntity()));
+                if (response.getHeaders("Content-Type").length > 0) {
+                    String contentType = response.getFirstHeader("Content-Type").getValue();
+                    crawlerTask.setResponseContentType(contentType);
+                }
+                if (!isNullOrEmpty(crawlerTask.getEncode())) {
+                    final String responseContent = new String(EntityUtils.toString(response.getEntity()).getBytes(crawlerTask.getEncode()));
+                    crawlerTask.setResponseContent(responseContent);
+                } else {
+                    crawlerTask.setResponseContent(EntityUtils.toString(response.getEntity()));
+                }
                 return crawlerTask.toWebLink();
             }
         }
@@ -83,7 +98,12 @@ public class DataFetcher {
 
     private HttpRequestBase createHttpRequest(CrawlerTask crawlerTask) {
         if (crawlerTask.getHttpMethod() == SupportHttpMethod.POST) {
-            return newHttpPostRequest(crawlerTask);
+            final String contentType = crawlerTask.getRequestHeaders().get("content-type");
+            if (contentType.equalsIgnoreCase("application/x-www-form-urlencoded")) {
+                return newHttpPostRequestWithForm(crawlerTask);
+            } else {
+                return newHttpPostRequest(crawlerTask);
+            }
         } else {
             return new HttpGet(crawlerTask.getRequestUrl());
         }
@@ -93,6 +113,21 @@ public class DataFetcher {
         HttpPost request = new HttpPost(crawlerTask.getRequestUrl());
         StringEntity entity = createRequestEntity(crawlerTask);
         request.setEntity(entity);
+        return request;
+    }
+
+    private HttpRequestBase newHttpPostRequestWithForm(CrawlerTask crawlerTask) {
+        HttpPost request = new HttpPost(crawlerTask.getRequestUrl());
+        final List<BasicNameValuePair> nameValuePairs = Arrays.stream(crawlerTask.getRequestBody().split("&"))
+                .map(it -> {
+                    final String[] nameValue = it.split("=");
+                    return new BasicNameValuePair(nameValue[0], nameValue[1]);
+                }).collect(Collectors.toList());
+        try {
+            request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         return request;
     }
 

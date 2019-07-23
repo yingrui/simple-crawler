@@ -11,7 +11,7 @@ crawler:
       headers:
         referer: https://www.infoq.cn/topic/cloud-computing
         content-type: application/json
-      body-template: '{"type": 1, "size": 12}'
+      data-template: '{"type": 1, "size": 12}'
       pagination:
         no-pagination: false
         stop-when-all-links-crawled: true

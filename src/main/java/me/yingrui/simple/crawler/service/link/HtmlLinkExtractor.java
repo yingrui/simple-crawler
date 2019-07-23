@@ -22,10 +22,12 @@ public class HtmlLinkExtractor extends AbstractLinkExtractor {
     public HtmlLinkExtractor() {
     }
 
+    @Override
     public void parseContent(CrawlerTask crawlerTask) {
         doc = Jsoup.parse(crawlerTask.getResponseContent());
     }
 
+    @Override
     public List<CrawlerTask> getCrawlerTasks(CrawlerTask crawlerTask, List<String> srcList) {
         return srcList.stream()
                 .map(src -> createChildTask(src))
@@ -33,11 +35,13 @@ public class HtmlLinkExtractor extends AbstractLinkExtractor {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<String> extractLinks(CrawlerTask crawlerTask) {
         String srcPath = crawlerTask.getLinkExtractorSettings().getPath();
         return getLinks(srcPath);
     }
 
+    @Override
     public List<String> getLinks(String path) {
         Elements elements = doc.select(path);
 

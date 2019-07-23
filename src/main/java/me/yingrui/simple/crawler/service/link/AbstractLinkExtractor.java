@@ -91,7 +91,7 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
                         getCrawlerTask().getLinkExtractorSettings().getHttpMethod(),
                         getCrawlerTask().getRequestHeaders(),
                         requestBody,
-                        getCrawlerTask().getLinkExtractorSettings(),
+                        null, getCrawlerTask().getLinkExtractorSettings(),
                         paginationSettings);
                 return nextPage;
             }
@@ -139,6 +139,7 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
                 crawlerTask.getLinkExtractorSettings().getHttpMethod(),
                 headers,
                 requestBody,
+                null,
                 crawlerTask.getLinkExtractorSettings(),
                 null,
                 crawlerTask.getUrl(),

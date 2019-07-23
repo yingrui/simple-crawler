@@ -16,6 +16,9 @@ public class LinkExtractorFactory {
     private WebLinkRepository webLinkRepository;
 
     public LinkExtractor create(CrawlerTask crawlerTask) {
+        if (crawlerTask.getUrl().contains("data.stats.gov")) {
+            return new StatsGovLinkExtractor(webLinkRepository);
+        }
         if (isNotEmpty(crawlerTask.getResponseContentType())) {
             if (crawlerTask.getResponseContentType().startsWith("application/json")) {
                 return new JsonLinkExtractor(webLinkRepository);

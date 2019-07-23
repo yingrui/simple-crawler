@@ -1,18 +1,26 @@
 spring:
   zookeeper:
-    quorum: 192.168.56.101
+    quorum: twdp-nn1
     port: 2181
 
 crawler:
   start-urls:
-    - start-url: https://insights.thoughtworks.cn/
+    - start-url: http://data.stats.gov.cn/easyquery.htm
+      http-method: POST
+      headers:
+        content-type: application/x-www-form-urlencoded
+      encode: ISO-8859-1
+      data-template: 'id=zb&dbcode=hgyd&wdcode=zb&m=getTree'
+#      data-template: 'id=${id}&dbcode=${dbcode}&wdcode=${wdcode}&m=getTree'
       pagination:
-        no-pagination: false
+        no-pagination: true
         stop-when-all-links-crawled: true
-        path: a.next
       links:
         new-links-only: true
-        path: .entry-title a
+        http-method: GET
+        url-template: http://data.stats.gov.cn/easyquery.htm?m=QueryData&dbcode=${db}&rowcode=${rowcode}&colcode=${colcode}&wds=${wds}&dfwds=${dfwds}&k1=1563764645856
+        headers:
+          content-type: application/json
 
 wrappers:
   websites:
@@ -36,8 +44,8 @@ wrappers:
           path: div.entry-content
 
 indexer:
-  cluster-nodes: localhost:9300
-  cluster-name: yingrui-laptop
+  cluster-nodes: 172.30.3.211:30001
+  cluster-name: elasticsearch-cluster
   index: article
   type: _doc
   string-fields: topic, author, translator, website
