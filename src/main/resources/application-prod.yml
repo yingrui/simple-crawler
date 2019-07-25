@@ -6,6 +6,7 @@ spring:
 crawler:
   start-urls:
     - start-url: https://www.infoq.cn/public/v1/article/getList
+      indexer-type: ElasticSearch
       url: https://www.infoq.cn/
       http-method: POST
       headers:
@@ -30,6 +31,7 @@ crawler:
           referer: '[(${url})]'
         body-template: '{"uuid":"[(${src})]"}'
     - start-url: https://insights.thoughtworks.cn/
+      indexer-type: ElasticSearch
       pagination:
         no-pagination: false
         stop-when-all-links-crawled: true
@@ -37,6 +39,22 @@ crawler:
       links:
         new-links-only: true
         path: .entry-title a
+    - start-url: http://data.stats.gov.cn/easyquery.htm
+      indexer-type: kafka
+      http-method: POST
+      headers:
+        content-type: application/x-www-form-urlencoded
+      encode: ISO-8859-1
+      data-template: 'id=zb&dbcode=hgyd&wdcode=zb&m=getTree'
+      pagination:
+        no-pagination: true
+        stop-when-all-links-crawled: true
+      links:
+        new-links-only: true
+        http-method: GET
+        url-template: http://data.stats.gov.cn/easyquery.htm?m=QueryData&dbcode=${db}&rowcode=${rowcode}&colcode=${colcode}&wds=${wds}&dfwds=${dfwds}&k1=1563764645856
+        headers:
+          content-type: application/json
 
 wrappers:
   websites:
@@ -83,13 +101,20 @@ wrappers:
           type: array
         - field: content
           path: div.entry-content
+    - website: data.stats.gov.cn
+      match-url: .*QueryData.*
 
-indexer:
-  cluster-nodes: 172.30.3.211:30001
-  cluster-name: elasticsearch-cluster
-  index: article
-  type: _doc
-  string-fields: topic, author, translator, website
+indexers:
+  - indexer-type: ElasticSearch
+    cluster-nodes: 172.30.3.211:30001
+    cluster-name: elasticsearch-cluster
+    index: article
+    type: _doc
+    string-fields: topic, author, translator, website
+  - indexer-type: kafka
+    cluster-nodes: twdp-dn5:9092,twdp-dn4:9092,twdp-dn3:9092
+    cluster-name: elasticsearch-cluster
+    index: crawler
 
 
 logging:
