@@ -29,6 +29,11 @@ public class KafkaIndexer implements Indexer {
     }
 
     @Override
+    public String getType() {
+        return "kafka";
+    }
+
+    @Override
     public void index(Map<String, Object> obj) {
         String value;
         try {

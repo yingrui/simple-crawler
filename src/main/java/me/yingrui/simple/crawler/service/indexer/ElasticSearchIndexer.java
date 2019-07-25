@@ -23,6 +23,11 @@ public class ElasticSearchIndexer implements Indexer {
     }
 
     @Override
+    public String getType() {
+        return "ElasticSearch";
+    }
+
+    @Override
     public void index(Map<String, Object> obj) {
         String json = toJson(obj);
         IndexResponse response = client.prepareIndex(index, type)

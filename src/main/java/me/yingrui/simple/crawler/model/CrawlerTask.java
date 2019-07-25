@@ -15,6 +15,7 @@ public class CrawlerTask {
 
     private String url;
     private String requestUrl;
+    private String indexerType;
     private LinkExtractorSettings linkExtractorSettings;
     private PaginationSettings paginationSettings;
     private int depth = 0;
@@ -28,12 +29,12 @@ public class CrawlerTask {
     private String responseContentType = null;
     private String parentUrl = null;
 
-    public CrawlerTask(String url, String requestUrl, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+    public CrawlerTask(String url, String requestUrl, String indexerType, String httpMethod, Map<String, String> requestHeaders, String requestBody,
                        String encode, LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings) {
-        this(url, requestUrl, httpMethod, requestHeaders, requestBody, encode, linkExtractorSettings, paginationSettings, null, 0);
+        this(url, requestUrl, indexerType, httpMethod, requestHeaders, requestBody, encode, linkExtractorSettings, paginationSettings, null, 0);
     }
 
-    public CrawlerTask(String url, String requestUrl, String httpMethod, Map<String, String> requestHeaders, String requestBody,
+    public CrawlerTask(String url, String requestUrl, String indexerType, String httpMethod, Map<String, String> requestHeaders, String requestBody,
                        String encode, LinkExtractorSettings linkExtractorSettings, PaginationSettings paginationSettings,
                        String parentUrl, int depth) {
         this.url = url;
@@ -44,16 +45,17 @@ public class CrawlerTask {
 
         this.linkExtractorSettings = linkExtractorSettings;
         this.paginationSettings = paginationSettings;
-        if (httpMethod == null) {
-            this.httpMethod = SupportHttpMethod.GET;
-        } else if (httpMethod.equalsIgnoreCase("POST")) {
-            this.httpMethod = SupportHttpMethod.POST;
+        if (httpMethod != null) {
+            if (httpMethod.equalsIgnoreCase("POST")) {
+                this.httpMethod = SupportHttpMethod.POST;
+            }
         }
         this.requestHeaders = requestHeaders;
         this.requestBody = requestBody;
         this.parentUrl = parentUrl;
         this.depth = depth;
         this.encode = encode;
+        this.indexerType = indexerType;
     }
 
     public WebLink toWebLink() {

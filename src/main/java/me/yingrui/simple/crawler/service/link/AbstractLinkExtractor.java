@@ -88,6 +88,7 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
 
                 CrawlerTask nextPage = new CrawlerTask(url,
                         requestUrl,
+                        getCrawlerTask().getIndexerType(),
                         getCrawlerTask().getLinkExtractorSettings().getHttpMethod(),
                         getCrawlerTask().getRequestHeaders(),
                         requestBody,
@@ -136,6 +137,7 @@ public abstract class AbstractLinkExtractor implements LinkExtractor {
         Map<String, String> headers = getRequestHeaders(crawlerTask, context);
 
         CrawlerTask childTask = new CrawlerTask(url, requestUrl,
+                getCrawlerTask().getIndexerType(),
                 crawlerTask.getLinkExtractorSettings().getHttpMethod(),
                 headers,
                 requestBody,

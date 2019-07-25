@@ -54,7 +54,7 @@ public class StatsGovLinkExtractor extends JsonLinkExtractor {
                 .replace("${wds}", URLEncoder.encode("[]"))
                 .replace("${dfwds}", URLEncoder.encode("[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}]"))
                 .replace("${k1}", "1563783167237");
-        return new CrawlerTask(requestUrl, requestUrl, SupportHttpMethod.GET.toString(), crawlerTask.getLinkExtractorSettings().getHeaders(), null, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
+        return new CrawlerTask(requestUrl, requestUrl, crawlerTask.getIndexerType(), SupportHttpMethod.GET.toString(), crawlerTask.getLinkExtractorSettings().getHeaders(), null, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
     }
 
     private CrawlerTask handleSubTreeNodes(CrawlerTask crawlerTask, Map parent) {
@@ -67,7 +67,7 @@ public class StatsGovLinkExtractor extends JsonLinkExtractor {
                         return it;
                     }
                 }).collect(Collectors.joining("&"));
-        return new CrawlerTask(crawlerTask.getUrl(), crawlerTask.getUrl(), SupportHttpMethod.POST.toString(), crawlerTask.getRequestHeaders(), dataTemplate, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
+        return new CrawlerTask(crawlerTask.getUrl(), crawlerTask.getUrl(),crawlerTask.getIndexerType(), SupportHttpMethod.POST.toString(), crawlerTask.getRequestHeaders(), dataTemplate, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
     }
 
     @Override

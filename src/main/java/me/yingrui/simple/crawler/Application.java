@@ -7,6 +7,7 @@ import me.yingrui.simple.crawler.model.WebLink;
 import me.yingrui.simple.crawler.service.*;
 import me.yingrui.simple.crawler.service.indexer.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,8 +25,10 @@ public class Application implements CommandLineRunner {
     private Crawler crawler;
     @Autowired
     private Wrappers wrappers;
+
+    @Qualifier("indexers")
     @Autowired
-    private Indexer indexer;
+    private Map<String, Indexer> indexers;
     @Autowired
     private WebLinkRepository webLinkRepository;
 
@@ -42,7 +45,7 @@ public class Application implements CommandLineRunner {
             crawler.run();
         }
 
-        indexer.close();
+        indexers.values().forEach(Indexer::close);
         System.out.println("Exit...");
         System.exit(0);
     }
@@ -54,7 +57,8 @@ public class Application implements CommandLineRunner {
             Wrapper wrapper = new Wrapper(wrapperSettings);
             Map<String, Object> obj = wrapper.wrap(webLink);
             System.out.println(toJson(obj));
-            indexer.index(obj);
+            //TODO: do we still need option: "--wrap-website=" ???
+            //indexer.index(obj);
         }
     }
 }

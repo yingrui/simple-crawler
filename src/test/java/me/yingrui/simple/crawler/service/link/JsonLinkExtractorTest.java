@@ -24,7 +24,7 @@ public class JsonLinkExtractorTest {
         LinkExtractorSettings linkExtractorSettings = new LinkExtractorSettings(linkPath, prefix, "POST",
                 urlTemplate, headers, bodyTemplate);
 
-        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "kafka","POST", defaultHeaders(), "",
                 null, linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
@@ -42,7 +42,7 @@ public class JsonLinkExtractorTest {
         LinkExtractorSettings linkExtractorSettings = new LinkExtractorSettings(linkPath, prefix, "POST",
                 urlTemplate, headers, bodyTemplate);
 
-        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html", "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", "homepage.html","kafka", "POST", defaultHeaders(), "",
                 null, linkExtractorSettings, null);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");
@@ -73,7 +73,7 @@ public class JsonLinkExtractorTest {
         PaginationSettings paginationSettings = new PaginationSettings(nextPagePath, nextPagePathPrefix, nextPageUrlTemplate, nextPageBodyTemplate);
         paginationSettings.setNoPagination(false);
 
-        CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "POST", defaultHeaders(), "",
+        CrawlerTask crawlerTask = new CrawlerTask("url", startUrl, "kafka", "POST", defaultHeaders(), "",
                 null, linkExtractorSettings, paginationSettings);
         crawlerTask.setResponseContent(jsonText);
         crawlerTask.setResponseContentType("application/json; charset=utf-8");

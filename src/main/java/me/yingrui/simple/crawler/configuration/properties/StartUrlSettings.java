@@ -15,6 +15,7 @@ public class StartUrlSettings {
 
     private String url;
     private String startUrl;
+    private String indexerType;
     private String httpMethod;
     private Map<String, String> headers;
     private String dataTemplate;
@@ -23,6 +24,6 @@ public class StartUrlSettings {
     private PaginationSettings pagination;
 
     public CrawlerTask toCrawlerTask() {
-        return new CrawlerTask(url, startUrl, httpMethod, headers, dataTemplate, encode, links, pagination);
+        return new CrawlerTask(url, startUrl, indexerType, httpMethod, headers, dataTemplate, encode, links, pagination);
     }
 }

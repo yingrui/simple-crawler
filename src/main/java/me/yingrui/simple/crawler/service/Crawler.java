@@ -14,12 +14,16 @@ import me.yingrui.simple.crawler.service.link.LinkExtractor;
 import me.yingrui.simple.crawler.service.link.LinkExtractorFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.*;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 
+@Component
 public class Crawler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Crawler.class);
@@ -32,15 +36,16 @@ public class Crawler {
     private CrawlerSettings crawlerSettings;
     private WebLinkRepository webLinkRepository;
     private Wrappers wrappers;
-    private Indexer indexer;
+    private Map<String, Indexer> indexers;
 
-    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, Indexer indexer) {
+    @Autowired
+    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, @Qualifier("indexers") Map<String, Indexer> indexers) {
         this.dataFetcher = dataFetcher;
         this.linkExtractorFactory = linkExtractorFactory;
         this.crawlerSettings = crawlerSettings;
         this.webLinkRepository = webLinkRepository;
         this.wrappers = wrappers;
-        this.indexer = indexer;
+        this.indexers = indexers;
         initializeQueue();
     }
 
@@ -69,7 +74,7 @@ public class Crawler {
                 webLinkRepository.save(webLink);
 
                 extractLinks(crawlerTask);
-                wrap(webLink);
+                wrap(webLink, crawlerTask.getIndexerType());
 
                 Thread.sleep(random.nextInt(3000));
             }
@@ -90,7 +95,7 @@ public class Crawler {
         }
     }
 
-    private void wrap(WebLink webLink) {
+    private void wrap(WebLink webLink, String indexerType) {
         LOGGER.info(webLink.getRowKey());
         WrapperSettings wrapperSettings = wrappers.getWrapper(webLink.getWebsite());
         if (wrapperSettings == null) {
@@ -101,13 +106,13 @@ public class Crawler {
             if (wrapperSettings.getExtractors() == null || wrapperSettings.getExtractors().isEmpty()) {
                 try {
                     Map<String, Object> result = new ObjectMapper().readValue(webLink.getContent(), HashMap.class);
-                    indexer.index(result);
+                    indexers.get(indexerType).index(result);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             } else {
                 Map<String, Object> obj = wrapper.wrap(webLink);
-                indexer.index(obj);
+                indexers.get(indexerType).index(obj);
             }
         }
     }

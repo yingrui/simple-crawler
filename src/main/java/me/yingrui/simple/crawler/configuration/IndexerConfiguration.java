@@ -2,6 +2,7 @@ package me.yingrui.simple.crawler.configuration;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.extern.slf4j.Slf4j;
+import me.yingrui.simple.crawler.configuration.properties.IndexerListSettings;
 import me.yingrui.simple.crawler.configuration.properties.IndexerSettings;
 import me.yingrui.simple.crawler.service.indexer.ElasticSearchIndexer;
 import me.yingrui.simple.crawler.service.indexer.Indexer;
@@ -21,19 +22,23 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toMap;
+
 @Slf4j
 @Configuration
 public class IndexerConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexerConfiguration.class);
 
-    @Bean
-    public Indexer indexer(IndexerSettings indexerSettings) {
-        if (indexerSettings.getIndexerType().equalsIgnoreCase("kafka")) {
-            return new KafkaIndexer(indexerSettings.getPlainNodes(), indexerSettings.getIndex());
-        } else {
-            return elasticSearchIndexer(indexerSettings);
-        }
+    @Bean(name = "indexers")
+    public Map<String, Indexer> indexer(IndexerListSettings indexerListSettings) {
+        return indexerListSettings.getIndexers().stream().map(indexerSettings -> {
+            if (indexerSettings.getIndexerType().equalsIgnoreCase("kafka")) {
+                return new KafkaIndexer(indexerSettings.getPlainNodes(), indexerSettings.getIndex());
+            } else {
+                return elasticSearchIndexer(indexerSettings);
+            }
+        }).collect(toMap(Indexer::getType, it -> it));
     }
 
     private ElasticSearchIndexer elasticSearchIndexer(IndexerSettings indexerSettings) {
