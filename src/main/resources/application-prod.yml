@@ -113,7 +113,6 @@ indexers:
     string-fields: topic, author, translator, website
   - indexer-type: kafka
     cluster-nodes: twdp-dn5:9092,twdp-dn4:9092,twdp-dn3:9092
-    cluster-name: elasticsearch-cluster
     index: crawler
 
 
