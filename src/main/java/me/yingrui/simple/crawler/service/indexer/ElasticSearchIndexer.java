@@ -28,7 +28,7 @@ public class ElasticSearchIndexer implements Indexer {
     }
 
     @Override
-    public void index(Map<String, Object> obj) {
+    public void index(String key, Map<String, Object> obj) {
         String json = toJson(obj);
         IndexResponse response = client.prepareIndex(index, type)
                 .setSource(json, XContentType.JSON)

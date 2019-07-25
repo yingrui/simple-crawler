@@ -106,13 +106,13 @@ public class Crawler {
             if (wrapperSettings.getExtractors() == null || wrapperSettings.getExtractors().isEmpty()) {
                 try {
                     Map<String, Object> result = new ObjectMapper().readValue(webLink.getContent(), HashMap.class);
-                    indexers.get(indexerType).index(result);
+                    indexers.get(indexerType).index(webLink.getRowKey(), result);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             } else {
                 Map<String, Object> obj = wrapper.wrap(webLink);
-                indexers.get(indexerType).index(obj);
+                indexers.get(indexerType).index(webLink.getRowKey(), obj);
             }
         }
     }

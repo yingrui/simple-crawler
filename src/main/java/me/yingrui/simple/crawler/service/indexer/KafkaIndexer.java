@@ -34,14 +34,14 @@ public class KafkaIndexer implements Indexer {
     }
 
     @Override
-    public void index(Map<String, Object> obj) {
+    public void index(String key, Map<String, Object> obj) {
         String value;
         try {
             value = objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-        procuder.send(new ProducerRecord<>(topic, value));
+        procuder.send(new ProducerRecord<>(topic, key, value));
     }
 
     @Override

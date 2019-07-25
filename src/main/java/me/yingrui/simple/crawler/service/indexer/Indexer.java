@@ -6,7 +6,7 @@ public interface Indexer {
 
     String getType();
 
-    void index(Map<String, Object> obj);
+    void index(String key, Map<String, Object> obj);
 
     void close();
 }
