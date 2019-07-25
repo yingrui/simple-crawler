@@ -67,7 +67,7 @@ public class DataFetcher {
                 response = httpClient.execute(request);
             } catch (IOException e) {
                 LOGGER.warn(e.getMessage());
-                sleep(2000);
+                sleep(3000);
             }
         }
 

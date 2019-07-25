@@ -39,22 +39,6 @@ crawler:
       links:
         new-links-only: true
         path: .entry-title a
-    - start-url: http://data.stats.gov.cn/easyquery.htm
-      indexer-type: kafka
-      http-method: POST
-      headers:
-        content-type: application/x-www-form-urlencoded
-      encode: ISO-8859-1
-      data-template: 'id=zb&dbcode=hgyd&wdcode=zb&m=getTree'
-      pagination:
-        no-pagination: true
-        stop-when-all-links-crawled: true
-      links:
-        new-links-only: true
-        http-method: GET
-        url-template: http://data.stats.gov.cn/easyquery.htm?m=QueryData&dbcode=${db}&rowcode=${rowcode}&colcode=${colcode}&wds=${wds}&dfwds=${dfwds}&k1=1563764645856
-        headers:
-          content-type: application/json
 
 wrappers:
   websites:
