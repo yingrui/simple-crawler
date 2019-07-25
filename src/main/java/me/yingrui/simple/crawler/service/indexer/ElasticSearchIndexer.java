@@ -1,4 +1,4 @@
-package me.yingrui.simple.crawler.service;
+package me.yingrui.simple.crawler.service.indexer;
 
 import me.yingrui.simple.crawler.configuration.properties.IndexerSettings;
 import org.elasticsearch.action.index.IndexResponse;

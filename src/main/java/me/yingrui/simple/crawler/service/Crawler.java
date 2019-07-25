@@ -9,6 +9,7 @@ import me.yingrui.simple.crawler.configuration.properties.Wrappers;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.WebLink;
+import me.yingrui.simple.crawler.service.indexer.Indexer;
 import me.yingrui.simple.crawler.service.link.LinkExtractor;
 import me.yingrui.simple.crawler.service.link.LinkExtractorFactory;
 import org.slf4j.Logger;

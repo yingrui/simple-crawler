@@ -5,6 +5,7 @@ import me.yingrui.simple.crawler.configuration.properties.Wrappers;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.WebLink;
 import me.yingrui.simple.crawler.service.*;
+import me.yingrui.simple.crawler.service.indexer.Indexer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

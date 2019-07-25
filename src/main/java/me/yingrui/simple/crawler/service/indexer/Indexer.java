@@ -1,4 +1,4 @@
-package me.yingrui.simple.crawler.service;
+package me.yingrui.simple.crawler.service.indexer;
 
 import java.util.Map;
 
