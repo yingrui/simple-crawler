@@ -2,23 +2,22 @@ package me.yingrui.simple.crawler.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.yingrui.simple.crawler.model.WebLink;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Properties;
 
-@Component
-public class KafkaIndexer {
+public class KafkaIndexer implements Indexer {
     private ObjectMapper objectMapper = new ObjectMapper();
     private Producer<String, String> procuder;
-    String topic = "crawler";
+    String topic;
 
-    public KafkaIndexer() {
+    public KafkaIndexer(String brokers, String topic) {
+        this.topic = topic;
         Properties props = new Properties();
-        props.put("bootstrap.servers", "twdp-dn5:9092,twdp-dn4:9092,twdp-dn3:9092");
+        props.put("bootstrap.servers", brokers);
         props.put("acks", "all");
         props.put("retries", 0);
         props.put("batch.size", 16384);
@@ -29,16 +28,18 @@ public class KafkaIndexer {
         procuder = new KafkaProducer<>(props);
     }
 
-    public void index(WebLink webLink) {
+    @Override
+    public void index(Map<String, Object> obj) {
         String value;
         try {
-            value = objectMapper.writeValueAsString(webLink);
+            value = objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
         procuder.send(new ProducerRecord<>(topic, value));
     }
 
+    @Override
     public void close() {
         procuder.close();
     }

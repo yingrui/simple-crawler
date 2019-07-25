@@ -28,12 +28,10 @@ wrappers:
       match-url: .*QueryData.*
 
 indexer:
-  cluster-nodes: 172.30.3.211:30001
+  indexer-type: kafka
+  cluster-nodes: twdp-dn5:9092,twdp-dn4:9092,twdp-dn3:9092
   cluster-name: elasticsearch-cluster
-  index: article
-  type: _doc
-  string-fields: topic, author, translator, website
-
+  index: crawler
 
 logging:
   level:

@@ -4,10 +4,7 @@ import me.yingrui.simple.crawler.configuration.properties.WrapperSettings;
 import me.yingrui.simple.crawler.configuration.properties.Wrappers;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.WebLink;
-import me.yingrui.simple.crawler.service.Crawler;
-import me.yingrui.simple.crawler.service.ElasticSearchIndexer;
-import me.yingrui.simple.crawler.service.KafkaIndexer;
-import me.yingrui.simple.crawler.service.Wrapper;
+import me.yingrui.simple.crawler.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,9 +24,7 @@ public class Application implements CommandLineRunner {
     @Autowired
     private Wrappers wrappers;
     @Autowired
-    private ElasticSearchIndexer elasticSearchIndexer;
-    @Autowired
-    private KafkaIndexer kafkaIndexer;
+    private Indexer indexer;
     @Autowired
     private WebLinkRepository webLinkRepository;
 
@@ -46,8 +41,7 @@ public class Application implements CommandLineRunner {
             crawler.run();
         }
 
-        elasticSearchIndexer.close();
-        kafkaIndexer.close();
+        indexer.close();
         System.out.println("Exit...");
         System.exit(0);
     }
@@ -59,7 +53,7 @@ public class Application implements CommandLineRunner {
             Wrapper wrapper = new Wrapper(wrapperSettings);
             Map<String, Object> obj = wrapper.wrap(webLink);
             System.out.println(toJson(obj));
-            elasticSearchIndexer.index(obj);
+            indexer.index(obj);
         }
     }
 }

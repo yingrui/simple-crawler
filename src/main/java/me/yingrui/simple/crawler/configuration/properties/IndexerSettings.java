@@ -2,6 +2,8 @@ package me.yingrui.simple.crawler.configuration.properties;
 
 
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 import org.elasticsearch.common.transport.TransportAddress;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +18,18 @@ import java.util.stream.Collectors;
 @ConfigurationProperties(prefix = "indexer")
 public class IndexerSettings {
 
+    @Getter
+    @Setter
+    private String indexerType;
     private String clusterNodes;
     private String clusterName;
     private String index;
     private String type;
     private String stringFields;
+
+    public String getPlainNodes() {
+        return this.clusterNodes;
+    }
 
     public List<TransportAddress> getClusterNodes() {
         ArrayList<String> listIpAndPort = Lists.newArrayList(clusterNodes.split(","));

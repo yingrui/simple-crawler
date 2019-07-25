@@ -9,7 +9,7 @@ import java.util.Map;
 
 import static me.yingrui.simple.crawler.util.JsonUtils.toJson;
 
-public class ElasticSearchIndexer {
+public class ElasticSearchIndexer implements Indexer {
 
     private final String index;
     private final TransportClient client;
@@ -22,6 +22,7 @@ public class ElasticSearchIndexer {
         this.type = indexerSettings.getType();
     }
 
+    @Override
     public void index(Map<String, Object> obj) {
         String json = toJson(obj);
         IndexResponse response = client.prepareIndex(index, type)
@@ -30,6 +31,7 @@ public class ElasticSearchIndexer {
                 .get();
     }
 
+    @Override
     public void close() {
         client.close();
     }

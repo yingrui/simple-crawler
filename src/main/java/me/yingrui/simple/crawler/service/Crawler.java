@@ -1,6 +1,7 @@
 package me.yingrui.simple.crawler.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import me.yingrui.simple.crawler.configuration.properties.CrawlerSettings;
 import me.yingrui.simple.crawler.configuration.properties.StartUrlSettings;
 import me.yingrui.simple.crawler.configuration.properties.WrapperSettings;
@@ -30,17 +31,15 @@ public class Crawler {
     private CrawlerSettings crawlerSettings;
     private WebLinkRepository webLinkRepository;
     private Wrappers wrappers;
-    private ElasticSearchIndexer elasticSearchIndexer;
-    private KafkaIndexer kafkaIndexer;
+    private Indexer indexer;
 
-    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, ElasticSearchIndexer elasticSearchIndexer, KafkaIndexer kafkaIndexer) {
+    public Crawler(DataFetcher dataFetcher, LinkExtractorFactory linkExtractorFactory, CrawlerSettings crawlerSettings, WebLinkRepository webLinkRepository, Wrappers wrappers, Indexer indexer) {
         this.dataFetcher = dataFetcher;
         this.linkExtractorFactory = linkExtractorFactory;
         this.crawlerSettings = crawlerSettings;
         this.webLinkRepository = webLinkRepository;
         this.wrappers = wrappers;
-        this.elasticSearchIndexer = elasticSearchIndexer;
-        this.kafkaIndexer = kafkaIndexer;
+        this.indexer = indexer;
         initializeQueue();
     }
 
@@ -99,10 +98,15 @@ public class Crawler {
         if (wrapperSettings.isMatch(webLink.getUrl())) {
             Wrapper wrapper = new Wrapper(wrapperSettings);
             if (wrapperSettings.getExtractors() == null || wrapperSettings.getExtractors().isEmpty()) {
-                kafkaIndexer.index(webLink);
+                try {
+                    Map<String, Object> result = new ObjectMapper().readValue(webLink.getContent(), HashMap.class);
+                    indexer.index(result);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             } else {
                 Map<String, Object> obj = wrapper.wrap(webLink);
-                elasticSearchIndexer.index(obj);
+                indexer.index(obj);
             }
         }
     }
