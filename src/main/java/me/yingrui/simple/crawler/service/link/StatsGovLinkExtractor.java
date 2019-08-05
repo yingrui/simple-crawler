@@ -6,7 +6,10 @@ import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.SupportHttpMethod;
 
 import java.net.URLEncoder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -48,13 +51,22 @@ public class StatsGovLinkExtractor extends JsonLinkExtractor {
                 .collect(Collectors.toMap(it -> it[0], it -> it[1]));
 
         String url = crawlerTask.getLinkExtractorSettings().getUrlTemplate();
-        final String requestUrl = url.replace("${db}", keyToValue.get("dbcode"))
-                .replace("${rowcode}", "zb")
+        final String dbcode = keyToValue.get("dbcode");
+        final String requestUrl = url.replace("${db}", dbcode)
+                .replace("${rowcode}", getRowCode(dbcode))
                 .replace("${colcode}", "sj")
                 .replace("${wds}", URLEncoder.encode("[]"))
                 .replace("${dfwds}", URLEncoder.encode("[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}]"))
                 .replace("${k1}", "1563783167237");
         return new CrawlerTask(requestUrl, requestUrl, crawlerTask.getIndexerType(), SupportHttpMethod.GET.toString(), crawlerTask.getLinkExtractorSettings().getHeaders(), null, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
+    }
+
+    private String getRowCode(String dbcode) {
+        if (dbcode.equals("hgyd") || dbcode.equals("hgjd") || dbcode.equals("hgnd")) {
+            return "zb";
+        } else {
+            return "reg";
+        }
     }
 
     private CrawlerTask handleSubTreeNodes(CrawlerTask crawlerTask, Map parent) {
@@ -67,7 +79,7 @@ public class StatsGovLinkExtractor extends JsonLinkExtractor {
                         return it;
                     }
                 }).collect(Collectors.joining("&"));
-        return new CrawlerTask(crawlerTask.getUrl(), crawlerTask.getUrl(),crawlerTask.getIndexerType(), SupportHttpMethod.POST.toString(), crawlerTask.getRequestHeaders(), dataTemplate, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
+        return new CrawlerTask(crawlerTask.getUrl(), crawlerTask.getUrl(), crawlerTask.getIndexerType(), SupportHttpMethod.POST.toString(), crawlerTask.getRequestHeaders(), dataTemplate, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
     }
 
     @Override
