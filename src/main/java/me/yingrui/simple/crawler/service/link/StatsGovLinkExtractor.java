@@ -1,6 +1,7 @@
 package me.yingrui.simple.crawler.service.link;
 
 import com.jayway.jsonpath.JsonPath;
+import joptsimple.internal.Strings;
 import me.yingrui.simple.crawler.dao.WebLinkRepository;
 import me.yingrui.simple.crawler.model.CrawlerTask;
 import me.yingrui.simple.crawler.model.SupportHttpMethod;
@@ -55,10 +56,42 @@ public class StatsGovLinkExtractor extends JsonLinkExtractor {
         final String requestUrl = url.replace("${db}", dbcode)
                 .replace("${rowcode}", getRowCode(dbcode))
                 .replace("${colcode}", "sj")
-                .replace("${wds}", URLEncoder.encode("[]"))
-                .replace("${dfwds}", URLEncoder.encode("[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}]"))
+                .replace("${wds}", URLEncoder.encode(getWds(dbcode, parent)))
+                .replace("${dfwds}", URLEncoder.encode(getTimeWd(dbcode, parent)))
                 .replace("${k1}", "1563783167237");
         return new CrawlerTask(requestUrl, requestUrl, crawlerTask.getIndexerType(), SupportHttpMethod.GET.toString(), crawlerTask.getLinkExtractorSettings().getHeaders(), null, crawlerTask.getEncode(), crawlerTask.getLinkExtractorSettings(), crawlerTask.getPaginationSettings());
+    }
+
+    private String getWds(String dbcode, Map parent) {
+        if (dbcode.equals("hgyd") || dbcode.equals("hgjd") || dbcode.equals("hgnd")) {
+            return "[]";
+        } else {
+            return "[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}]";
+        }
+    }
+
+    @SuppressWarnings("DuplicateBranchesInSwitch")
+    private String getTimeWd(String dbcode, Map parent) {
+        switch (dbcode) {
+            case "hgyd":
+                return "[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}, {\"wdcode\":\"sj\",\"valuecode\":\"LAST36\"}]";
+            case "hgjd":
+                return "[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}, {\"wdcode\":\"sj\",\"valuecode\":\"LAST18\"}]";
+            case "hgnd":
+                return "[{\"wdcode\":\"zb\",\"valuecode\":\"" + parent.get("id") + "\"}, {\"wdcode\":\"sj\",\"valuecode\":\"LAST20\"}]";
+            case "fsyd":
+                return "[{\"wdcode\":\"sj\",\"valuecode\":\"LAST36\"}]";
+            case "fsjd":
+                return "[{\"wdcode\":\"sj\",\"valuecode\":\"LAST18\"}]";
+            case "fsnd":
+                return "[{\"wdcode\":\"sj\",\"valuecode\":\"LAST20\"}]";
+            case "gatyd":
+                return "[{\"wdcode\":\"sj\",\"valuecode\":\"LAST36\"}]";
+            case "gatnd":
+                return "[{\"wdcode\":\"sj\",\"valuecode\":\"LAST20\"}]";
+            default:
+                return Strings.EMPTY;
+        }
     }
 
     private String getRowCode(String dbcode) {

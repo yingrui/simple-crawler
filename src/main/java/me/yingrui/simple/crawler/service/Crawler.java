@@ -76,7 +76,7 @@ public class Crawler {
                 extractLinks(crawlerTask);
                 wrap(webLink, crawlerTask.getIndexerType());
 
-                Thread.sleep(random.nextInt(3000));
+                Thread.sleep(random.nextInt(4000));
             }
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
